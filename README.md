@@ -56,6 +56,8 @@ More inputs to try:
 python cli.py --python 3.8  --want "deferred annotations and Self"
 python cli.py --python 3.11 --want "@override, TypeIs, ReadOnly keys"
 python cli.py --python 3.12 --want "arrow callable syntax and inline typeddict"
+python cli.py --python 3.9  --want "def f(x: list[int] | None)"   # features written as code
+python cli.py --python 3.11.9 --want "X|None"                     # patch versions are accepted
 ```
 
 ## Rebuild the knowledge state
