@@ -82,14 +82,20 @@ def match_features(graph, description):
     the shorter alias "none". Returns (matched feature ids in order of
     appearance, unrecognized fragments with suggestions).
     """
-    text = description.lower()
+    def norm(t):
+        return re.sub(r"\s*\|\s*", " | ", t.lower())  # "X|None", "X |None" -> "x | none"
+
+    text = norm(description)
     hits = []
     for nid, n in graph.nodes.items():
         if n["type"] != "Feature":
             continue
         for al in n["aliases"]:
-            for m in re.finditer(re.escape(al.lower()), text):
+            for m in re.finditer(re.escape(norm(al)), text):
                 hits.append((m.start(), m.end(), nid, al))
+        for pat in n.get("patterns", []):  # features written as code, e.g. "int | str"
+            for m in re.finditer(pat, text):
+                hits.append((m.start(), m.end(), nid, pat))
     hits.sort(key=lambda h: (-(h[1] - h[0]), h[0]))
     taken, chosen = [], {}
     for s, e, nid, al in hits:
@@ -205,32 +211,53 @@ def all_fallbacks(graph, fid, have_versions):
 
 
 def risk_flags(graph, fid):
+    """Risks of depending on a feature, deduplicated.
+
+    The same fact can reach a PEP through several edges (Status: Superseded,
+    a superseded_by edge, and an incoming replaces edge all say "a newer PEP
+    took over"). Each fact is reported once, with every edge kept as evidence.
+    """
     flags = []
     pep = graph.one(fid, "introduced_by")
     p = graph.nodes[pep]
-    if p["status"] in schema.STATUS_RISK:
-        flags.append({"kind": "status", "detail": schema.STATUS_RISK[p["status"]],
-                      "evidence": f"{pep} Status: {p['status']}"})
+
+    successors, succ_ev = [], []
     for e in graph.out[pep]["superseded_by"]:
-        t = graph.nodes[e["target"]]
-        flags.append({"kind": "superseded", "detail": f"superseded by PEP {t['number']} ({t['title']}, Python {t['python_version']})",
-                      "evidence": f"{pep} -superseded_by-> {e['target']}"})
+        successors.append(e["target"]); succ_ev.append(f"{pep} -superseded_by-> {e['target']}")
     for e in graph.inc[pep]["replaces"]:
-        s = graph.nodes[e["source"]]
-        flags.append({"kind": "replaced", "detail": f"replaced by PEP {s['number']} ({s['title']})",
-                      "evidence": f"{e['source']} -replaces-> {pep}"})
+        if e["source"] not in successors:
+            successors.append(e["source"])
+        succ_ev.append(f"{e['source']} -replaces-> {pep}")
+
+    if p["status"] in schema.STATUS_RISK and not (p["status"] == "Superseded" and successors):
+        flags.append({"kind": "status", "detail": schema.STATUS_RISK[p["status"]],
+                      "evidence": [f"{pep} Status: {p['status']}"]})
+    if successors:
+        names = " and ".join(
+            f"PEP {graph.nodes[t]['number']} ({graph.nodes[t]['title']}"
+            + (f", Python {graph.nodes[t]['python_version']})" if graph.nodes[t]["python_version"] else ")")
+            for t in successors)
+        flags.append({"kind": "superseded", "detail": f"superseded by {names}", "evidence": succ_ev})
+
+    # Compatibility concerns: one flag per other PEP, whichever direction the
+    # mention goes. Skip PEPs already reported as successors.
+    compat = {}
     for e in graph.inc[pep]["compat_concern"]:
-        s = graph.nodes[e["source"]]
-        flags.append({"kind": "compat_concern_from", "detail": f"PEP {s['number']} ({s['title']}) discusses compatibility with this PEP",
-                      "evidence": f"{e['source']} -compat_concern-> {pep} in {e['evidence']}"})
+        compat.setdefault(e["source"], []).append(f"{e['source']} -compat_concern-> {pep} in {e['evidence']}")
     for e in graph.out[pep]["compat_concern"]:
-        t = graph.nodes[e["target"]]
-        flags.append({"kind": "compat_concern_with", "detail": f"this PEP discusses compatibility with PEP {t['number']} ({t['title']})",
-                      "evidence": f"{pep} -compat_concern-> {e['target']} in {e['evidence']}"})
+        compat.setdefault(e["target"], []).append(f"{pep} -compat_concern-> {e['target']} in {e['evidence']}")
+    for other, ev in compat.items():
+        if other in successors:
+            continue
+        o = graph.nodes[other]
+        flags.append({"kind": "compat_concern",
+                      "detail": f"compatibility with PEP {o['number']} ({o['title']}) is discussed in the PEPs",
+                      "evidence": ev})
+
     for e in graph.out[fid]["requires"]:
         r = feature_facts(graph, e["target"])
         flags.append({"kind": "dependency", "detail": f"depends on {r['name']} (Python {r['version']})",
-                      "evidence": f"{fid} -requires-> {e['target']}"})
+                      "evidence": [f"{fid} -requires-> {e['target']}"]})
     return flags
 
 
@@ -252,10 +279,16 @@ def design_reasoning(graph, fid, max_ideas=5):
     }
 
 
+def normalize_version(raw):
+    """Accept '3.9', '3.11.9', 'python 3.9', 'py3.10'; return 'major.minor'."""
+    m = re.search(r"(?<![\d.])(3)\.(\d+)(?:\.\d+)?(?![\d.])", raw.strip())
+    if not m:
+        raise ValueError(f"could not read a Python 3 version from {raw!r}; use a form like 3.9 or 3.11.9")
+    return f"{m.group(1)}.{int(m.group(2))}"
+
+
 def analyze(graph, target_version, description):
-    if not re.fullmatch(r"3\.\d+", target_version.strip()):
-        raise ValueError(f"target version must look like 3.9, got {target_version!r}")
-    target_version = target_version.strip()
+    target_version = normalize_version(target_version)
     have = graph.versions_up_to(target_version)
     have_set = set(have)
     notes = []
@@ -275,6 +308,7 @@ def analyze(graph, target_version, description):
             "feature": graph.nodes[fid]["name"], "feature_id": fid,
             "introduced_by": f"PEP {pep_node['number']}: {pep_node['title']}",
             "pep_status": facts["pep_status"],
+            "pep_target_version": facts["version"],
             "min_python": eff,
             "usable_on_target": ok,
             "reason": reason,

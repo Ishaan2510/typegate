@@ -3,7 +3,7 @@ import os
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from reasoner.engine import Graph, analyze, match_features  # noqa: E402
+from reasoner.engine import Graph, analyze, match_features, normalize_version  # noqa: E402
 
 G = Graph()
 
@@ -79,3 +79,30 @@ def test_every_feature_has_version_and_pep():
         if n["type"] == "Feature":
             assert G.one(n["id"], "introduced_by")
             assert G.one(n["id"], "available_from")
+
+
+def test_risk_flags_are_deduplicated():
+    f = by_id(analyze(G, "3.8", "deferred annotations"), "deferred_annotations")
+    fb_risks = f["fallback"]["risks"]
+    assert sum(r["kind"] == "superseded" for r in fb_risks) == 1
+    assert not any(r["kind"] == "status" for r in fb_risks)  # implied by the superseded flag
+    others = [r["detail"] for r in f["risk_flags"] if r["kind"] == "compat_concern"]
+    assert len(others) == len(set(others))
+
+
+def test_union_written_as_code_any_spacing():
+    for text in ["int | str", "X|None", "str |None", "def f(x: list[int] | None)"]:
+        ids, _ = match_features(G, text)
+        assert "feature:union_pipe" in ids, text
+
+
+def test_version_forms():
+    assert normalize_version("3.11.9") == "3.11"
+    assert normalize_version("python 3.9") == "3.9"
+    assert normalize_version("py3.10") == "3.10"
+    for bad in ["3", "2.7", "version nine"]:
+        try:
+            normalize_version(bad)
+            assert False, bad
+        except ValueError:
+            pass
