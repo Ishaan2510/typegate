@@ -1,0 +1,5 @@
+peps/
+data/peps_raw.json
+__pycache__/
+.pytest_cache/
+*.pyc
