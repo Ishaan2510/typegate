@@ -1,0 +1,4981 @@
+{
+ "meta": {
+  "description": "Knowledge graph of Python typing PEPs, the features they introduced, and the Python versions those features need.",
+  "source": "https://github.com/python/peps",
+  "source_commit": "fc91a833f0d38d9aa95bee850a1301ec1c4bc3d4",
+  "scope": "PEPs whose Topic header contains 'Typing'",
+  "node_types": {
+   "PEP": "A typing PEP. Carries status, title, authors, and its design reasoning (rejected ideas, backwards compatibility notes) as text.",
+   "Feature": "One usable typing feature (e.g. X | Y unions). Users ask about these, not about PEP numbers.",
+   "PythonVersion": "A CPython minor version (3.5 ... 3.16). Linked in release order."
+  },
+  "edge_types": {
+   "introduced_by": {
+    "from": "Feature",
+    "to": "PEP",
+    "meaning": "The PEP that added this feature."
+   },
+   "available_from": {
+    "from": "Feature",
+    "to": "PythonVersion",
+    "meaning": "First version with the feature, taken from the introducing PEP's Python-Version header."
+   },
+   "requires": {
+    "from": "Feature",
+    "to": "Feature",
+    "meaning": "Cannot be used without the target feature."
+   },
+   "falls_back_to": {
+    "from": "Feature",
+    "to": "Feature",
+    "meaning": "Older substitute; edge carries the condition under which it is valid."
+   },
+   "next_version": {
+    "from": "PythonVersion",
+    "to": "PythonVersion",
+    "meaning": "Release order."
+   },
+   "superseded_by": {
+    "from": "PEP",
+    "to": "PEP",
+    "meaning": "From the Superseded-By header."
+   },
+   "replaces": {
+    "from": "PEP",
+    "to": "PEP",
+    "meaning": "From the Replaces header."
+   },
+   "pep_requires": {
+    "from": "PEP",
+    "to": "PEP",
+    "meaning": "From the Requires header."
+   },
+   "builds_on": {
+    "from": "PEP",
+    "to": "PEP",
+    "meaning": "Mentioned in Abstract/Motivation/Rationale/Specification-type sections."
+   },
+   "compat_concern": {
+    "from": "PEP",
+    "to": "PEP",
+    "meaning": "Mentioned in a Backwards Compatibility-type section."
+   },
+   "rejected_idea_ref": {
+    "from": "PEP",
+    "to": "PEP",
+    "meaning": "Mentioned inside a rejected idea or alternative."
+   },
+   "cites": {
+    "from": "PEP",
+    "to": "PEP",
+    "meaning": "Mentioned anywhere else (references, open issues, how to teach, ...)."
+   }
+  },
+  "section_rules": [
+   {
+    "edge": "rejected_idea_ref",
+    "title_pattern": "rejected|rejection|alternatives|objection|discarded|not adopted|considered"
+   },
+   {
+    "edge": "compat_concern",
+    "title_pattern": "backward|compatib|incompatib|migration|deprecat|breaking"
+   },
+   {
+    "edge": "builds_on",
+    "title_pattern": "abstract|motivation|rationale|specification|proposal|overview|background|introduction|semantics|design"
+   }
+  ],
+  "counts": {
+   "nodes": {
+    "Feature": 43,
+    "PEP": 49,
+    "PythonVersion": 12
+   },
+   "edges": {
+    "available_from": 43,
+    "builds_on": 108,
+    "cites": 39,
+    "compat_concern": 8,
+    "falls_back_to": 18,
+    "introduced_by": 43,
+    "next_version": 11,
+    "pep_requires": 1,
+    "rejected_idea_ref": 30,
+    "replaces": 2,
+    "requires": 10,
+    "superseded_by": 2
+   },
+   "out_of_scope_mentions_dropped": 52
+  },
+  "build_warnings": []
+ },
+ "nodes": [
+  {
+   "id": "feature:annotated",
+   "type": "Feature",
+   "name": "Annotated metadata",
+   "example": "age: Annotated[int, Gt(0)]",
+   "aliases": [
+    "annotated",
+    "annotated[",
+    "type metadata"
+   ]
+  },
+  {
+   "id": "feature:builtin_generics",
+   "type": "Feature",
+   "name": "Built-in generics (list[int], dict[str, int])",
+   "example": "def f(xs: list[int]) -> dict[str, int]",
+   "aliases": [
+    "list[int]",
+    "dict[str",
+    "tuple[",
+    "set[",
+    "built-in generics",
+    "builtin generics",
+    "lowercase generics",
+    "list[",
+    "dict["
+   ]
+  },
+  {
+   "id": "feature:callable_arrow_syntax",
+   "type": "Feature",
+   "name": "Arrow callable syntax ((int) -> str)",
+   "example": "handler: (int, str) -> bool",
+   "aliases": [
+    "arrow syntax",
+    "(int) -> str",
+    "callable syntax",
+    "arrow callable",
+    "callable arrow"
+   ]
+  },
+  {
+   "id": "feature:dataclass_transform",
+   "type": "Feature",
+   "name": "@dataclass_transform",
+   "example": "@dataclass_transform()\nclass ModelBase: ...",
+   "aliases": [
+    "dataclass_transform",
+    "dataclass transform",
+    "orm models",
+    "model base class"
+   ]
+  },
+  {
+   "id": "feature:deferred_annotations",
+   "type": "Feature",
+   "name": "Deferred evaluation of annotations (default)",
+   "example": "class A:\n    next: B  # no quotes, no __future__ import",
+   "aliases": [
+    "deferred evaluation",
+    "deferred annotations",
+    "lazy annotations",
+    "annotationlib",
+    "unquoted forward references"
+   ]
+  },
+  {
+   "id": "feature:deprecated",
+   "type": "Feature",
+   "name": "@deprecated",
+   "example": "@deprecated('use g()')\ndef f() -> None",
+   "aliases": [
+    "@deprecated",
+    "deprecated decorator",
+    "deprecation",
+    "deprecated"
+   ]
+  },
+  {
+   "id": "feature:final",
+   "type": "Feature",
+   "name": "Final and @final",
+   "example": "MAX: Final = 10",
+   "aliases": [
+    "final[",
+    "typing.final",
+    "@final",
+    "constants",
+    "final qualifier"
+   ]
+  },
+  {
+   "id": "feature:forward_ref_strings",
+   "type": "Feature",
+   "name": "String forward references",
+   "example": "def f() -> 'Node'",
+   "aliases": [
+    "forward reference",
+    "forward references",
+    "string annotations",
+    "quoted annotations"
+   ]
+  },
+  {
+   "id": "feature:implicit_type_alias",
+   "type": "Feature",
+   "name": "Implicit type alias (Vector = list[float])",
+   "example": "Vector = List[float]",
+   "aliases": [
+    "implicit alias",
+    "plain alias",
+    "alias by assignment"
+   ]
+  },
+  {
+   "id": "feature:inline_typeddict",
+   "type": "Feature",
+   "name": "Inline TypedDict (TypedDict[{...}])",
+   "example": "def f() -> TypedDict[{'a': int}]",
+   "aliases": [
+    "inline typeddict",
+    "inline typed dict",
+    "anonymous typeddict"
+   ]
+  },
+  {
+   "id": "feature:kwargs_unpack",
+   "type": "Feature",
+   "name": "Unpack[TypedDict] for **kwargs",
+   "example": "def f(**kwargs: Unpack[Options]) -> None",
+   "aliases": [
+    "**kwargs",
+    "kwargs typing",
+    "typed kwargs",
+    "unpack kwargs"
+   ]
+  },
+  {
+   "id": "feature:literal",
+   "type": "Feature",
+   "name": "Literal types",
+   "example": "mode: Literal['r', 'w']",
+   "aliases": [
+    "literal[",
+    "literal types",
+    "literal type",
+    "literals"
+   ]
+  },
+  {
+   "id": "feature:literal_string",
+   "type": "Feature",
+   "name": "LiteralString",
+   "example": "def run_sql(query: LiteralString) -> None",
+   "aliases": [
+    "literalstring",
+    "literal string",
+    "sql injection typing"
+   ]
+  },
+  {
+   "id": "feature:override",
+   "type": "Feature",
+   "name": "@override",
+   "example": "@override\ndef save(self) -> None",
+   "aliases": [
+    "@override",
+    "override decorator",
+    "override"
+   ]
+  },
+  {
+   "id": "feature:paramspec",
+   "type": "Feature",
+   "name": "ParamSpec and Concatenate",
+   "example": "P = ParamSpec('P')\ndef deco(f: Callable[P, R]) -> Callable[P, R]",
+   "aliases": [
+    "paramspec",
+    "concatenate",
+    "typed decorators",
+    "decorator typing",
+    "parameter specification"
+   ]
+  },
+  {
+   "id": "feature:postponed_annotations",
+   "type": "Feature",
+   "name": "from __future__ import annotations",
+   "example": "from __future__ import annotations",
+   "aliases": [
+    "from __future__ import annotations",
+    "__future__ annotations",
+    "postponed evaluation",
+    "postponed annotations"
+   ]
+  },
+  {
+   "id": "feature:protocol",
+   "type": "Feature",
+   "name": "Protocol (structural subtyping)",
+   "example": "class Closeable(Protocol):\n    def close(self) -> None: ...",
+   "aliases": [
+    "protocol",
+    "protocols",
+    "structural subtyping",
+    "duck typing",
+    "runtime_checkable",
+    "static duck typing"
+   ]
+  },
+  {
+   "id": "feature:py_typed",
+   "type": "Feature",
+   "name": "py.typed marker and stub packages",
+   "example": "mypackage/py.typed",
+   "aliases": [
+    "py.typed",
+    "stub package",
+    "stub packages",
+    "-stubs",
+    "ship types",
+    "distribute types"
+   ]
+  },
+  {
+   "id": "feature:readonly_attributes",
+   "type": "Feature",
+   "name": "ReadOnly class attributes",
+   "example": "class P:\n    x: ReadOnly[int]",
+   "aliases": [
+    "readonly attributes",
+    "read-only attributes",
+    "read only attributes"
+   ]
+  },
+  {
+   "id": "feature:readonly_typeddict",
+   "type": "Feature",
+   "name": "ReadOnly TypedDict items",
+   "example": "class Movie(TypedDict):\n    title: ReadOnly[str]",
+   "aliases": [
+    "readonly",
+    "read-only items",
+    "read only items",
+    "readonly keys",
+    "read-only keys"
+   ]
+  },
+  {
+   "id": "feature:required_notrequired",
+   "type": "Feature",
+   "name": "Required / NotRequired TypedDict items",
+   "example": "class Movie(TypedDict):\n    title: str\n    year: NotRequired[int]",
+   "aliases": [
+    "notrequired",
+    "not required",
+    "required[",
+    "optional keys",
+    "optional key",
+    "missing keys",
+    "potentially-missing"
+   ]
+  },
+  {
+   "id": "feature:self_type",
+   "type": "Feature",
+   "name": "Self",
+   "example": "def set_x(self, x: int) -> Self",
+   "aliases": [
+    "self type",
+    "typing.self",
+    "-> self",
+    "return self",
+    "self"
+   ]
+  },
+  {
+   "id": "feature:strict_typeguard",
+   "type": "Feature",
+   "name": "Stricter TypeGuard semantics",
+   "example": "(proposal to change TypeGuard narrowing)",
+   "aliases": [
+    "stricter typeguard",
+    "strict typeguard"
+   ]
+  },
+  {
+   "id": "feature:type_checking_builtin",
+   "type": "Feature",
+   "name": "TYPE_CHECKING as a built-in",
+   "example": "if TYPE_CHECKING:  # no import needed",
+   "aliases": [
+    "type_checking builtin",
+    "built-in type_checking",
+    "type_checking without import"
+   ]
+  },
+  {
+   "id": "feature:type_comments",
+   "type": "Feature",
+   "name": "Type comments (# type: int)",
+   "example": "x = []  # type: List[int]",
+   "aliases": [
+    "type comments",
+    "type comment",
+    "# type:"
+   ]
+  },
+  {
+   "id": "feature:type_param_syntax",
+   "type": "Feature",
+   "name": "Type parameter syntax (class Box[T])",
+   "example": "class Box[T]: ...\ndef first[T](xs: list[T]) -> T",
+   "aliases": [
+    "type parameter syntax",
+    "class box[t]",
+    "def f[t]",
+    "new generic syntax",
+    "pep 695 generics",
+    "inline generics",
+    "type params"
+   ]
+  },
+  {
+   "id": "feature:type_statement",
+   "type": "Feature",
+   "name": "type statement (type Vector = ...)",
+   "example": "type Vector = list[float]",
+   "aliases": [
+    "type statement",
+    "type x =",
+    "type alias statement",
+    "lazy type alias"
+   ]
+  },
+  {
+   "id": "feature:typealias_explicit",
+   "type": "Feature",
+   "name": "TypeAlias annotation",
+   "example": "Vector: TypeAlias = list[float]",
+   "aliases": [
+    "typealias",
+    "explicit type alias",
+    "explicit alias"
+   ]
+  },
+  {
+   "id": "feature:typeddict",
+   "type": "Feature",
+   "name": "TypedDict",
+   "example": "class Movie(TypedDict):\n    title: str\n    year: int",
+   "aliases": [
+    "typeddict",
+    "typed dict",
+    "typed dictionary",
+    "typed dictionaries",
+    "dict with fixed keys"
+   ]
+  },
+  {
+   "id": "feature:typeddict_extra_items",
+   "type": "Feature",
+   "name": "TypedDict closed / extra_items",
+   "example": "class Movie(TypedDict, extra_items=int): ...",
+   "aliases": [
+    "extra_items",
+    "extra items",
+    "closed typeddict",
+    "closed=true"
+   ]
+  },
+  {
+   "id": "feature:typeddict_total",
+   "type": "Feature",
+   "name": "TypedDict total=False",
+   "example": "class Movie(TypedDict, total=False): ...",
+   "aliases": [
+    "total=false",
+    "total false",
+    "all keys optional"
+   ]
+  },
+  {
+   "id": "feature:typeform",
+   "type": "Feature",
+   "name": "TypeForm",
+   "example": "def trycast(typx: TypeForm[T], value: object) -> T | None",
+   "aliases": [
+    "typeform",
+    "type form",
+    "type forms"
+   ]
+  },
+  {
+   "id": "feature:typeguard",
+   "type": "Feature",
+   "name": "TypeGuard",
+   "example": "def is_str_list(v: list[object]) -> TypeGuard[list[str]]",
+   "aliases": [
+    "typeguard",
+    "type guard",
+    "type guards"
+   ]
+  },
+  {
+   "id": "feature:typeis",
+   "type": "Feature",
+   "name": "TypeIs",
+   "example": "def is_str(v: object) -> TypeIs[str]",
+   "aliases": [
+    "typeis",
+    "type narrowing",
+    "narrowing"
+   ]
+  },
+  {
+   "id": "feature:typevar_defaults",
+   "type": "Feature",
+   "name": "Type parameter defaults",
+   "example": "class Box[T = int]: ...",
+   "aliases": [
+    "typevar default",
+    "typevar defaults",
+    "type parameter defaults",
+    "default type parameter"
+   ]
+  },
+  {
+   "id": "feature:typevar_generics",
+   "type": "Feature",
+   "name": "TypeVar and Generic classes",
+   "example": "T = TypeVar('T')\nclass Box(Generic[T]): ...",
+   "aliases": [
+    "typevar",
+    "type variable",
+    "type variables",
+    "generic[",
+    "generic class",
+    "generic classes",
+    "generics"
+   ]
+  },
+  {
+   "id": "feature:typevartuple",
+   "type": "Feature",
+   "name": "TypeVarTuple (variadic generics)",
+   "example": "Ts = TypeVarTuple('Ts')\nclass Array(Generic[*Ts]): ...",
+   "aliases": [
+    "typevartuple",
+    "variadic generics",
+    "variadic",
+    "*ts"
+   ]
+  },
+  {
+   "id": "feature:typing_callable",
+   "type": "Feature",
+   "name": "Callable[[Args], Ret]",
+   "example": "handler: Callable[[int, str], bool]",
+   "aliases": [
+    "callable[",
+    "typing.callable",
+    "callable types",
+    "callable type",
+    "function types"
+   ]
+  },
+  {
+   "id": "feature:typing_generic_aliases",
+   "type": "Feature",
+   "name": "typing.List / Dict / Tuple",
+   "example": "def f(xs: List[int]) -> Dict[str, int]",
+   "aliases": [
+    "typing.list",
+    "typing.dict",
+    "list[...] from typing",
+    "capital list",
+    "List[",
+    "Dict["
+   ]
+  },
+  {
+   "id": "feature:typing_optional",
+   "type": "Feature",
+   "name": "Optional[X]",
+   "example": "def f(x: Optional[str] = None)",
+   "aliases": [
+    "optional[",
+    "typing.optional",
+    "optional types",
+    "optional type",
+    "nullable"
+   ]
+  },
+  {
+   "id": "feature:typing_union",
+   "type": "Feature",
+   "name": "Union[X, Y]",
+   "example": "def f(x: Union[int, str]) -> None",
+   "aliases": [
+    "union[",
+    "typing.union",
+    "union types",
+    "union type",
+    "unions"
+   ]
+  },
+  {
+   "id": "feature:union_pipe",
+   "type": "Feature",
+   "name": "X | Y union syntax",
+   "example": "def f(x: int | None) -> str | bytes",
+   "aliases": [
+    "x | y",
+    "x | none",
+    "| none",
+    "pipe union",
+    "pipe syntax",
+    "union operator",
+    "unions with |",
+    "union with |",
+    "| syntax"
+   ]
+  },
+  {
+   "id": "feature:variable_annotations",
+   "type": "Feature",
+   "name": "Variable annotations (x: int = 0)",
+   "example": "count: int = 0",
+   "aliases": [
+    "variable annotations",
+    "variable annotation",
+    "annotated assignment",
+    "classvar",
+    "class variable annotations",
+    "attribute annotations"
+   ]
+  },
+  {
+   "id": "pep:482",
+   "type": "PEP",
+   "number": 482,
+   "title": "Literature Overview for Type Hints",
+   "status": "Final",
+   "pep_type": "Informational",
+   "python_version": null,
+   "created": "08-Jan-2015",
+   "authors": "Łukasz Langa <lukasz@python.org>",
+   "url": "https://peps.python.org/pep-0482/",
+   "mentions_typing_extensions": false,
+   "rejected_ideas": [],
+   "backwards_compatibility": []
+  },
+  {
+   "id": "pep:483",
+   "type": "PEP",
+   "number": 483,
+   "title": "The Theory of Type Hints",
+   "status": "Final",
+   "pep_type": "Informational",
+   "python_version": null,
+   "created": "19-Dec-2014",
+   "authors": "Guido van Rossum <guido@python.org>, Ivan Levkivskyi <levkivskyi@gmail.com>",
+   "url": "https://peps.python.org/pep-0483/",
+   "mentions_typing_extensions": false,
+   "rejected_ideas": [],
+   "backwards_compatibility": []
+  },
+  {
+   "id": "pep:484",
+   "type": "PEP",
+   "number": 484,
+   "title": "Type Hints",
+   "status": "Final",
+   "pep_type": "Standards Track",
+   "python_version": "3.5",
+   "created": "29-Sep-2014",
+   "authors": "Guido van Rossum <guido@python.org>, Jukka Lehtosalo <jukka.lehtosalo@iki.fi>, Łukasz Langa <lukasz@python.org>",
+   "url": "https://peps.python.org/pep-0484/",
+   "mentions_typing_extensions": false,
+   "rejected_ideas": [
+    {
+     "title": "Which brackets for generic type parameters?",
+     "summary": "Most people are familiar with the use of angular brackets (e.g. List<int>) in languages like C++, Java, C# and Swift to express the parameterization of generic types. The problem with these is that they are really hard to parse, especially for a simple-minded parser like Python. In most languages the ambiguities are usually dealt with by only allowing angular brackets in specific syntactic ..."
+    },
+    {
+     "title": "What about existing uses of annotations?",
+     "summary": "One line of argument points out that PEP 3107 explicitly supports the use of arbitrary expressions in function annotations. The new proposal is then considered incompatible with the specification of PEP 3107. Our response to this is that, first of all, the current proposal does not introduce any direct incompatibilities, so programs using annotations in Python 3.4 will still work correctly and ..."
+    },
+    {
+     "title": "The problem of forward declarations",
+     "summary": "The current proposal is admittedly sub-optimal when type hints must contain forward references. Python requires all names to be defined by the time they are used. Apart from circular imports this is rarely a problem: \"use\" here means \"look up at runtime\", and with most \"forward\" references there is no problem in ensuring that a name is defined before the function using it is called. The problem ..."
+    },
+    {
+     "title": "The double colon",
+     "summary": "A few creative souls have tried to invent solutions for this problem. For example, it was proposed to use a double colon (::) for type hints, solving two problems at once: disambiguating between type hints and other annotations, and changing the semantics to preclude runtime evaluation. There are several things wrong with this idea, however. * It's ugly. The single colon in Python has many uses, ..."
+    },
+    {
+     "title": "Other forms of new syntax",
+     "summary": "A few other forms of alternative syntax have been proposed, e.g. the introduction of a where keyword, and Cobra-inspired requires clauses. But these all share a problem with the double colon: they won't work for earlier versions of Python 3. The same would apply to a new __future__ import."
+    },
+    {
+     "title": "Other backwards compatible conventions",
+     "summary": "The ideas put forward include: * A decorator, e.g. @typehints(name=str, returns=str). This could work, but it's pretty verbose (an extra line, and the argument names must be repeated), and a far cry in elegance from the PEP 3107 notation. * Stub files. We do want stub files, but they are primarily useful for adding type hints to existing code that doesn't lend itself to adding type hints, e.g. ..."
+    }
+   ],
+   "backwards_compatibility": [
+    {
+     "title": "Compatibility with other uses of function annotations",
+     "summary": "A number of existing or potential use cases for function annotations exist, which are incompatible with type hinting. These may confuse a static type checker. However, since type hinting annotations have no runtime behavior (other than evaluation of the annotation expression and storing annotations in the __annotations__ attribute of the function object), this does not make the program incorrect ..."
+    },
+    {
+     "title": "Other backwards compatible conventions",
+     "summary": "The ideas put forward include: * A decorator, e.g. @typehints(name=str, returns=str). This could work, but it's pretty verbose (an extra line, and the argument names must be repeated), and a far cry in elegance from the PEP 3107 notation. * Stub files. We do want stub files, but they are primarily useful for adding type hints to existing code that doesn't lend itself to adding type hints, e.g. ..."
+    }
+   ]
+  },
+  {
+   "id": "pep:526",
+   "type": "PEP",
+   "number": 526,
+   "title": "Syntax for Variable Annotations",
+   "status": "Final",
+   "pep_type": "Standards Track",
+   "python_version": "3.6",
+   "created": "09-Aug-2016",
+   "authors": "Ryan Gonzalez <rymg19@gmail.com>, Philip House <phouse512@gmail.com>, Ivan Levkivskyi <levkivskyi@gmail.com>, Lisa Roach <lisaroach14@gmail.com>, Guido van Rossum <guido@python.org>",
+   "url": "https://peps.python.org/pep-0526/",
+   "mentions_typing_extensions": false,
+   "rejected_ideas": [
+    {
+     "title": "Rejected/Postponed Proposals",
+     "summary": "- **Should we introduce variable annotations at all?** Variable annotations have *already* been around for almost two years in the form of type comments, sanctioned by PEP 484. They are extensively used by third party type checkers (mypy, pytype, PyCharm, etc.) and by projects using the type checkers. However, the comment syntax has many downsides listed in Rationale. This PEP is not about the ..."
+    }
+   ],
+   "backwards_compatibility": [
+    {
+     "title": "Backwards Compatibility",
+     "summary": "This PEP is fully backwards compatible."
+    }
+   ]
+  },
+  {
+   "id": "pep:544",
+   "type": "PEP",
+   "number": 544,
+   "title": "Protocols: Structural subtyping (static duck typing)",
+   "status": "Final",
+   "pep_type": "Standards Track",
+   "python_version": "3.8",
+   "created": "05-Mar-2017",
+   "authors": "Ivan Levkivskyi <levkivskyi@gmail.com>, Jukka Lehtosalo <jukka.lehtosalo@iki.fi>, Łukasz Langa <lukasz@python.org>",
+   "url": "https://peps.python.org/pep-0544/",
+   "mentions_typing_extensions": true,
+   "rejected_ideas": [
+    {
+     "title": "Make every class a protocol by default",
+     "summary": "Some languages such as Go make structural subtyping the only or the primary form of subtyping. We could achieve a similar result by making all classes protocols by default (or even always). However we believe that it is better to require classes to be explicitly marked as protocols, for the following reasons: * Protocols don't have some properties of regular classes. In particular, isinstance(), ..."
+    },
+    {
+     "title": "Protocols subclassing normal classes",
+     "summary": "The main rationale to prohibit this is to preserve transitivity of subtyping, consider this example: Now, C is a subtype of Proto, and Proto is a subtype of Base. But C cannot be a subtype of Base (since the latter is not a protocol). This situation would be really weird. In addition, there is an ambiguity about whether attributes of Base should become protocol members of Proto."
+    },
+    {
+     "title": "Support optional protocol members",
+     "summary": "We can come up with examples where it would be handy to be able to say that a method or data attribute does not need to be present in a class implementing a protocol, but if it is present, it must conform to a specific signature or type. One could use a hasattr() check to determine whether they can use the attribute on a particular instance. Languages such as TypeScript have similar features and ..."
+    },
+    {
+     "title": "Allow only protocol methods and force use of getters and setters",
+     "summary": "One could argue that protocols typically only define methods, but not variables. However, using getters and setters in cases where only a simple variable is needed would be quite unpythonic. Moreover, the widespread use of properties (that often act as type validators) in large code bases is partially due to previous absence of static type checkers for Python, the problem that PEP 484 and this ..."
+    },
+    {
+     "title": "Support non-protocol members",
+     "summary": "There was an idea to make some methods \"non-protocol\" (i.e. not necessary to implement, and inherited in explicit subclassing), but it was rejected, since this complicates things. For example, consider this situation: The question is should this be an error? We think most people would expect this to be valid. Therefore, to be on the safe side, we need to require both methods to be implemented in ..."
+    },
+    {
+     "title": "Make protocols interoperable with other approaches",
+     "summary": "The protocols as described here are basically a minimal extension to the existing concept of ABCs. We argue that this is the way they should be understood, instead of as something that *replaces* Zope interfaces, for example. Attempting such interoperabilities will significantly complicate both the concept and the implementation. On the other hand, Zope interfaces are conceptually a superset of ..."
+    },
+    {
+     "title": "Use assignments to check explicitly that a class implements a protocol",
+     "summary": "In the Go language the explicit checks for implementation are performed via dummy assignments [golang]_. Such a way is also possible with the current proposal. Example: This approach moves the check away from the class definition and it almost requires a comment as otherwise the code probably would not make any sense to an average reader -- it looks like dead code. Besides, in the simplest form ..."
+    },
+    {
+     "title": "Support isinstance() checks by default",
+     "summary": "The problem with this is instance checks could be unreliable, except for situations where there is a common signature convention such as Iterable. For example: Another potentially problematic case is assignment of attributes *after* instantiation: We argue that requiring an explicit class decorator would be better, since one can then attach warnings about problems like this in the documentation. ..."
+    },
+    {
+     "title": "Provide a special intersection type construct",
+     "summary": "There was an idea to allow Proto = All[Proto1, Proto2, ...] as a shorthand for: However, it is not yet clear how popular/useful it will be and implementing this in type checkers for non-protocol classes could be difficult. Finally, it will be very easy to add this later if needed."
+    },
+    {
+     "title": "Prohibit explicit subclassing of protocols by non-protocols",
+     "summary": "This was rejected for the following reasons: * Backward compatibility: People are already using ABCs, including generic ABCs from typing module. If we prohibit explicit subclassing of these ABCs, then quite a lot of code will break. * Convenience: There are existing protocol-like ABCs (that may be turned into protocols) that have many useful \"mix-in\" (non-abstract) methods. For example, in the ..."
+    },
+    {
+     "title": "Covariant subtyping of mutable attributes",
+     "summary": "Rejected because covariant subtyping of mutable attributes is not safe. Consider this example: It was initially proposed to allow this for practical reasons, but it was subsequently rejected, since this may mask some hard to spot bugs."
+    },
+    {
+     "title": "Overriding inferred variance of protocol classes",
+     "summary": "It was proposed to allow declaring protocols as invariant if they are actually covariant or contravariant (as it is possible for nominal classes, see PEP 484). However, it was decided not to do this because of several downsides: * Declared protocol invariance breaks transitivity of sub-typing. Consider this situation: * Subtyping checks will always require type inference for protocols. In the ..."
+    },
+    {
+     "title": "Support adapters and adaptation",
+     "summary": "Adaptation was proposed by PEP 246 (rejected) and is supported by zope.interface, see the Zope documentation on adapter registries. Adapters is quite an advanced concept, and PEP 484 supports unions and generic aliases that can be used instead of adapters. This can be illustrated with an example of Iterable protocol, there is another way of supporting iteration by providing __getitem__ and ..."
+    },
+    {
+     "title": "Call structural base types \"interfaces\"",
+     "summary": "\"Protocol\" is a term already widely used in Python to describe duck typing contracts such as the iterator protocol (providing __iter__ and __next__), and the descriptor protocol (providing __get__, __set__, and __delete__). In addition to this and other reasons given in `specification`_, protocols are different from Java interfaces in several aspects: protocols don't require explicit declaration ..."
+    },
+    {
+     "title": "Make protocols special objects at runtime rather than normal ABCs",
+     "summary": "Making protocols non-ABCs will make the backwards compatibility problematic if possible at all. For example, collections.abc.Iterable is already an ABC, and lots of existing code use patterns like isinstance(obj, collections.abc.Iterable) and similar checks with other ABCs (also in a structural manner, i.e., via __subclasshook__). Disabling this behavior will cause breakages. If we keep this ..."
+    }
+   ],
+   "backwards_compatibility": [
+    {
+     "title": "Backwards Compatibility",
+     "summary": "This PEP is fully backwards compatible."
+    }
+   ]
+  },
+  {
+   "id": "pep:560",
+   "type": "PEP",
+   "number": 560,
+   "title": "Core support for typing module and generic types",
+   "status": "Final",
+   "pep_type": "Standards Track",
+   "python_version": "3.7",
+   "created": "03-Sep-2017",
+   "authors": "Ivan Levkivskyi <levkivskyi@gmail.com>",
+   "url": "https://peps.python.org/pep-0560/",
+   "mentions_typing_extensions": false,
+   "rejected_ideas": [],
+   "backwards_compatibility": [
+    {
+     "title": "Backwards compatibility and impact on users who don't use typing",
+     "summary": "This proposal may break code that currently uses the names __class_getitem__ and __mro_entries__. (But the language reference explicitly reserves *all* undocumented dunder names, and allows \"breakage without warning\"; see [6]_.) This proposal will support almost complete backwards compatibility with the current public generic types API; moreover the typing module is still provisional. The only ..."
+    }
+   ]
+  },
+  {
+   "id": "pep:561",
+   "type": "PEP",
+   "number": 561,
+   "title": "Distributing and Packaging Type Information",
+   "status": "Final",
+   "pep_type": "Standards Track",
+   "python_version": "3.7",
+   "created": "09-Sep-2017",
+   "authors": "Emma Harper Smith <emma@python.org>",
+   "url": "https://peps.python.org/pep-0561/",
+   "mentions_typing_extensions": false,
+   "rejected_ideas": [],
+   "backwards_compatibility": []
+  },
+  {
+   "id": "pep:563",
+   "type": "PEP",
+   "number": 563,
+   "title": "Postponed Evaluation of Annotations",
+   "status": "Superseded",
+   "pep_type": "Standards Track",
+   "python_version": "3.7",
+   "created": "08-Sep-2017",
+   "authors": "Łukasz Langa <lukasz@python.org>",
+   "url": "https://peps.python.org/pep-0563/",
+   "mentions_typing_extensions": false,
+   "rejected_ideas": [
+    {
+     "title": "Keeping the ability to use function local state when defining annotations",
+     "summary": "With postponed evaluation, this would require keeping a reference to the frame in which an annotation got created. This could be achieved for example by storing all annotations as lambdas instead of strings. This would be prohibitively expensive for highly annotated code as the frames would keep all their objects alive. That includes predominantly objects that won't ever be accessed again. To be ..."
+    },
+    {
+     "title": "Disallowing local state usage for classes, too",
+     "summary": "This PEP originally proposed limiting names within annotations to only allow names from the model-level scope, including for classes. The author argued this makes name resolution unambiguous, including in cases of conflicts between local names and module-level names. This idea was ultimately rejected in case of classes. Instead, typing.get_type_hints() got modified to populate the local namespace ..."
+    },
+    {
+     "title": "Introducing a new dictionary for the string literal form instead",
+     "summary": "Yury Selivanov shared the following idea: 1. Add a new special attribute to functions: __annotations_text__. 2. Make __annotations__ a lazy dynamic mapping, evaluating expressions from the corresponding key in __annotations_text__ just-in-time. This idea is supposed to solve the backwards compatibility issue, removing the need for a new __future__ import. Sadly, this is not enough. Postponed ..."
+    },
+    {
+     "title": "Dropping annotations with -O",
+     "summary": "There are two reasons this is not satisfying for the purpose of this PEP. First, this only addresses runtime cost, not forward references, those still cannot be safely used in source code. A library maintainer would never be able to use forward references since that would force the library users to use this new hypothetical -O switch. Second, this throws the baby out with the bath water. Now *no* ..."
+    },
+    {
+     "title": "Passing string literals in annotations verbatim to __annotations__",
+     "summary": "This PEP originally suggested directly storing the contents of a string literal under its respective key in __annotations__. This was meant to simplify support for runtime type checkers. Mark Shannon pointed out this idea was flawed since it wasn't handling situations where strings are only part of a type annotation. The inconsistency of it was always apparent but given that it doesn't fully ..."
+    },
+    {
+     "title": "Making the name of the future import more verbose",
+     "summary": "Instead of requiring the following import: the PEP could call the feature more explicitly, for example string_annotations, stringify_annotations, annotation_strings, annotations_as_strings, lazy_annotations, static_annotations, etc. The problem with those names is that they are very verbose. Each of them besides lazy_annotations would constitute the longest future feature name in Python. They are ..."
+    }
+   ],
+   "backwards_compatibility": []
+  },
+  {
+   "id": "pep:585",
+   "type": "PEP",
+   "number": 585,
+   "title": "Type Hinting Generics In Standard Collections",
+   "status": "Final",
+   "pep_type": "Standards Track",
+   "python_version": "3.9",
+   "created": "03-Mar-2019",
+   "authors": "Łukasz Langa <lukasz@python.org>",
+   "url": "https://peps.python.org/pep-0585/",
+   "mentions_typing_extensions": false,
+   "rejected_ideas": [
+    {
+     "title": "Do nothing",
+     "summary": "Keeping the status quo forces Python programmers to perform book-keeping of imports from the typing module for standard collections, making all but the simplest annotations cumbersome to maintain. The existence of parallel types is confusing to newcomers (why is there both list and List?). The above problems also don't exist in user-built generic classes which share runtime functionality and the ..."
+    },
+    {
+     "title": "Generics erasure",
+     "summary": "It would be easier to implement __class_getitem__ on the listed standard collections in a way that doesn't preserve the generic type, in other words: This is problematic as it breaks backwards compatibility: current equivalents of those types in the typing module **do** preserve the generic type: As mentioned in the \"Implementation\" section, preserving the generic type at runtime enables runtime ..."
+    },
+    {
+     "title": "Disallowing instantiation of parameterized types",
+     "summary": "Given that the proxy type which preserves __origin__ and __args__ is mostly useful for runtime introspection purposes, we might have disallowed instantiation of parameterized types. In fact, forbidding instantiation of parameterized types is what the typing module does today for types which parallel builtin collections (instantiation of other parameterized types is allowed). The original reason ..."
+    },
+    {
+     "title": "Making isinstance(obj, list[str]) perform a check ignoring generics",
+     "summary": "An earlier version of this PEP suggested treating parameterized generics like list[str] as equivalent to their non-parameterized variants like list for purposes of isinstance() and issubclass(). This would be symmetrical to how list[str]() creates a regular list. This design was rejected because isinstance() and issubclass() checks with parameterized generics would read like element-by-element ..."
+    },
+    {
+     "title": "Making isinstance(obj, list[str]) perform a runtime type check",
+     "summary": "This functionality requires iterating over the collection which is a destructive operation in some of them. This functionality would have been useful, however implementing the type checker within Python that would deal with complex types, nested type checking, type variables, string forward references, and so on is out of scope for this PEP."
+    },
+    {
+     "title": "Naming the type GenericType instead of GenericAlias",
+     "summary": "We considered a different name for this type, but decided GenericAlias is better -- these aren't real types, they are aliases for the corresponding container type with some extra metadata attached."
+    }
+   ],
+   "backwards_compatibility": [
+    {
+     "title": "Backwards compatibility",
+     "summary": "Tooling, including type checkers and linters, will have to be adapted to recognize standard collections as generics. On the source level, the newly described functionality requires Python 3.9. For use cases restricted to type annotations, Python files with the \"annotations\" future-import (available since Python 3.7) can parameterize standard collections, including builtins. To reiterate, that ..."
+    },
+    {
+     "title": "Forward compatibility",
+     "summary": "Future standard collections must implement the same behavior."
+    }
+   ]
+  },
+  {
+   "id": "pep:586",
+   "type": "PEP",
+   "number": 586,
+   "title": "Literal Types",
+   "status": "Final",
+   "pep_type": "Standards Track",
+   "python_version": "3.8",
+   "created": "14-Mar-2019",
+   "authors": "Michael Lee <michael.lee.0x2a@gmail.com>, Ivan Levkivskyi <levkivskyi@gmail.com>, Jukka Lehtosalo <jukka.lehtosalo@iki.fi>",
+   "url": "https://peps.python.org/pep-0586/",
+   "mentions_typing_extensions": true,
+   "rejected_ideas": [
+    {
+     "title": "True dependent types/integer generics",
+     "summary": "This proposal is essentially describing adding a very simplified dependent type system to the PEP 484 ecosystem. One obvious extension would be to implement a full-fledged dependent type system that lets users predicate types based on their values in arbitrary ways. That would let us write signatures like the below: At the very least, it would be useful to add some form of integer generics. ..."
+    },
+    {
+     "title": "Adding more concise syntax",
+     "summary": "One objection to this PEP is that having to explicitly write Literal[...] feels verbose. For example, instead of writing: Unfortunately, these abbreviations simply will not work with the existing implementation of typing at runtime. For example, the following snippet crashes when run using Python 3.7: Running this yields the following exception: We don’t want users to have to memorize exactly ..."
+    }
+   ],
+   "backwards_compatibility": [
+    {
+     "title": "Backwards compatibility",
+     "summary": "When type checkers add support for Literal, it's important they do so in a way that maximizes backwards-compatibility. Type checkers should ensure that code that used to type check continues to do so after support for Literal is added on a best-effort basis. This is particularly important when performing type inference. For example, given the statement x = \"blue\", should the inferred type of x be ..."
+    }
+   ]
+  },
+  {
+   "id": "pep:589",
+   "type": "PEP",
+   "number": 589,
+   "title": "TypedDict: Type Hints for Dictionaries with a Fixed Set of Keys",
+   "status": "Final",
+   "pep_type": "Standards Track",
+   "python_version": "3.8",
+   "created": "20-Mar-2019",
+   "authors": "Jukka Lehtosalo <jukka.lehtosalo@iki.fi>",
+   "url": "https://peps.python.org/pep-0589/",
+   "mentions_typing_extensions": true,
+   "rejected_ideas": [
+    {
+     "title": "Rejected Alternatives",
+     "summary": "Several proposed ideas were rejected. The current set of features seem to cover a lot of ground, and it was not clear which of the proposed extensions would be more than marginally useful. This PEP defines a baseline feature that can be potentially extended later. These are rejected on principle, as incompatible with the spirit of this proposal: * TypedDict isn't extensible, and it addresses only ..."
+    }
+   ],
+   "backwards_compatibility": [
+    {
+     "title": "Backwards Compatibility",
+     "summary": "To retain backwards compatibility, type checkers should not infer a TypedDict type unless it is sufficiently clear that this is desired by the programmer. When unsure, an ordinary dictionary type should be inferred. Otherwise existing code that type checks without errors may start generating errors once TypedDict support is added to the type checker, since TypedDict types are more restrictive ..."
+    }
+   ]
+  },
+  {
+   "id": "pep:591",
+   "type": "PEP",
+   "number": 591,
+   "title": "Adding a final qualifier to typing",
+   "status": "Final",
+   "pep_type": "Standards Track",
+   "python_version": "3.8",
+   "created": "15-Mar-2019",
+   "authors": "Michael J. Sullivan <sully@msully.net>, Ivan Levkivskyi <levkivskyi@gmail.com>",
+   "url": "https://peps.python.org/pep-0591/",
+   "mentions_typing_extensions": true,
+   "rejected_ideas": [
+    {
+     "title": "Rejected/deferred Ideas",
+     "summary": "The name Const was also considered as the name for the Final type annotation. The name Final was chosen instead because the concepts are related and it seemed best to be consistent between them. We considered using a single name Final instead of introducing final as well, but @Final just looked too weird to us. A related feature to final classes would be Scala-style sealed classes, where a class ..."
+    }
+   ],
+   "backwards_compatibility": []
+  },
+  {
+   "id": "pep:593",
+   "type": "PEP",
+   "number": 593,
+   "title": "Flexible function and variable annotations",
+   "status": "Final",
+   "pep_type": "Standards Track",
+   "python_version": "3.9",
+   "created": "26-Apr-2019",
+   "authors": "Till Varoquaux <till.varoquaux@gmail.com>, Konstantin Kashin <kkashin@fb.com>",
+   "url": "https://peps.python.org/pep-0593/",
+   "mentions_typing_extensions": false,
+   "rejected_ideas": [
+    {
+     "title": "Rejected ideas",
+     "summary": "Some of the proposed ideas were rejected from this PEP because they would cause Annotated to not integrate cleanly with the other typing annotations: * Annotated cannot infer the decorated type. You could imagine that Annotated[..., Immutable] could be used to mark a value as immutable while still inferring its type. Typing does not support using the inferred type anywhere else; it's best to not ..."
+    }
+   ],
+   "backwards_compatibility": []
+  },
+  {
+   "id": "pep:604",
+   "type": "PEP",
+   "number": 604,
+   "title": "Allow writing union types as X | Y",
+   "status": "Final",
+   "pep_type": "Standards Track",
+   "python_version": "3.10",
+   "created": "28-Aug-2019",
+   "authors": "Philippe PRADOS <python@prados.fr>, Maggie Moss <maggiebmoss@gmail.com>",
+   "url": "https://peps.python.org/pep-0604/",
+   "mentions_typing_extensions": false,
+   "rejected_ideas": [
+    {
+     "title": "1. Add a new operator for Union[type1, type2]?",
+     "summary": "- This syntax can be more readable, and is similar to other languages (Scala, ...) - At runtime, int|str might return a simple object in 3.10, rather than everything that you'd need to grab from importing typing CONS: - Adding this operator introduces a dependency between typing and builtins - Breaks the backport (in that typing can easily be backported but core types can't) - If Python itself ..."
+    },
+    {
+     "title": "2. Change only PEP 484 (Type hints) to accept the syntax type1 | type2 ?",
+     "summary": "PEP 563 (Postponed Evaluation of Annotations) is enough to accept this proposition, if we accept to not be compatible with the dynamic evaluation of annotations (eval()). :"
+    },
+    {
+     "title": "3. Extend isinstance() and issubclass() to accept Union ?",
+     "summary": "- If they were permitted, then instance checking could use an extremely clean-looking notation CONS: - Must migrate all of the typing module in builtin"
+    }
+   ],
+   "backwards_compatibility": [
+    {
+     "title": "Incompatible changes",
+     "summary": "In some situations, some exceptions will not be raised as expected. If a metaclass implements the __or__ operator, it will override this:"
+    }
+   ]
+  },
+  {
+   "id": "pep:612",
+   "type": "PEP",
+   "number": 612,
+   "title": "Parameter Specification Variables",
+   "status": "Final",
+   "pep_type": "Standards Track",
+   "python_version": "3.10",
+   "created": "18-Dec-2019",
+   "authors": "Mark Mendoza <mendoza.mark.a@gmail.com>",
+   "url": "https://peps.python.org/pep-0612/",
+   "mentions_typing_extensions": false,
+   "rejected_ideas": [
+    {
+     "title": "Using List Variadics and Map Variadics",
+     "summary": "We considered just trying to make something like this with a callback protocol which was parameterized on a list-type variadic, and a map-type variadic like so: However, there are some problems with trying to come up with a consistent solution for those type variables for a given callable. This problem comes up with even the simplest of callables: Any time where a type can implement a protocol in ..."
+    },
+    {
+     "title": "Defining ParametersOf",
+     "summary": "Another proposal we considered was defining ParametersOf and ReturnType operators which would operate on a domain of a newly defined Function type. Function would be callable with, and only with ParametersOf[F]. ParametersOf and ReturnType would only operate on type variables with precisely this bound. The combination of these three features could express everything that we can express with ..."
+    },
+    {
+     "title": "Concatenating Keyword Parameters",
+     "summary": "In principle the idea of concatenation as a means to modify a finite number of positional parameters could be expanded to include keyword parameters. However, the key distinction is that while prepending positional-only parameters to a valid callable type always yields another valid callable type, the same cannot be said for adding keyword-only parameters. As alluded to above_ , the issue is name ..."
+    },
+    {
+     "title": "Naming this a ParameterSpecification",
+     "summary": "We decided that ParameterSpecification was a little too long-winded for use here, and that this style of abbreviated name made it look more like TypeVar."
+    },
+    {
+     "title": "Naming this an ArgSpec",
+     "summary": "We think that calling this a ParamSpec is more correct than referring to it as an ArgSpec, since callables have parameters, which are distinct from the arguments which are passed to them in a given call site. A given binding for a ParamSpec is a set of function parameters, not a call-site’s arguments."
+    }
+   ],
+   "backwards_compatibility": [
+    {
+     "title": "Backwards Compatibility",
+     "summary": "The only changes necessary to existing features in typing is allowing these ParamSpec and Concatenate objects to be the first parameter to Callable and to be a parameter to Generic. Currently Callable expects a list of types there and Generic expects single types, so they are currently mutually exclusive. Otherwise, existing code that doesn't reference the new interfaces will be unaffected."
+    }
+   ]
+  },
+  {
+   "id": "pep:613",
+   "type": "PEP",
+   "number": 613,
+   "title": "Explicit Type Aliases",
+   "status": "Final",
+   "pep_type": "Standards Track",
+   "python_version": "3.10",
+   "created": "21-Jan-2020",
+   "authors": "Shannon Zhu <szhu@fb.com>",
+   "url": "https://peps.python.org/pep-0613/",
+   "mentions_typing_extensions": false,
+   "rejected_ideas": [
+    {
+     "title": "Rejected Ideas",
+     "summary": "Some alternative syntaxes were considered for explicit aliases: : This looks a lot like an uninitialized variable. : Along with the option above, this format potentially adds confusion around what the runtime value of MyType is. In comparison, the chosen syntax option MyType: TypeAlias = int is appealing because it still sticks with the MyType = int assignment syntax, and adds some information ..."
+    }
+   ],
+   "backwards_compatibility": [
+    {
+     "title": "Backwards Compatibility",
+     "summary": "Explicit aliases provide an alternative way to declare type aliases, but all pre-existing code and old alias declarations will work as before."
+    }
+   ]
+  },
+  {
+   "id": "pep:646",
+   "type": "PEP",
+   "number": 646,
+   "title": "Variadic Generics",
+   "status": "Final",
+   "pep_type": "Standards Track",
+   "python_version": "3.11",
+   "created": "16-Sep-2020",
+   "authors": "Mark Mendoza <mendoza.mark.a@gmail.com>, Matthew Rahtz <mrahtz@google.com>, Pradeep Kumar Srinivasan <gohanpra@gmail.com>, Vincent Siles <vsiles@fb.com>",
+   "url": "https://peps.python.org/pep-0646/",
+   "mentions_typing_extensions": false,
+   "rejected_ideas": [
+    {
+     "title": "Shape Arithmetic",
+     "summary": "Considering the use case of array shapes in particular, note that as of this PEP, it is not yet possible to describe arithmetic transformations of array dimensions - for example, def repeat_each_element(x: Array[N]) -> Array[2*N]. We consider this out-of-scope for the current PEP, but plan to propose additional mechanisms that *will* enable this in a future PEP."
+    },
+    {
+     "title": "Supporting Variadicity Through Aliases",
+     "summary": "As noted in the introduction, it *is* possible to avoid variadic generics by simply defining aliases for each possible number of type parameters: : However, this seems somewhat clumsy - it requires users to unnecessarily pepper their code with 1s, 2s, and so on for each rank necessary."
+    },
+    {
+     "title": "Construction of TypeVarTuple",
+     "summary": "TypeVarTuple began as ListVariadic, based on its naming in an early implementation in Pyre. We then changed this to TypeVar(list=True), on the basis that a) it better emphasises the similarity to TypeVar, and b) the meaning of 'list' is more easily understood than the jargon of 'variadic'. Once we'd decided that a variadic type variable should behave like a Tuple, we also considered ..."
+    },
+    {
+     "title": "Unspecified Type Parameters: Tuple vs TypeVarTuple",
+     "summary": "In order to support gradual typing, this PEP states that *both* of the following examples should type-check correctly: : Note that this is in contrast to the behaviour of the only currently-existing variadic type in Python, Tuple: : The rules for Tuple were deliberately chosen such that the latter case is an error: it was thought to be more likely that the programmer has made a mistake than that ..."
+    },
+    {
+     "title": "Alternatives",
+     "summary": "It should be noted that the approach outlined in this PEP to solve the issue of shape checking in numerical libraries is *not* the only approach possible. Examples of lighter-weight alternatives based on *runtime* checking include ShapeGuard [#shapeguard]_, tsanley [#tsanley]_, and PyContracts [#pycontracts]_. While these existing approaches improve significantly on the default situation of shape ..."
+    },
+    {
+     "title": "Alternatives (Why Not Just Use Unpack?)",
+     "summary": "If these grammar changes are considered too burdensome, there are two alternatives. The first would be to **support change 1 but not change 2**. Variadic generics are more important to us than the ability to annotate *args. The second alternative would be to **use Unpack instead**, requiring no grammar changes. However, we regard this as a suboptimal solution for two reasons: * **Readability**. ..."
+    }
+   ],
+   "backwards_compatibility": [
+    {
+     "title": "Unpack for Backwards Compatibility",
+     "summary": "Note that the use of the star operator in this context requires a grammar change, and is therefore available only in new versions of Python. To enable use of type variable tuples in older versions of Python, we introduce the Unpack type operator that can be used in place of the star operator: :"
+    },
+    {
+     "title": "Backwards Compatibility",
+     "summary": "The Unpack version of the PEP should be back-portable to previous versions of Python. Gradual typing is enabled by the fact that unparameterised variadic classes are compatible with an arbitrary number of type parameters. This means that if existing classes are made generic, a) all existing (unparameterised) uses of the class will still work, and b) parameterised and unparameterised versions of ..."
+    }
+   ]
+  },
+  {
+   "id": "pep:647",
+   "type": "PEP",
+   "number": 647,
+   "title": "User-Defined Type Guards",
+   "status": "Final",
+   "pep_type": "Standards Track",
+   "python_version": "3.10",
+   "created": "07-Oct-2020",
+   "authors": "Eric Traut <erictr at microsoft.com>",
+   "url": "https://peps.python.org/pep-0647/",
+   "mentions_typing_extensions": false,
+   "rejected_ideas": [
+    {
+     "title": "Decorator Syntax",
+     "summary": "The use of a decorator was considered for defining type guards. : The decorator approach is inferior because it requires runtime evaluation of the type, precluding forward references. The proposed approach was also deemed to be easier to understand and simpler to implement."
+    },
+    {
+     "title": "Enforcing Strict Narrowing",
+     "summary": "Strict type narrowing enforcement (requiring that the type specified in the TypeGuard type argument is a narrower form of the type specified for the first parameter) was considered, but this eliminates valuable use cases for this functionality. For instance, the is_str_list example above would be considered invalid because List[str] is not a subtype of List[object] because of invariance rules. ..."
+    },
+    {
+     "title": "Conditionally Applying TypeGuard Type",
+     "summary": "It was suggested that the expression passed as the first argument to a type guard function should retain its existing type if the type of the expression was a proper subtype of the type specified in the TypeGuard return type. For example, if the type guard function is def f(value: object) -> TypeGuard[float] and the expression passed to this function is of type int, it would retain the int type ..."
+    },
+    {
+     "title": "Narrowing of Arbitrary Parameters",
+     "summary": "TypeScript's formulation of user-defined type guards allows for any input parameter to be used as the value tested for narrowing. The TypeScript language authors could not recall any real-world examples in TypeScript where the parameter being tested was not the first parameter. For this reason, it was decided unnecessary to burden the Python implementation of user-defined type guards with ..."
+    },
+    {
+     "title": "Narrowing of Implicit \"self\" and \"cls\" Parameters",
+     "summary": "The proposal states that the first positional argument is assumed to be the value that is tested for narrowing. If the type guard function is implemented as an instance or class method, an implicit self or cls argument will also be passed to the function. A concern was raised that there may be cases where it is desired to apply the narrowing logic on self and cls. This is an unusual use case, and ..."
+    }
+   ],
+   "backwards_compatibility": [
+    {
+     "title": "Backwards Compatibility",
+     "summary": "Existing code that does not use this new functionality will be unaffected. Notably, code which uses annotations in a manner incompatible with the stdlib typing library should simply not import TypeGuard."
+    }
+   ]
+  },
+  {
+   "id": "pep:649",
+   "type": "PEP",
+   "number": 649,
+   "title": "Deferred Evaluation Of Annotations Using Descriptors",
+   "status": "Final",
+   "pep_type": "Standards Track",
+   "python_version": "3.14",
+   "created": "11-Jan-2021",
+   "authors": "Larry Hastings <larry@hastings.org>",
+   "url": "https://peps.python.org/pep-0649/",
+   "mentions_typing_extensions": false,
+   "rejected_ideas": [
+    {
+     "title": "Mistaken Rejection Of This Approach In November 2017",
+     "summary": "During the early days of discussion around PEP 563, in a November 2017 thread in comp.lang.python-dev, the idea of using code to delay the evaluation of annotations was briefly discussed. At the time the technique was termed an \"implicit lambda expression\". Guido van Rossum—Python's BDFL at the time—replied, asserting that these \"implicit lambda expression\" wouldn't work, because they'd only be ..."
+    },
+    {
+     "title": "\"Just store the strings\"",
+     "summary": "One proposed idea for supporting SOURCE format was for the Python compiler to emit the actual source code for the annotation values somewhere, and to furnish that when the user requested SOURCE format. This idea wasn't rejected so much as categorized as \"not yet\". We already know we need to support FORWARDREF format, and that technique can be adapted to support SOURCE format in just a few lines. ..."
+    }
+   ],
+   "backwards_compatibility": []
+  },
+  {
+   "id": "pep:655",
+   "type": "PEP",
+   "number": 655,
+   "title": "Marking individual TypedDict items as required or potentially-missing",
+   "status": "Final",
+   "pep_type": "Standards Track",
+   "python_version": "3.11",
+   "created": "30-Jan-2021",
+   "authors": "David Foster <david at dafoster.net>",
+   "url": "https://peps.python.org/pep-0655/",
+   "mentions_typing_extensions": true,
+   "rejected_ideas": [
+    {
+     "title": "Special syntax around the *key* of a TypedDict item",
+     "summary": "This notation would require Python grammar changes and it is not believed that marking TypedDict items as required or potentially-missing would meet the high bar required to make such grammar changes. : This notation causes Optional[] to take on different meanings depending on where it is positioned, which is inconsistent and confusing. Also, “let’s just not put funny syntax before the colon.” ..."
+    },
+    {
+     "title": "Marking required or potentially-missing keys with an operator",
+     "summary": "We could use unary + as shorthand to mark a required key, unary - to mark a potentially-missing key, or unary ~ to mark a key with opposite-of-normal totality: : Such operators could be implemented on type via the __pos__, __neg__ and __invert__ special methods without modifying the grammar. It was decided that it would be prudent to introduce long-form notation (i.e. Required[] and ..."
+    },
+    {
+     "title": "Marking absence of a value with a special constant",
+     "summary": "We could introduce a new type-level constant which signals the absence of a value when used as a union member, similar to JavaScript’s undefined type, perhaps called Missing: : Such a Missing constant could also be used for other scenarios such as the type of a variable which is only conditionally defined: : :"
+    },
+    {
+     "title": "Misalignment with how unions apply to values",
+     "summary": "However this use of ...|Missing, equivalent to Union[..., Missing], doesn’t align well with what a union normally means: Union[...] always describes the type of a *value* that is present. By contrast missingness or non-totality is a property of a *variable* instead. Current precedent for marking properties of a variable include Final[...] and ClassVar[...], which the proposal for Required[...] is ..."
+    },
+    {
+     "title": "Misalignment with how unions are subdivided",
+     "summary": "Furthermore the use of Union[..., Missing] doesn’t align with the usual ways that union values are broken down: Normally you can eliminate components of a union type using isinstance checks: : However if we were to allow Union[..., Missing] you’d either have to eliminate the Missing case with hasattr for object attributes: : or a check against locals() for local variables: : or a check via other ..."
+    },
+    {
+     "title": "Difficult to implement",
+     "summary": "Eric Traut from the Pyright type checker team has stated that implementing a Union[..., Missing]-style notation would be difficult. [2]_"
+    },
+    {
+     "title": "Introduces a second null-like value into Python",
+     "summary": "Defining a new Missing type-level constant would be very close to introducing a new Missing value-level constant at runtime, creating a second null-like runtime value in addition to None. Having two different null-like constants in Python (None and Missing) would be confusing. Many newcomers to JavaScript already have difficulty distinguishing between its analogous constants null and undefined."
+    },
+    {
+     "title": "Replace Optional with Nullable. Repurpose Optional to mean “optional item”.",
+     "summary": "Optional[] is too ubiquitous to deprecate, although use of it *may* fade over time in favor of the T|None notation specified by PEP 604."
+    },
+    {
+     "title": "Change Optional to mean “optional item” in certain contexts instead of “nullable”",
+     "summary": "Consider the use of a special flag on a TypedDict definition to alter the interpretation of Optional inside the TypedDict to mean “optional item” rather than its usual meaning of “nullable”: : or: : This would add more confusion for users because it would mean that in *some* contexts the meaning of Optional[] is different than in other contexts, and it would be easy to overlook the flag."
+    },
+    {
+     "title": "Various synonyms for “potentially-missing item”",
+     "summary": "- Omittable – too easy to confuse with optional - OptionalItem, OptionalKey – two words; too easy to confuse with optional - MayExist, MissingOk – two words - Droppable – too similar to Rust’s Drop, which means something different - Potential – too vague - Open – sounds like applies to an entire structure rather then to an item - Excludable - Checked"
+    }
+   ],
+   "backwards_compatibility": [
+    {
+     "title": "Backwards Compatibility",
+     "summary": "No backward incompatible changes are made by this PEP."
+    }
+   ]
+  },
+  {
+   "id": "pep:673",
+   "type": "PEP",
+   "number": 673,
+   "title": "Self Type",
+   "status": "Final",
+   "pep_type": "Standards Track",
+   "python_version": "3.11",
+   "created": "10-Nov-2021",
+   "authors": "Pradeep Kumar Srinivasan <gohanpra@gmail.com>, James Hilton-Balfe <gobot1234yt@gmail.com>",
+   "url": "https://peps.python.org/pep-0673/",
+   "mentions_typing_extensions": false,
+   "rejected_ideas": [
+    {
+     "title": "Allow the Type Checker to Infer the Return Type",
+     "summary": "One proposal is to leave the Self type implicit and let the type checker infer from the body of the method that the return type must be the same as the type of the self parameter: : We reject this because Explicit Is Better Than Implicit. Beyond that, the above approach will fail for type stubs, which don’t have method bodies to analyze."
+    }
+   ],
+   "backwards_compatibility": []
+  },
+  {
+   "id": "pep:675",
+   "type": "PEP",
+   "number": 675,
+   "title": "Arbitrary Literal String Type",
+   "status": "Final",
+   "pep_type": "Standards Track",
+   "python_version": "3.11",
+   "created": "30-Nov-2021",
+   "authors": "Pradeep Kumar Srinivasan <gohanpra@gmail.com>, Graham Bleaney <gbleaney@gmail.com>",
+   "url": "https://peps.python.org/pep-0675/",
+   "mentions_typing_extensions": true,
+   "rejected_ideas": [
+    {
+     "title": "Why not use tool X?",
+     "summary": "Tools to catch issues such as SQL injection seem to come in three flavors: AST based, function level analysis, and taint flow analysis. **AST-based tools**: Bandit has a plugin to warn when SQL queries are not literal strings. The problem is that many perfectly safe SQL queries are dynamically built out of string literals, as shown in the `Motivation`_ section. At the AST level, the resultant SQL ..."
+    },
+    {
+     "title": "Why not use a NewType for str?",
+     "summary": "Any API for which LiteralString would be suitable could instead be updated to accept a different type created within the Python type system, such as NewType(\"SafeSQL\", str): : Having to create a new type to call an API might give some developers pause and encourage more caution, but it doesn't guarantee that developers won't just turn a user controlled string into the new type, and pass it into ..."
+    },
+    {
+     "title": "Why not try to emulate Trusted Types?",
+     "summary": "Trusted Types is a W3C specification for preventing DOM-based Cross Site Scripting (XSS). XSS occurs when dangerous browser APIs accept raw user-controlled strings. The specification modifies these APIs to accept only the \"Trusted Types\" returned by designated sanitizing functions. These sanitizing functions must take in a potentially malicious string and validate it or render it benign somehow, ..."
+    },
+    {
+     "title": "Runtime Checkable LiteralString",
+     "summary": "The LiteralString concept could be extended beyond static type checking to be a runtime checkable property of str objects. This would provide some benefits, such as allowing frameworks to raise errors on dynamic strings. Such runtime errors would be a more robust defense mechanism than type errors, which can potentially be suppressed, ignored, or never even seen if the author does not use a type ..."
+    },
+    {
+     "title": "LiteralBytes",
+     "summary": "We could generalize literal byte types, such as Literal[b\"foo\"], to LiteralBytes. However, literal byte types are used much less frequently than literal string types and we did not find much user demand for LiteralBytes, so we decided not to include it in this PEP. Others may, however, consider it in future PEPs."
+    }
+   ],
+   "backwards_compatibility": [
+    {
+     "title": "Backwards Compatibility",
+     "summary": "We propose adding typing_extensions.LiteralString for use in earlier Python versions. As PEP 586 mentions <586#backwards-compatibility>, type checkers \"should feel free to experiment with more sophisticated inference techniques\". So, if the type checker infers a literal string type for an unannotated variable that is initialized with a literal string, the following example should be OK: : This ..."
+    }
+   ]
+  },
+  {
+   "id": "pep:677",
+   "type": "PEP",
+   "number": 677,
+   "title": "Callable Type Syntax",
+   "status": "Rejected",
+   "pep_type": "Standards Track",
+   "python_version": "3.11",
+   "created": "13-Dec-2021",
+   "authors": "Steven Troxler <steven.troxler@gmail.com>, Pradeep Kumar Srinivasan <gohanpra@gmail.com>",
+   "url": "https://peps.python.org/pep-0677/",
+   "mentions_typing_extensions": false,
+   "rejected_ideas": [
+    {
+     "title": "Extended Syntax Supporting Named and Optional Arguments",
+     "summary": "Another alternative was for a compatible but more complex syntax that could express everything in this PEP but also named, optional, and variadic arguments. In this “extended” syntax proposal the following types would have been equivalent: Advantages of this syntax include: - Most of the advantages of the proposal in this PEP (conciseness, PEP 612 support, etc) - Furthermore, the ability to ..."
+    },
+    {
+     "title": "Syntax Closer to Function Signatures",
+     "summary": "One alternative we had floated was a syntax much more similar to function signatures. In this proposal, the following types would have been equivalent: The benefits of this proposal would have included: - Perfect syntactic consistency between signatures and callable types. - Support for more features of function signatures (named, optional, variadic args) that this PEP does not support. Key ..."
+    },
+    {
+     "title": "Functions-as-Types",
+     "summary": "An idea we looked at very early on was to allow using functions as types. The idea is allowing a function to stand in for its own call signature, with roughly the same semantics as the __call__ method of callback protocols: This may be a good idea, but we do not consider it a viable replacement for callable types: - It would be difficult to handle ParamSpec, which we consider a critical feature ..."
+    },
+    {
+     "title": "Hybrid keyword-arrow Syntax",
+     "summary": "In the Rust language, a keyword fn is used to indicate functions in much the same way as Python's def, and callable types are indicated using a hybrid arrow syntax Fn(i64, String) -> bool. We could use the def keyword in callable types for Python, for example our two-parameter boolean function could be written as def(int, str) -> bool. But we think this might confuse readers into thinking def(A, ..."
+    },
+    {
+     "title": "Parenthesis-Free Syntax",
+     "summary": "We considered a parentheses-free syntax that would have been even more concise: We decided against it because this is not visually as similar to existing function header syntax. Moreover, it is visually similar to lambdas, which bind names with no parentheses: lambda x, y: x == y."
+    },
+    {
+     "title": "Requiring Outer Parentheses",
+     "summary": "A concern with the current proposal is readability, particularly when callable types are used in return type position which leads to multiple top-level -> tokens, for example: We considered a few ideas to prevent this by changing rules about parentheses. One was to move the parentheses to the outside, so that a two-argument boolean function is written (int, str -> bool). With this change, the ..."
+    },
+    {
+     "title": "Making -> bind tighter than |",
+     "summary": "In order to allow both -> and | tokens in type expressions we had to choose precedence. In the current proposal, this is a function returning an optional boolean: We considered having -> bind tighter so that instead the expression would parse as ((int, str) -> bool) | None. There are two advantages to this: - It means we no would longer have to treat None | (int, str) -> bool as a syntax error. - ..."
+    },
+    {
+     "title": "Introducing type-strings",
+     "summary": "Another idea was adding a new “special string” syntax and putting the type inside of it, for example t”(int, str) -> bool”. We rejected this because it is not as readable, and seems out of step with guidance from the Steering Council on ensuring that type expressions do not diverge from the rest of Python's syntax."
+    },
+    {
+     "title": "Improving Usability of the Indexed Callable Type",
+     "summary": "If we do not want to add new syntax for callable types, we could look at how to make the existing type easier to read. One proposal would be to make the builtin callable function indexable so that it could be used as a type: This change would be analogous to PEP 585 that made built in collections like list and dict usable as types, and would make imports more convenient, but it wouldn't help ..."
+    },
+    {
+     "title": "Alternative Runtime Behaviors",
+     "summary": "The hard requirements on our runtime API are that: - It must preserve backward compatibility with typing.Callable via __args__ and __params__. - It must provide a structured API, which should be extensible if in the future we try to support named and variadic arguments."
+    },
+    {
+     "title": "Alternative APIs",
+     "summary": "We considered having the runtime data types.CallableType use a more structured API where there would be separate fields for posonlyargs and param_spec. The current proposal was was inspired by the inspect.Signature type. We use \"argument\" in our field and type names, unlike \"parameter\" as in inspect.Signature, in order to avoid confusion with the callable_type.__parameters__ field from the legacy ..."
+    },
+    {
+     "title": "Using the plain return type in __args__ for async types",
+     "summary": "It is debatable whether we are required to preserve backward compatibility of __args__ for async callable types like async (int) -> str. The reason is that one could argue they are not expressible directly using typing.Callable, and therefore it would be fine to set __args__ as (int, int) rather than (int, typing.Awaitable[int]). But we believe this would be problematic. By preserving the ..."
+    }
+   ],
+   "backwards_compatibility": [
+    {
+     "title": "Incompatibility with other possible uses of * and **",
+     "summary": "The use of **P for supporting PEP 612 ParamSpec rules out any future proposal using a bare **<some_type> to type kwargs. This seems acceptable because: - If we ever do want such a syntax, it would be clearer to require an argument name anyway. This would also make the type look more similar to a function signature. In other words, if we ever support typing kwargs in callable types, we would ..."
+    },
+    {
+     "title": "Compatibility with Arrow-Based Lambda Syntax",
+     "summary": "To the best of our knowledge there is no active discussion of arrow-style lambda syntax that we are aware of, but it is nonetheless worth considering what possibilities would be ruled out by adopting this proposal. It would be incompatible with this proposal to adopt the same a parenthesized ->-based arrow syntax for lambdas, e.g. (x, y) -> x + y for lambda x, y: x + y. Our view is that if we ..."
+    },
+    {
+     "title": "Backward-Compatible API",
+     "summary": "To get backward compatibility with the existing types.Callable API, which relies on fields __args__ and __parameters__, we can define them as if they were written in terms of the following:"
+    },
+    {
+     "title": "Backward Compatibility",
+     "summary": "This PEP proposes a major syntax improvement over typing.Callable, but the static semantics are the same. As such, the only thing we need for backward compatibility is to ensure that types specified via the new syntax behave the same as equivalent typing.Callable and typing.Concatenate values they intend to replace. There is no particular interaction between this proposal and from __future__ ..."
+    }
+   ]
+  },
+  {
+   "id": "pep:681",
+   "type": "PEP",
+   "number": 681,
+   "title": "Data Class Transforms",
+   "status": "Final",
+   "pep_type": "Standards Track",
+   "python_version": "3.11",
+   "created": "02-Dec-2021",
+   "authors": "Erik De Bonte <erikd at microsoft.com>, Eric Traut <erictr at microsoft.com>",
+   "url": "https://peps.python.org/pep-0681/",
+   "mentions_typing_extensions": false,
+   "rejected_ideas": [
+    {
+     "title": "auto_attribs parameter",
+     "summary": "The attrs library supports an auto_attribs parameter that indicates whether class members decorated with PEP 526 variable annotations but with no assignment should be treated as data fields. We considered supporting auto_attribs and a corresponding auto_attribs_default parameter, but decided against this because it is specific to attrs. Django does not support declaring fields using type ..."
+    },
+    {
+     "title": "cmp parameter",
+     "summary": "The attrs library supports a bool parameter cmp that is equivalent to setting both eq and order to True. We chose not to support a cmp parameter, since it only applies to attrs. Users can emulate the cmp behaviour by using the eq and order parameter names instead."
+    },
+    {
+     "title": "Automatic field name aliasing",
+     "summary": "The attrs library performs automatic aliasing of field names that start with a single underscore, stripping the underscore from the name of the corresponding __init__ parameter. This proposal omits that behavior since it is specific to attrs. Users can manually alias these fields using the alias parameter."
+    },
+    {
+     "title": "Alternate field ordering algorithms",
+     "summary": "The attrs library currently supports two approaches to ordering the fields within a class: * Dataclass order: The same ordering used by dataclasses. This is the default behavior of the older APIs (e.g. attr.s). * Method Resolution Order (MRO): This is the default behavior of the newer APIs (e.g. define, mutable, frozen). Older APIs (e.g. attr.s) can opt into this behavior by specifying ..."
+    },
+    {
+     "title": "Fields redeclared in subclasses",
+     "summary": "The attrs library differs from stdlib dataclasses in how it handles inherited fields that are redeclared in subclasses. The dataclass specification preserves the original order, but attrs defines a new order based on subclasses. For simplicity, we chose to only support the dataclass behavior. Users of attrs who rely on the attrs-specific ordering will not see the expected order of parameters in ..."
+    },
+    {
+     "title": "Django primary and foreign keys",
+     "summary": "Django applies additional logic for primary and foreign keys. For example, it automatically adds an id field (and __init__ parameter) if there is no field designated as a primary key. As this is not broadly applicable to dataclass libraries, this additional logic is not accommodated with this proposal, so users of Django would need to explicitly declare the id field."
+    },
+    {
+     "title": "Class-wide default values",
+     "summary": "SQLAlchemy requested that we expose a way to specify that the default value of all fields in the transformed class is None. It is typical that all SQLAlchemy fields are optional, and None indicates that the field is not set. We chose not to support this feature, since it is specific to SQLAlchemy. Users can manually set default=None on these fields instead."
+    },
+    {
+     "title": "Descriptor-typed field support",
+     "summary": "We considered adding a boolean parameter on dataclass_transform to enable better support for fields with descriptor types, which is common in SQLAlchemy. When enabled, the type of each parameter on the synthesized __init__ method corresponding to a descriptor-typed field would be the type of the value parameter to the descriptor's __set__ method rather than the descriptor type itself. Similarly, ..."
+    },
+    {
+     "title": "converter field specifier parameter",
+     "summary": "The attrs library supports a converter field specifier parameter, which is a Callable that is called by the generated __init__ method to convert the supplied value to some other desired value. This is tricky to support since the parameter type in the synthesized __init__ method needs to accept uncovered values, but the resulting field is typed according to the output of the converter. Some ..."
+    }
+   ],
+   "backwards_compatibility": []
+  },
+  {
+   "id": "pep:688",
+   "type": "PEP",
+   "number": 688,
+   "title": "Making the buffer protocol accessible in Python",
+   "status": "Final",
+   "pep_type": "Standards Track",
+   "python_version": "3.12",
+   "created": "23-Apr-2022",
+   "authors": "Jelle Zijlstra <jelle.zijlstra@gmail.com>",
+   "url": "https://peps.python.org/pep-0688/",
+   "mentions_typing_extensions": true,
+   "rejected_ideas": [
+    {
+     "title": "types.Buffer",
+     "summary": "An earlier version of this PEP proposed adding a new types.Buffer type with an __instancecheck__ implemented in C so that isinstance() checks can be used to check whether a type implements the buffer protocol. This avoids the complexity of exposing the full buffer protocol to Python code, while still allowing the type system to check for the buffer protocol. However, that approach does not ..."
+    },
+    {
+     "title": "Keep bytearray compatible with bytes",
+     "summary": "It has been suggested to remove the special case where memoryview is always compatible with bytes, but keep it for bytearray, because the two types have very similar interfaces. However, several standard library functions (e.g., re.compile, socket.getaddrinfo, and most functions accepting path-like arguments) accept bytes but not bytearray. In most codebases, bytearray is also not a very common ..."
+    },
+    {
+     "title": "Distinguish between mutable and immutable buffers",
+     "summary": "The most frequently used distinction within buffer types is whether or not the buffer is mutable. Some functions accept only mutable buffers (e.g., bytearray, some memoryview objects), others accept all buffers. An earlier version of this PEP proposed using the presence of the bf_releasebuffer slot to determine whether a buffer type is mutable. This rule holds for most standard library buffer ..."
+    }
+   ],
+   "backwards_compatibility": [
+    {
+     "title": "__buffer__ and __release_buffer__ attributes",
+     "summary": "As the runtime changes in this PEP only add new functionality, there are few backwards compatibility concerns. However, code that uses a __buffer__ or __release_buffer__ attribute for other purposes may be affected. While all dunders are technically reserved for the language, it is still good practice to ensure that a new dunder does not interfere with too much existing code, especially widely ..."
+    },
+    {
+     "title": "Removal of the bytes special case",
+     "summary": "Separately, the recommendation to remove the special behavior for bytes in type checkers does have a backwards compatibility impact on their users. An experiment with mypy shows that several major open source projects that use it for type checking will see new errors if the bytes promotion is removed. Many of these errors can be fixed by improving the stubs in typeshed, as has already been done ..."
+    },
+    {
+     "title": "Keep bytearray compatible with bytes",
+     "summary": "It has been suggested to remove the special case where memoryview is always compatible with bytes, but keep it for bytearray, because the two types have very similar interfaces. However, several standard library functions (e.g., re.compile, socket.getaddrinfo, and most functions accepting path-like arguments) accept bytes but not bytearray. In most codebases, bytearray is also not a very common ..."
+    }
+   ]
+  },
+  {
+   "id": "pep:692",
+   "type": "PEP",
+   "number": 692,
+   "title": "Using TypedDict for more precise \\*\\*kwargs typing",
+   "status": "Final",
+   "pep_type": "Standards Track",
+   "python_version": "3.12",
+   "created": "29-May-2022",
+   "authors": "Franek Magiera <framagie@gmail.com>",
+   "url": "https://peps.python.org/pep-0692/",
+   "mentions_typing_extensions": false,
+   "rejected_ideas": [
+    {
+     "title": "TypedDict unions",
+     "summary": "It is possible to create unions of typed dictionaries. However, supporting typing **kwargs with a union of typed dicts would greatly increase the complexity of the implementation of this PEP and there seems to be no compelling use case to justify the support for this. Therefore, using unions of typed dictionaries to type **kwargs as described in the context of this PEP can result in an error: ..."
+    },
+    {
+     "title": "Changing the meaning of **kwargs annotations",
+     "summary": "One way to achieve the purpose of this PEP would be to change the meaning of **kwargs annotations, so that the annotations would apply to the entire **kwargs dict, not to individual elements. For consistency, we would have to make an analogous change to *args annotations. This idea was discussed in a meeting of the typing community, and the consensus was that the change would not be worth the ..."
+    },
+    {
+     "title": "Introducing a new syntax",
+     "summary": "In the previous versions of this PEP, using a double asterisk syntax was proposed to support more precise **kwargs typing. Using this syntax, functions could be annotated as follows: Which would have the same meaning as: This greatly increased the scope of the PEP, as it would require a grammar change and adding a new dunder for the Unpack special form. At the same the justification for ..."
+    }
+   ],
+   "backwards_compatibility": []
+  },
+  {
+   "id": "pep:695",
+   "type": "PEP",
+   "number": 695,
+   "title": "Type Parameter Syntax",
+   "status": "Final",
+   "pep_type": "Standards Track",
+   "python_version": "3.12",
+   "created": "15-Jun-2022",
+   "authors": "Eric Traut <erictr at microsoft.com>",
+   "url": "https://peps.python.org/pep-0695/",
+   "mentions_typing_extensions": false,
+   "rejected_ideas": [
+    {
+     "title": "Prefix Clause",
+     "summary": "We explored various syntactic options for specifying type parameters that preceded def and class statements. One such variant we considered used a using clause as follows: : This option was rejected because the scoping rules for the type parameters were less clear. Also, this syntax did not interact well with class and function decorators, which are common in Python. Only one other popular ..."
+    },
+    {
+     "title": "Angle Brackets",
+     "summary": "Many languages that support generics make use of angle brackets. (Refer to the table at the end of Appendix A for a summary.) We explored the use of angle brackets for type parameter declarations in Python, but we ultimately rejected it for two reasons. First, angle brackets are not considered \"paired\" by the Python scanner, so end-of-line characters between a < and > token are retained. That ..."
+    },
+    {
+     "title": "Bounds Syntax",
+     "summary": "We explored various syntactic options for specifying the bounds and constraints for a type variable. We considered, but ultimately rejected, the use of a <: token like in Scala, the use of an extends or with keyword like in various other languages, and the use of a function call syntax similar to today's typing.TypeVar constructor. The simple colon syntax is consistent with many other programming ..."
+    },
+    {
+     "title": "Explicit Variance",
+     "summary": "We considered adding syntax for specifying whether a type parameter is intended to be invariant, covariant, or contravariant. The typing.TypeVar mechanism in Python requires this. A few other languages including Scala and C# also require developers to specify the variance. We rejected this idea because variance can generally be inferred, and most modern programming languages do infer variance ..."
+    },
+    {
+     "title": "Name Mangling",
+     "summary": "When considering implementation options, we considered a \"name mangling\" approach where each type parameter was given a unique \"mangled\" name by the compiler. This mangled name would be based on the qualified name of the generic class, function or type alias it was associated with. This approach was rejected because qualified names are not necessarily unique, which means the mangled name would ..."
+    }
+   ],
+   "backwards_compatibility": [
+    {
+     "title": "Compatibility with Traditional TypeVars",
+     "summary": "The existing mechanism for allocating TypeVar, TypeVarTuple, and ParamSpec is retained for backward compatibility. However, these \"traditional\" type variables should not be combined with type parameters allocated using the new syntax. Such a combination should be flagged as an error by type checkers. This is necessary because the type parameter order is ambiguous. It is OK to combine traditional ..."
+    }
+   ]
+  },
+  {
+   "id": "pep:696",
+   "type": "PEP",
+   "number": 696,
+   "title": "Type Defaults for Type Parameters",
+   "status": "Final",
+   "pep_type": "Standards Track",
+   "python_version": "3.13",
+   "created": "14-Jul-2022",
+   "authors": "James Hilton-Balfe <gobot1234yt@gmail.com>",
+   "url": "https://peps.python.org/pep-0696/",
+   "mentions_typing_extensions": false,
+   "rejected_ideas": [
+    {
+     "title": "Allowing the Type Parameters Defaults to Be Passed to type.__new__'s **kwargs",
+     "summary": "While this is much easier to read and follows a similar rationale to the TypeVar unary syntax, it would not be backwards compatible as T might already be passed to a metaclass/superclass or support classes that don't subclass Generic at runtime. Ideally, if PEP 637 wasn't rejected, the following would be acceptable:"
+    },
+    {
+     "title": "Allowing Non-defaults to Follow Defaults",
+     "summary": "Allowing non-defaults to follow defaults would alleviate the issues with returning types like Coroutine from functions where the most used type argument is the last (the return). Allowing non-defaults to follow defaults is too confusing and potentially ambiguous, even if only the above two forms were valid. Changing the argument order now would also break a lot of codebases. This is also solvable ..."
+    },
+    {
+     "title": "Having default Implicitly Be bound",
+     "summary": "In an earlier version of this PEP, the default was implicitly set to bound if no value was passed for default. This while convenient, could have a type parameter with no default follow a type parameter with a default. Consider: : This would have also been a breaking change for a small number of cases where the code relied on Any being the implicit default."
+    },
+    {
+     "title": "Allowing Type Parameters With Defaults To Be Used in Function Signatures",
+     "summary": "A previous version of this PEP allowed TypeVarLike\\s with defaults to be used in function signatures. This was removed for the reasons described in `Function Defaults`_. Hopefully, this can be added in the future if a way to get the runtime value of a type parameter is added."
+    },
+    {
+     "title": "Allowing Type Parameters from Outer Scopes in default",
+     "summary": "This was deemed too niche a feature to be worth the added complexity. If any cases arise where this is needed, it can be added in a future PEP."
+    }
+   ],
+   "backwards_compatibility": []
+  },
+  {
+   "id": "pep:698",
+   "type": "PEP",
+   "number": 698,
+   "title": "Override Decorator for Static Typing",
+   "status": "Final",
+   "pep_type": "Standards Track",
+   "python_version": "3.12",
+   "created": "05-Sep-2022",
+   "authors": "Steven Troxler <steven.troxler@gmail.com>, Joshua Xu <jxu425@fb.com>, Shannon Zhu <szhu@fb.com>",
+   "url": "https://peps.python.org/pep-0698/",
+   "mentions_typing_extensions": false,
+   "rejected_ideas": [
+    {
+     "title": "Rely on Integrated Development Environments for safety",
+     "summary": "Modern Integrated Development Environments (IDEs) often provide the ability to automatically update subclasses when renaming a method. But we view this as insufficient for several reasons: - If a codebase is split into multiple projects, an IDE will not help and the bug appears when upgrading dependencies. Type checkers are a fast way to catch breaking changes in dependencies. - Not all ..."
+    },
+    {
+     "title": "Runtime enforcement",
+     "summary": "We considered having @typing.override enforce override safety at runtime, similarly to how @overrides.overrides does today. We rejected this for four reasons: - For users of static type checking, it is not clear this brings any benefits. - There would be at least some performance overhead, leading to projects importing slower with runtime enforcement. We estimate the @overrides.overrides ..."
+    },
+    {
+     "title": "Mark a base class to force explicit overrides on subclasses",
+     "summary": "We considered including a class decorator @require_explicit_overrides, which would have provided a way for base classes to declare that all subclasses must use the @override decorator on method overrides. The Overrides library has a mixin class, EnforceExplicitOverrides, which provides similar behavior in runtime checks. We decided against this because we expect owners of large codebases will ..."
+    },
+    {
+     "title": "Include the name of the ancestor class being overridden",
+     "summary": "We considered allowing the caller of @override to specify a specific ancestor class where the overridden method should be defined: class Parent1: def bar(self) -> int: return 1 class Child(Parent0, Parent1): @override(Parent0) # okay, Parent0 defines foo def foo(self) -> int: return 2 This could be useful for code readability because it makes the override structure more explicit for deep ..."
+    }
+   ],
+   "backwards_compatibility": [
+    {
+     "title": "No New Rules for Override Compatibility",
+     "summary": "This PEP is exclusively concerned with the handling of the new @override decorator, which specifies that the decorated method must override some attribute in an ancestor class. This PEP does not propose any new rules regarding the type signatures of such methods."
+    },
+    {
+     "title": "Backward Compatibility",
+     "summary": "By default, the @override decorator will be opt-in. Codebases that do not use it will type-check as before, without the additional type safety."
+    }
+   ]
+  },
+  {
+   "id": "pep:702",
+   "type": "PEP",
+   "number": 702,
+   "title": "Marking deprecations using the type system",
+   "status": "Final",
+   "pep_type": "Standards Track",
+   "python_version": "3.13",
+   "created": "30-Dec-2022",
+   "authors": "Jelle Zijlstra <jelle.zijlstra@gmail.com>",
+   "url": "https://peps.python.org/pep-0702/",
+   "mentions_typing_extensions": true,
+   "rejected_ideas": [
+    {
+     "title": "Deprecation of modules and attributes",
+     "summary": "This PEP covers deprecations of classes, functions and overloads. This allows type checkers to detect many but not all possible deprecations. To evaluate whether additional functionality would be worthwhile, I examined all current deprecations in the CPython standard library. I found: * 74 deprecations of functions, methods and classes (supported by this PEP) * 28 deprecations of whole modules ..."
+    },
+    {
+     "title": "Placing the decorator in the typing module",
+     "summary": "An earlier version of this PEP proposed placing the @deprecated decorator in the typing module. However, there was feedback that it would be unexpected for a decorator in the typing module to have runtime behavior. Therefore, the PEP now proposes adding the decorator the warnings module instead."
+    }
+   ],
+   "backwards_compatibility": [
+    {
+     "title": "Deprecation policy",
+     "summary": "We propose that CPython's deprecation policy (PEP 387) is updated to require that new deprecations use the functionality in this PEP to alert users about the deprecation, if possible. Concretely, this means that new deprecations should be accompanied by a change to the typeshed repo to add the @deprecated decorator in the appropriate place. This requirement does not apply to deprecations that ..."
+    },
+    {
+     "title": "Backwards compatibility",
+     "summary": "Creating a new decorator poses no backwards compatibility concerns. As with all new typing functionality, the @deprecated decorator will be added to the typing_extensions module, enabling its use in older versions of Python."
+    },
+    {
+     "title": "Deprecation of modules and attributes",
+     "summary": "This PEP covers deprecations of classes, functions and overloads. This allows type checkers to detect many but not all possible deprecations. To evaluate whether additional functionality would be worthwhile, I examined all current deprecations in the CPython standard library. I found: * 74 deprecations of functions, methods and classes (supported by this PEP) * 28 deprecations of whole modules ..."
+    }
+   ]
+  },
+  {
+   "id": "pep:705",
+   "type": "PEP",
+   "number": 705,
+   "title": "TypedDict: Read-only items",
+   "status": "Final",
+   "pep_type": "Standards Track",
+   "python_version": "3.13",
+   "created": "07-Nov-2022",
+   "authors": "Alice Purcell <alicederyn@gmail.com>",
+   "url": "https://peps.python.org/pep-0705/",
+   "mentions_typing_extensions": false,
+   "rejected_ideas": [
+    {
+     "title": "A TypedMapping protocol type",
+     "summary": "An earlier version of this PEP proposed a TypedMapping protocol type, behaving much like a read-only TypedDict but without the constraint that the runtime type be a dict. The behavior described in the current version of this PEP could then be obtained by inheriting a TypedDict from a TypedMapping. This has been set aside for now as more complex, without a strong use-case motivating the additional ..."
+    },
+    {
+     "title": "A higher-order ReadOnly type",
+     "summary": "A generalized higher-order type could be added that removes mutator methods from its parameter, e.g. ReadOnly[MovieRecord]. For a TypedDict, this would be like adding ReadOnly to every item, including those declared in superclasses. This would naturally want to be defined for a wider set of types than just TypedDict subclasses, and also raises questions about whether and how it applies to nested ..."
+    },
+    {
+     "title": "Calling the type Readonly",
+     "summary": "Read-only is generally hyphenated, and it appears to be common convention to put initial caps onto words separated by a dash when converting to CamelCase. This appears consistent with the definition of CamelCase on Wikipedia: CamelCase uppercases the first letter of each word. That said, Python examples or counter-examples, ideally from the core Python libraries, or better explicit guidance on ..."
+    },
+    {
+     "title": "Reusing the Final annotation",
+     "summary": "The typing.Final annotation prevents an attribute from being modified, like the proposed ReadOnly qualifier does for TypedDict items. However, it is also documented as preventing redefinition in subclasses too; from PEP 591: This does not fit with the intended use of ReadOnly. Rather than introduce confusion by having Final behave differently in different contexts, we chose to introduce a new ..."
+    },
+    {
+     "title": "A readonly flag",
+     "summary": "Earlier versions of this PEP introduced a boolean flag that would ensure all items in a TypedDict were read-only: However, this led to confusion when inheritance was introduced: It would be reasonable for someone familiar with frozen (from dataclasses), on seeing just the definition of B, to assume that the whole type was read-only. On the other hand, it would be reasonable for someone familiar ..."
+    },
+    {
+     "title": "Supporting type-checked removal of read-only qualifier via copy and other methods",
+     "summary": "An earlier version of this PEP mandated that code like the following be supported by type-checkers: However, there is currently no way to express this in the typeshed, meaning type-checkers would be forced to special-case these functions. There is already a way to code these operations that mypy and pyright do support, though arguably this is less readable: While not as flexible as would be ..."
+    },
+    {
+     "title": "Preventing unspecified keys in TypedDicts",
+     "summary": "Consider the following \"type discrimination\" code: This is a common idiom, and other languages like Typescript allow it. Technically, however, this code is unsound: B does not declare foo, but instances of B may still have the key present, and the associated value may be of any type: mypy rejects the definition of get_field on the marked line with the error TypedDict \"B\" has no key \"foo\", which ..."
+    }
+   ],
+   "backwards_compatibility": [
+    {
+     "title": "Backwards compatibility",
+     "summary": "This PEP adds a new feature to TypedDict, so code that inspects TypedDict types will have to change to support types using it. This is expected to mainly affect type-checkers."
+    }
+   ]
+  },
+  {
+   "id": "pep:718",
+   "type": "PEP",
+   "number": 718,
+   "title": "Subscriptable functions",
+   "status": "Draft",
+   "pep_type": "Standards Track",
+   "python_version": "3.15",
+   "created": "23-Jun-2023",
+   "authors": "James Hilton-Balfe <gobot1234yt@gmail.com>, Pablo Ruiz Cuevas <pablo.r.c@live.com>",
+   "url": "https://peps.python.org/pep-0718/",
+   "mentions_typing_extensions": false,
+   "rejected_ideas": [],
+   "backwards_compatibility": [
+    {
+     "title": "Backwards Compatibility",
+     "summary": "Currently these classes are not subclassable and so there are no backwards compatibility concerns with regards to classes already implementing __getitem__."
+    }
+   ]
+  },
+  {
+   "id": "pep:724",
+   "type": "PEP",
+   "number": 724,
+   "title": "Stricter Type Guards",
+   "status": "Withdrawn",
+   "pep_type": "Standards Track",
+   "python_version": "3.13",
+   "created": "28-Jul-2023",
+   "authors": "Rich Chiodo <rchiodo at microsoft.com>, Eric Traut <erictr at microsoft.com>, Erik De Bonte <erikd at microsoft.com>,",
+   "url": "https://peps.python.org/pep-0724/",
+   "mentions_typing_extensions": false,
+   "rejected_ideas": [
+    {
+     "title": "StrictTypeGuard",
+     "summary": "A new StrictTypeGuard construct was proposed. This alternative form would be similar to a TypeGuard except it would apply stricter type guard semantics. It would also enforce that the return type was consistent [#isconsistent]_ with the input type. See this thread for details: `StrictTypeGuard proposal`__ __ https://github.com/python/typing/discussions/1013#discussioncomment-1966238 This idea was ..."
+    },
+    {
+     "title": "TypeGuard with a second output type",
+     "summary": "Another idea was proposed where TypeGuard could support a second optional type argument that indicates the type that should be used for narrowing in the negative (\"else\") case. This idea was proposed `here`__. __ https://github.com/python/typing/issues/996 It was rejected because it was considered too complicated and addressed only one of the two main limitations of TypeGuard. Refer to this ..."
+    }
+   ],
+   "backwards_compatibility": []
+  },
+  {
+   "id": "pep:727",
+   "type": "PEP",
+   "number": 727,
+   "title": "Documentation in Annotated Metadata",
+   "status": "Withdrawn",
+   "pep_type": "Standards Track",
+   "python_version": "3.13",
+   "created": "28-Aug-2023",
+   "authors": "Sebastián Ramírez <tiangolo@gmail.com>",
+   "url": "https://peps.python.org/pep-0727/",
+   "mentions_typing_extensions": true,
+   "rejected_ideas": [
+    {
+     "title": "Standardize Current Docstrings",
+     "summary": "A possible alternative would be to support and try to push as a standard one of the existing docstring formats. But that would only solve the standardization. It wouldn't solve any of the other problems derived from using a microsyntax inside of a docstring instead of pure Python syntax, the same as described above in the **Rationale - Summary**."
+    },
+    {
+     "title": "Extra Metadata and Decorator",
+     "summary": "Some ideas before this proposal included having a function doc() instead of the single class Doc with several parameters to indicate whether an object is discouraged from use, what exceptions it may raise, etc. To allow also deprecating functions and classes, it was also expected that doc() could be used as a decorator. But this functionality is covered by typing.deprecated() in PEP 702, so it ..."
+    },
+    {
+     "title": "String Under Definition",
+     "summary": "A proposed alternative in the discussion is declaring a string under the definition of a symbol and providing runtime access to those values: This was already proposed and rejected in PEP 224, mainly due to the ambiguity of how is the string connected with the symbol it's documenting. Additionally, there would be no way to provide runtime access to this value in previous versions of Python."
+    },
+    {
+     "title": "Plain String in Annotated",
+     "summary": "In the discussion, it was also suggested to use a plain string inside of typing.Annotated: But this would create a predefined meaning for any plain string inside of typing.Annotated, and any tool that was using plain strings in them for any other purpose, which is currently allowed, would now be invalid. Having an explicit typing.Doc makes it compatible with current valid uses of typing.Annotated."
+    },
+    {
+     "title": "Another Annotated-Like Type",
+     "summary": "In the discussion it was suggested to define a new type similar to typing.Annotated, it would take the type and a parameter with the documentation string: This idea was rejected as it would only support that use case and would make it more difficult to combine it with typing.Annotated for other purposes ( e.g. with FastAPI metadata, Pydantic fields, etc.) or adding additional metadata apart from ..."
+    },
+    {
+     "title": "Transferring Documentation from Type aliases",
+     "summary": "A previous version of this proposal specified that when type aliases declared with typing.Annotated were used, and these type aliases were used in annotations, the documentation string would be transferred to the annotated symbol. For example: UserName: TypeAlias = Annotated[str, Doc(\"The user's name\")] def create_user(name: UserName): ... This was rejected after receiving feedback from the ..."
+    },
+    {
+     "title": "Shorthand with Slices",
+     "summary": "In the discussion, it was suggested to use a shorthand with slices: Although this is a very clever idea and would remove the need for a new Doc class, runtime executing of current versions of Python don't allow it. At runtime, typing.Annotated requires at least two arguments, and it requires the first argument to be type, it crashes if it is a slice."
+    }
+   ],
+   "backwards_compatibility": [
+    {
+     "title": "Backwards Compatibility",
+     "summary": "This proposal is fully backwards compatible with existing code and it doesn't deprecate existing usage of docstring conventions. For developers that wish to adopt it before it is available in the standard library, or to support older versions of Python, they can use typing_extensions and import and use Doc from there. For example:"
+    }
+   ]
+  },
+  {
+   "id": "pep:728",
+   "type": "PEP",
+   "number": 728,
+   "title": "TypedDict with Typed Extra Items",
+   "status": "Final",
+   "pep_type": "Standards Track",
+   "python_version": "3.15",
+   "created": "12-Sep-2023",
+   "authors": "Zixuan James Li <p359101898@gmail.com>",
+   "url": "https://peps.python.org/pep-0728/",
+   "mentions_typing_extensions": false,
+   "rejected_ideas": [
+    {
+     "title": "Use @final instead of closed Class Parameter",
+     "summary": "Quoting a relevant comment from Eric Traut:"
+    },
+    {
+     "title": "Use a Special __extra_items__ Key with the closed Class Parameter",
+     "summary": "In an earlier revision of this proposal, we discussed an approach that would utilize __extra_items__'s value type to specify the type of extra items accepted, like so: where closed=True is required for __extra_items__ to be treated specially, to avoid key collision. Some members of the community concern about the elegance of the syntax. Practically, the key collision with a regular key can be ..."
+    },
+    {
+     "title": "Support a New Syntax of Specifying Keys",
+     "summary": "By introducing a new syntax that allows specifying string keys, we could deprecate the functional syntax of defining TypedDict types and address the key conflict issues if we decide to reserve a special key to type extra items. For example: This was proposed here by Jukka. The '_' key is chosen for not needing to invent a new name, and its similarity with the match statement. This will allow us ..."
+    },
+    {
+     "title": "Allowing Extra Items without Specifying the Type",
+     "summary": "extra=True was originally proposed for defining a TypedDict that accepts extra items regardless of the type, like how total=True works: Because it did not offer a way to specify the type of the extra items, the type checkers will need to assume that the type of the extra items is Any, which compromises type safety. Furthermore, the current behavior of TypedDict already allows untyped extra items ..."
+    },
+    {
+     "title": "Support Extra Items with Intersection",
+     "summary": "Supporting intersections in Python's type system requires a lot of careful consideration, and it can take a long time for the community to reach a consensus on a reasonable design. Ideally, extra items in TypedDict should not be blocked by work on intersections, nor does it necessarily need to be supported through intersections. Moreover, the intersection between Mapping[...] and TypedDict is not ..."
+    },
+    {
+     "title": "Requiring Type Compatibility of the Known Items with extra_items",
+     "summary": "extra_items restricts the value type for keys that are *unknown* to the TypedDict type. So the value type of any *known* item is not necessarily assignable to extra_items, and extra_items is not necessarily assignable to the value types of all known items. This differs from TypeScript's Index Signatures syntax, which requires all properties' types to match the string index's type. For example: ..."
+    }
+   ],
+   "backwards_compatibility": [
+    {
+     "title": "Backwards Compatibility",
+     "summary": "Because extra_items is an opt-in feature, no existing codebase will break due to this change. Note that closed and extra_items as keyword arguments do not collide with other keys when using something like TD = TypedDict(\"TD\", foo=str, bar=int), because this syntax has already been removed in Python 3.13. Because this is a type-checking feature, it can be made available to older versions as long ..."
+    },
+    {
+     "title": "Requiring Type Compatibility of the Known Items with extra_items",
+     "summary": "extra_items restricts the value type for keys that are *unknown* to the TypedDict type. So the value type of any *known* item is not necessarily assignable to extra_items, and extra_items is not necessarily assignable to the value types of all known items. This differs from TypeScript's Index Signatures syntax, which requires all properties' types to match the string index's type. For example: ..."
+    }
+   ]
+  },
+  {
+   "id": "pep:729",
+   "type": "PEP",
+   "number": 729,
+   "title": "Typing governance process",
+   "status": "Active",
+   "pep_type": "Process",
+   "python_version": null,
+   "created": "19-Sep-2023",
+   "authors": "Jelle Zijlstra <jelle.zijlstra@gmail.com>, Shantanu Jain <hauntsaninja at gmail.com>",
+   "url": "https://peps.python.org/pep-0729/",
+   "mentions_typing_extensions": true,
+   "rejected_ideas": [
+    {
+     "title": "Writing the specification from scratch",
+     "summary": "This PEP proposes creating the typing specification by starting from the existing PEPs, then clarifying and improving the specification as necessary. Some members of the community prefer to start from scratch, writing a new, more formal specification covering the entire type system. This could provide a more solid basis for the specification. However, this would be a much larger undertaking. The ..."
+    },
+    {
+     "title": "Alternate governance mechanisms",
+     "summary": "An earlier draft of this PEP suggested that the Steering Council appoint members of the Typing Council each year. The current Steering Council suggested that it would be better to have the Typing Council self-organise and avoid the need for the Steering Council to continuously supervise the Typing Council. Alternate governance mechanisms are possible, including more democratic ones, but these ..."
+    },
+    {
+     "title": "Do nothing",
+     "summary": "We are hopeful substantial progress will be made on projects that improve the type system regardless of whether this PEP is accepted. We anticipate projects like specification or the potential for PEP delegation would benefit more from a Typing Council, and projects like end user documentation would benefit less. Certainly the bottleneck is likely to be contributor effort, not governance. ..."
+    }
+   ],
+   "backwards_compatibility": []
+  },
+  {
+   "id": "pep:742",
+   "type": "PEP",
+   "number": 742,
+   "title": "Narrowing types with TypeIs",
+   "status": "Final",
+   "pep_type": "Standards Track",
+   "python_version": "3.13",
+   "created": "07-Feb-2024",
+   "authors": "Jelle Zijlstra <jelle.zijlstra@gmail.com>",
+   "url": "https://peps.python.org/pep-0742/",
+   "mentions_typing_extensions": true,
+   "rejected_ideas": [
+    {
+     "title": "Change the behavior of TypeGuard",
+     "summary": "PEP 724 previously proposed changing the specified behavior of typing.TypeGuard so that if the return type of the guard is consistent with the input type, the behavior proposed here for TypeIs would apply. This proposal has some important advantages: because it does not require any runtime changes, it requires changes only in type checkers, making it easier for users to take advantage of the new, ..."
+    },
+    {
+     "title": "Do nothing",
+     "summary": "Both this PEP and the alternative proposed in PEP 724 have shortcomings. The latter are discussed above. As for this PEP, it introduces two special forms with very similar semantics, and it potentially creates a long migration path for users currently using TypeGuard who would be better off with different narrowing semantics. One way forward, then, is to do nothing and live with the current ..."
+    },
+    {
+     "title": "Alternative names",
+     "summary": "This PEP currently proposes the name TypeIs, emphasizing that the special form TypeIs[T] returns whether the argument is of type T, and mirroring TypeScript's syntax. Other names were considered, including in an earlier version of this PEP. Options include: * IsInstance (post by Paul Moore): emphasizes that the new construct behaves similarly to the builtin isinstance. * Narrowed or NarrowedTo: ..."
+    }
+   ],
+   "backwards_compatibility": [
+    {
+     "title": "Backwards Compatibility",
+     "summary": "As this PEP only proposes a new special form, there are no implications on backwards compatibility."
+    }
+   ]
+  },
+  {
+   "id": "pep:746",
+   "type": "PEP",
+   "number": 746,
+   "title": "Type checking Annotated metadata",
+   "status": "Draft",
+   "pep_type": "Standards Track",
+   "python_version": "3.15",
+   "created": "20-May-2024",
+   "authors": "Adrian Garcia Badaracco <adrian@adriangb.com>",
+   "url": "https://peps.python.org/pep-0746/",
+   "mentions_typing_extensions": false,
+   "rejected_ideas": [
+    {
+     "title": "Introducing a type variable instead of a generic class",
+     "summary": "We considered using a special type variable, AnnotatedT = TypeVar(\"AnnotatedT\"), to represent the type T of the inner type in Annotated; metadata would be type checked against this type variable. However, this would require using the old type variable syntax (before PEP 695), which is now a discouraged feature. In addition, this would use type variables in an unusual way that does not fit well ..."
+    },
+    {
+     "title": "Introducing a new type to typing.py that all metadata objects should subclass",
+     "summary": "A previous version of this PEP suggested adding a new generic base class, TypedMetadata[U], that metadata objects would subclass. If a metadata object is a subclass of TypedMetadata[U], then type checkers would check that the annotation's base type is assignable to U. However, this mechanism does not integrate as well with the rest of the language; Python does not generally use marker base ..."
+    },
+    {
+     "title": "Using a method instead of an attribute for __supports_annotated_base__",
+     "summary": "We considered using a method instead of an attribute for the protocol, so that this method can be used at runtime to check the validity of the metadata and to support overloads or returning boolean literals. However, using a method adds boilerplate to the implementation and the value of the runtime use cases or more complex scenarios involving overloads and returning boolean literals was not ..."
+    }
+   ],
+   "backwards_compatibility": [
+    {
+     "title": "Backwards Compatibility",
+     "summary": "Metadata that does not implement the protocol will be considered valid for all types, so no breaking changes are introduced for existing code. The new checks only apply to metadata objects that explicitly implement the protocol specified by this PEP."
+    }
+   ]
+  },
+  {
+   "id": "pep:747",
+   "type": "PEP",
+   "number": 747,
+   "title": "Annotating Type Forms",
+   "status": "Final",
+   "pep_type": "Standards Track",
+   "python_version": "3.15",
+   "created": "27-May-2024",
+   "authors": "David Foster <david at dafoster.net>, Eric Traut <erictr at microsoft.com>",
+   "url": "https://peps.python.org/pep-0747/",
+   "mentions_typing_extensions": true,
+   "rejected_ideas": [
+    {
+     "title": "Alternative names",
+     "summary": "Alternate names were considered for TypeForm. TypeObject and TypeType were deemed too generic. TypeExpression and TypeExpr were also considered, but these were considered confusing because these objects are not themselves \"expressions\" but rather the result of evaluating a type expression."
+    },
+    {
+     "title": "Widen type[C] to support all type expressions",
+     "summary": "type was `designed`_ to describe class objects, subclasses of the type class. A value with the type type is assumed to be instantiable through a constructor call. Widening the meaning of type to represent arbitrary type form objects would present backward compatibility problems and would eliminate a way to describe the set of values limited to subclasses of type."
+    },
+    {
+     "title": "Accept arbitrary annotation expressions",
+     "summary": "Certain special forms act as type qualifiers and can be used in *some* but not *all* annotation contexts: For example. the type qualifier Final can be used as a variable type but not as a parameter type or a return type: : With the exception of Annotated, type qualifiers are not allowed in type expressions. TypeForm is limited to type expressions because its assignability rules are based on the ..."
+    },
+    {
+     "title": "Pattern matching on type forms",
+     "summary": "It was asserted that some functions may wish to pattern match on the interior of type expressions in their signatures. One use case is to allow a function to explicitly enumerate all the *specific* kinds of type expressions it supports as input. Consider the following possible pattern matching syntax: : All functions observed in the wild that conceptually accept type form objects generally try to ..."
+    }
+   ],
+   "backwards_compatibility": [
+    {
+     "title": "Backward Compatibility",
+     "summary": "This PEP clarifies static type checker behaviors when evaluating type expressions in \"value expression\" contexts (that is, contexts where type expressions are not mandated by the typing spec). In the absence of a TypeForm type annotation, existing type evaluation behaviors persist, so no backward compatibility issues are anticipated. For example, if a static type checker previously evaluated the ..."
+    }
+   ]
+  },
+  {
+   "id": "pep:749",
+   "type": "PEP",
+   "number": 749,
+   "title": "Implementing PEP 649",
+   "status": "Final",
+   "pep_type": "Standards Track",
+   "python_version": "3.14",
+   "created": "28-May-2024",
+   "authors": "Jelle Zijlstra <jelle.zijlstra@gmail.com>",
+   "url": "https://peps.python.org/pep-0749/",
+   "mentions_typing_extensions": true,
+   "rejected_ideas": [
+    {
+     "title": "Rejected alternatives",
+     "summary": "*Immediately make the future import a no-op*: We considered applying PEP 649 semantics to all code in Python 3.14, making the future import a no-op. However, this would break code that works in 3.13 under the following set of conditions: * __future__ import annotations is active * There are annotations that rely on forward references * Annotations are eagerly evaluated at import time, for example ..."
+    },
+    {
+     "title": "Rejected alternatives",
+     "summary": "*Use a different name*: Naming is hard, and I considered several ideas: - annotations: The most obvious name, but it may cause confusion with the existing from __future__ import annotations, because users may have both import annotations and from __future__ import annotations in the same module. The use of a common word as the name will make the module harder to search for. There is a PyPI ..."
+    },
+    {
+     "title": "Rejected alternatives",
+     "summary": "We considered three broad approaches for dealing with the behavior of the __annotations__ and __annotate__ entries in classes: * Ensure that the entry is *always* present in the class dictionary, even if it is empty or has not yet been evaluated. This means we do not have to rely on the descriptors defined on type to fill in the field, and therefore the metaclass's attributes will not interfere. ..."
+    }
+   ],
+   "backwards_compatibility": [
+    {
+     "title": "Backwards Compatibility",
+     "summary": "PEP 649 provides a thorough discussion of the backwards compatibility implications on existing code that uses either stock or PEP 563 semantics. However, there is another set of compatibility problems: new code that is written assuming PEP 649 semantics, but uses existing tools that eagerly evaluate annotations. For example, consider a dataclass-like class decorator @annotator that retrieves the ..."
+    }
+   ]
+  },
+  {
+   "id": "pep:764",
+   "type": "PEP",
+   "number": 764,
+   "title": "Inline typed dictionaries",
+   "status": "Draft",
+   "pep_type": "Standards Track",
+   "python_version": "3.15",
+   "created": "25-Oct-2024",
+   "authors": "Victorien Plot <contact@vctrn.dev>",
+   "url": "https://peps.python.org/pep-0764/",
+   "mentions_typing_extensions": true,
+   "rejected_ideas": [
+    {
+     "title": "Using the functional syntax in annotations",
+     "summary": "The alternative functional syntax could be used as an annotation directly: However, call expressions are currently unsupported in such a context for various reasons (expensive to process, evaluating them is not standardized). This would also require a name which is sometimes not relevant."
+    },
+    {
+     "title": "Using dict or typing.Dict with a single type argument",
+     "summary": "We could reuse dict or typing.Dict with a single type argument to express the same concept: While this would avoid having to import typing.TypedDict from typing, this solution has several downsides: * For type checkers, dict is a regular class with two type variables. Allowing dict to be parametrized with a single type argument would require special casing from type checkers, as there is no way ..."
+    },
+    {
+     "title": "Using a simple dictionary",
+     "summary": "Instead of subscripting the typing.TypedDict class, a plain dictionary could be used as an annotation: However, PEP 584 added union operators on dictionaries and PEP 604 introduced union types <python:types-union>. Both features make use of the bitwise or (|) <python:bitwise> operator, making the following use cases incompatible, especially for runtime introspection:"
+    },
+    {
+     "title": "Extending other typed dictionaries",
+     "summary": "Several syntaxes could be used to have the ability to extend other typed dictionaries: As inline typed dictionaries are meant to only support a subset of the existing syntax, adding this extension mechanism isn't compelling enough to be supported, considering the added complexity. If intersections were to be added into the type system, it could cover this use case."
+    }
+   ],
+   "backwards_compatibility": [
+    {
+     "title": "Backwards Compatibility",
+     "summary": "This PEP does not bring any backwards incompatible changes."
+    }
+   ]
+  },
+  {
+   "id": "pep:767",
+   "type": "PEP",
+   "number": 767,
+   "title": "Annotating Read-Only Attributes",
+   "status": "Draft",
+   "pep_type": "Standards Track",
+   "python_version": "3.15",
+   "created": "18-Nov-2024",
+   "authors": "Łukasz Modzelewski",
+   "url": "https://peps.python.org/pep-0767/",
+   "mentions_typing_extensions": true,
+   "rejected_ideas": [
+    {
+     "title": "Clarifying Interaction of @property and Protocols",
+     "summary": "The protocols section mentions an inconsistency between type checkers in the interpretation of properties in protocols. The problem could be fixed by amending the typing specification, clarifying what implements the read-only quality of such properties. This PEP makes ReadOnly a better alternative for defining read-only attributes in protocols, superseding the use of properties for this purpose."
+    },
+    {
+     "title": "Assignment Only in __init__ and Class Scope",
+     "summary": "An earlier version of this PEP specified that read-only attributes could only be assigned to in __init__ and the class' body. This decision was based on the specification of C#'s readonly. Later revision of this PEP loosened the restriction to also include __new__, __init_subclass__ and @classmethod\\ s, as it was revealed that the initial version would severely limit the usability of ReadOnly ..."
+    },
+    {
+     "title": "Allowing Bare ReadOnly With Initializing Value",
+     "summary": "An earlier version of this PEP allowed the use of bare ReadOnly when the attribute being annotated had an initializing value. The type of the attribute was supposed to be determined by type checkers using their usual type inference rules. This thread surfaced a few non-trivial issues with this feature, like undesirable inference of Literal[...] from literal values, differences in type checker ..."
+    }
+   ],
+   "backwards_compatibility": [
+    {
+     "title": "Backwards Compatibility",
+     "summary": "This PEP introduces new contexts where ReadOnly is valid. Programs inspecting those places will have to change to support it. This is expected to mainly affect type checkers. However, caution is advised while using the backported typing_extensions.ReadOnly in older versions of Python. Mechanisms inspecting annotations may behave incorrectly when encountering ReadOnly; in particular, the ..."
+    }
+   ]
+  },
+  {
+   "id": "pep:781",
+   "type": "PEP",
+   "number": 781,
+   "title": "Make TYPE_CHECKING a built-in constant",
+   "status": "Draft",
+   "pep_type": "Standards Track",
+   "python_version": "3.15",
+   "created": "24-Mar-2025",
+   "authors": "Inada Naoki <songofacandy@gmail.com>",
+   "url": "https://peps.python.org/pep-0781/",
+   "mentions_typing_extensions": false,
+   "rejected_ideas": [
+    {
+     "title": "Eliminate type-checking-only code",
+     "summary": "It is considered to add real constant named __type_checking__ to eliminate type-checking-only code at compile time. However, adding real constant to language increase complexity of the language. Benefit from eliminating type-checking-only code is estimated to be not enough to justify the complexity."
+    },
+    {
+     "title": "Optimize import typing",
+     "summary": "Future optimizations may eliminate the need to avoid importing the typing module for startup time. Even with such optimizations, there will still be use cases where minimizing imports is beneficial, such as running Python on embedded systems or in browsers. Therefore, defining a constant for skipping type-checking-only code outside the typing module remains valuable."
+    }
+   ],
+   "backwards_compatibility": [
+    {
+     "title": "Backwards Compatibility",
+     "summary": "Since TYPE_CHECKING doesn't prohibit assignment, existing code using TYPE_CHECKING will continue to work. User can remove the assignment to TYPE_CHECKING after they stop using Python 3.13 or older versions."
+    }
+   ]
+  },
+  {
+   "id": "pep:800",
+   "type": "PEP",
+   "number": 800,
+   "title": "Disjoint bases in the type system",
+   "status": "Final",
+   "pep_type": "Standards Track",
+   "python_version": "3.15",
+   "created": "21-Jul-2025",
+   "authors": "Jelle Zijlstra <jelle.zijlstra@gmail.com>",
+   "url": "https://peps.python.org/pep-0800/",
+   "mentions_typing_extensions": true,
+   "rejected_ideas": [],
+   "backwards_compatibility": [
+    {
+     "title": "Backward compatibility",
+     "summary": "For compatibility with earlier versions of Python, the @disjoint_base decorator will be added to the typing_extensions backport package. At runtime, the new decorator poses no compatibility issues. In stubs, the decorator may be added to disjoint base classes even if not all type checkers understand the decorator yet; such type checkers should simply treat the decorator as a no-op. When type ..."
+    },
+    {
+     "title": "Mypy's incompatibility check",
+     "summary": "The mypy type checker considers two classes to be incompatible if they have incompatible methods. For example, mypy considers the int and str classes to be incompatible because they have incompatible definitions of various methods. Given a class definition like: Mypy will output Definition of \"__add__\" in base class \"int\" is incompatible with definition in base class \"str\", and similar errors for ..."
+    }
+   ]
+  },
+  {
+   "id": "pep:821",
+   "type": "PEP",
+   "number": 821,
+   "title": "Support for unpacking TypedDicts in Callable type hints",
+   "status": "Draft",
+   "pep_type": "Standards Track",
+   "python_version": "3.15",
+   "created": "12-Jan-2026",
+   "authors": "Daniel Sperber <github.blurry@9ox.net>",
+   "url": "https://peps.python.org/pep-0821/",
+   "mentions_typing_extensions": false,
+   "rejected_ideas": [
+    {
+     "title": "Alternatives considered",
+     "summary": "1. Continue recommending Protocol-based callbacks only. This keeps the status quo and avoids changing Callable. However, it is syntactically heavier and duplicates concepts already present in Callable. 2. Introduce a new Callable syntax for keywords (e.g., dedicated keyword parameter markers inside Callable). This would require extending the callable parameter grammar with new constructs, ..."
+    },
+    {
+     "title": "Rejected Ideas",
+     "summary": "- Combining Unpack[TD] with Concatenate. With such support, one could write Callable[Concatenate[int, Unpack[TD], P], R] which in turn would allow a keyword-only parameter between *args and **kwargs, i.e. def func(*args: Any, a: int, **kwargs: Any) -> R: ... which is currently not allowed per PEP 612. To keep the initial implementation simple, this PEP does not propose such support."
+    }
+   ],
+   "backwards_compatibility": [
+    {
+     "title": "Backwards Compatibility",
+     "summary": "This feature is mostly an additive typing-only feature. It does not affect existing code. Subscripting a ParamSpec with a generic Unpack of a TypedDict is only backwards compatible when placed inside extra brackets; a TypeAliasType is not affected by this:"
+    }
+   ]
+  },
+  {
+   "id": "pep:827",
+   "type": "PEP",
+   "number": 827,
+   "title": "Type Manipulation",
+   "status": "Draft",
+   "pep_type": "Standards Track",
+   "python_version": "3.16",
+   "created": "27-Feb-2026",
+   "authors": "Michael J. Sullivan <sully@vercel.com>, Daniel W. Park <daniel.park@vercel.com>, Yury Selivanov <yury@vercel.com>",
+   "url": "https://peps.python.org/pep-0827/",
+   "mentions_typing_extensions": false,
+   "rejected_ideas": [
+    {
+     "title": "Renounce all cares of runtime evaluation",
+     "summary": "This would give us more flexibility to experiment with syntactic forms, and would allow us to dispense with some ugliness such as requiring typing.Iter in unpacked comprehension types and having a limited set of <type-bool> expressions that can appear in conditional types. For better or worse, though, runtime use of type annotations is widespread, e.g. pydantic depends on it, and one of our ..."
+    },
+    {
+     "title": "Support TypeScript style pattern matching in subtype checking",
+     "summary": "In TypeScript, conditional types are formed like: What's more, the right-hand side of the check allows binding type variables based on pattern matching, using the infer keyword, like this example that extracts the element type of an array: This is a very elegant mechanism, especially in the way that it eliminates the need for typing.GetArg and its subtle Base parameter. Unfortunately it seems ..."
+    },
+    {
+     "title": "Replace IsAssignable with something weaker than \"assignable to\" checking",
+     "summary": "Full Python typing assignability checking is not fully implementable at runtime (in particular, even if all the typeshed types for the stdlib were made available, checking against protocols will often not be possible, because class attributes may be inferred and have no visible presence at runtime). As proposed, a runtime evaluator will need to be \"best effort\", ideally with the contours of that ..."
+    },
+    {
+     "title": "Don't use dot notation to access Member components",
+     "summary": "Earlier versions of this PEP draft omitted the ability to write m.name and similar on Member and Param components, and instead relied on helper operators such as typing.GetName (that could be implemented under the hood using typing.GetArg or typing.GetMemberType). The potential advantage here is reducing the number of new constructs being added to the type language, and avoiding needing to either ..."
+    },
+    {
+     "title": "Use type operators for conditional and iteration",
+     "summary": "Instead of writing: * tt if tb else tf * *[tres for T in Iter[ttuple]] we could use type operator forms like: * Cond[tb, tt, tf] * UnpackMap[ttuple, lambda T: tres] * or UnpackMap[ttuple, T, tres] where T must be a declared TypeVar Boolean operations would likewise become operators (Not, And, etc). The advantage of this is that constructing a type annotation never needs to do non-trivial ..."
+    },
+    {
+     "title": "Perform type manipulations with normal Python functions",
+     "summary": "One suggestion has been, instead of defining a new type language fragment for type-level manipulations, to support calling (some subset of) Python functions that serve as kind-of \"mini-mypy-plugins\". The main advantage (in our view) here would be leveraging a more familiar execution model. One suggested advantage is that it would be a simplification of the proposal, but we feel that the ..."
+    },
+    {
+     "title": "Make the type-level operations more \"strictly-typed\"",
+     "summary": "This proposal is less \"strictly-typed\" than TypeScript (strictly-kinded, maybe?). TypeScript has better typechecking at the alias definition site: For P[K], K needs to have keyof P. The extends conditional type operator narrows the type to help support this. It's not possible to define a type alias in TypeScript that fails at expansion time, but it *is* possible to do so in this system. We could ..."
+    }
+   ],
+   "backwards_compatibility": [
+    {
+     "title": "Backwards Compatibility",
+     "summary": "In the most strict sense, this PEP only proposes new features, and so shouldn't have backward compatibility issues. More loosely speaking, though, the use of if and for in type annotations can cause trouble for tools that want to extract type annotations. Tools that want to fully evaluate the annotations will need to either implement an evaluator or use a library for it (the PEP authors are ..."
+    }
+   ]
+  },
+  {
+   "id": "pep:835",
+   "type": "PEP",
+   "number": 835,
+   "title": "Shorthand syntax for Annotated type metadata",
+   "status": "Draft",
+   "pep_type": "Standards Track",
+   "python_version": "3.16",
+   "created": "12-Jun-2026",
+   "authors": "Till Varoquaux <till.varoquaux@gmail.com>",
+   "url": "https://peps.python.org/pep-0835/",
+   "mentions_typing_extensions": true,
+   "rejected_ideas": [
+    {
+     "title": "Alternative Syntaxes",
+     "summary": "Debates around reusing @ yielded several alternatives: - A new infix operator: int <@ Field(...) - A new soft keyword: int annotated Interval(1, 10) - Bracket syntax: x: int {Gt(10), Lt(20)} These lacked consensus. The @ symbol also extends cleanly to symbol decorators if the language pursues that route later."
+    },
+    {
+     "title": "Sole Reliance on __rmatmul__",
+     "summary": "We explicitly reject relying *solely* on metadata objects implementing __rmatmul__ (e.g., via a base class) to return an Annotated type: This approach is rejected for two reasons. First, relying on arbitrary right-hand objects to implement __rmatmul__ breaks the type expression model, complicating the assignment of fixed static meanings to operators. This is inconsistent with how | works and ..."
+    },
+    {
+     "title": "Parameter/Field Decorators",
+     "summary": "True parameter/field decorators were rejected for now. Modifying the core parser for symbol-level decorators opens a complex design space; this PEP scopes the @ operator to type expressions."
+    },
+    {
+     "title": "Avoiding @ Due to Matrix Multiplication",
+     "summary": "We rejected the argument that @ should be avoided because of its association with matrix multiplication. Within a type expression, Python already reuses standard operators (like | for unions and [] for generics) with typing-specific semantics (see `Why the @ Operator?`_)."
+    },
+    {
+     "title": "Structural Evaluation Format (Format.TYPE)",
+     "summary": "Early drafts proposed a new Format.TYPE in annotationlib (PEP 749) to structurally evaluate the @ operator and preserve metadata on unresolvable ForwardRef instances. This was rejected. Prototype integrations (beartype, pydantic, fastapi, sqlalchemy, and hypothesis) showed the existing ecosystem handles the @ operator using annotationlib's current tools."
+    },
+    {
+     "title": "No-Space Formatting (@annot)",
+     "summary": "We initially considered formatting the shorthand without a space (e.g., int @Field) to visually mirror function decorators. This was rejected because it forces formatters (like Black and Ruff) to maintain complex, context-dependent rules for the @ operator."
+    }
+   ],
+   "backwards_compatibility": [
+    {
+     "title": "Backwards Compatibility",
+     "summary": "Analyzing the top 10,000 PyPI projects revealed 0 metaclass overloads for __matmul__ or __rmatmul__. (For comparison, the analysis caught rare __or__ and __and__ overloads in libraries like pgpy (#1,690), dataclass-wizard (#2,205), and multimethod (#2,377)). The pure-Python typing._AnnotatedAlias class is replaced with a native C implementation (types.AnnotatedType). typing.Annotated becomes a ..."
+    },
+    {
+     "title": "Ecosystem Migration",
+     "summary": "We validated this shorthand by migrating several major type-directed frameworks. To ensure tests continued to pass, we used a two-phase approach: 1. **Add Support**: We first updated the internal machinery of the libraries to accept the @ syntax. 2. **Move the Project**: We then migrated every internal usage of Annotated to the @ operator. The required modifications to add support were: * ..."
+    }
+   ]
+  },
+  {
+   "id": "pep:846",
+   "type": "PEP",
+   "number": 846,
+   "title": "Docstrings for Type Aliases",
+   "status": "Draft",
+   "pep_type": "Standards Track",
+   "python_version": "3.16",
+   "created": "06-Sep-2026",
+   "authors": "Bartosz Sławecki <bartosz@ilikepython.com>",
+   "url": "https://peps.python.org/pep-0846/",
+   "mentions_typing_extensions": false,
+   "rejected_ideas": [
+    {
+     "title": "Retaining the String Statement",
+     "summary": "An alternative design would have AST preprocessing populate doc while retaining the string as a separate ast.Expr statement following the alias. Existing tools could continue to inspect that statement, but the AST would contain the same documentation in both the field and the statement. After an AST transformation, the two could contain different strings. The compiler would then need a rule for ..."
+    }
+   ],
+   "backwards_compatibility": [
+    {
+     "title": "Backwards Compatibility",
+     "summary": "Previously, a string literal immediately following a type statement had no effect at runtime. Under this proposal, a qualifying string becomes the alias's __doc__ and is removed from the AST as a separate ast.Expr statement. The string is stored in the alias node's doc field, and the node's end position extends to cover it. Tools that find alias docstrings by looking at the following statement, ..."
+    }
+   ]
+  },
+  {
+   "id": "pep:849",
+   "type": "PEP",
+   "number": 849,
+   "title": "More Expressive Type Expressions",
+   "status": "Draft",
+   "pep_type": "Standards Track",
+   "python_version": "3.16",
+   "created": "20-Sep-2026",
+   "authors": "Imogen Hergeth <python at imogen.tech>",
+   "url": "https://peps.python.org/pep-0849/",
+   "mentions_typing_extensions": true,
+   "rejected_ideas": [
+    {
+     "title": "Creating Typing Objects Within Annotate Functions",
+     "summary": "An initial idea was to modify annotate functions such that they create the relevant typing objects themselves. This can be achieved in several ways, for example via a new optional argument to signal typing-specific semantics or a new format. These approaches were rejected because they force the type-specific semantics to be defined in the interpreter itself. This not only limits the semantics to ..."
+    },
+    {
+     "title": "Storing Annotation Source Code",
+     "summary": "Instead of storing binary data that defines the annotations' ASTs an alternative is to simply store the annotations source code directly. This also was presented as a possibility all the way back in PEP 649. The two approaches are largely equivalent since one can create the AST from the source code and vice versa. While the unparsed AST is not necessarily the exact string that occurred in the ..."
+    },
+    {
+     "title": "Not Returning AST Namespaces",
+     "summary": "In order to properly evaluate an AST into the correct typing objects, the evaluating function needs to have access to the namespace the annotation was defined in. Initially it seems like this namespace can be reconstructed from the annotate function's object since they contain the globals and cellvars used. However, this is not sufficient since namespaces can use more complex lookup logic when ..."
+    }
+   ],
+   "backwards_compatibility": [
+    {
+     "title": "Backwards Compatibility",
+     "summary": "The new annotation format and helper functions only add new functionality and thus do not have backwards compatibility concerns. The deprecation of typing.get_type_hints means that existing code that uses this function will break once it is removed from the standard library. We recommend that users migrate to annotationlib.get_annotations or typing.get_type_annotations, depending on which ..."
+    }
+   ]
+  },
+  {
+   "id": "version:3.10",
+   "type": "PythonVersion",
+   "version": "3.10"
+  },
+  {
+   "id": "version:3.11",
+   "type": "PythonVersion",
+   "version": "3.11"
+  },
+  {
+   "id": "version:3.12",
+   "type": "PythonVersion",
+   "version": "3.12"
+  },
+  {
+   "id": "version:3.13",
+   "type": "PythonVersion",
+   "version": "3.13"
+  },
+  {
+   "id": "version:3.14",
+   "type": "PythonVersion",
+   "version": "3.14"
+  },
+  {
+   "id": "version:3.15",
+   "type": "PythonVersion",
+   "version": "3.15"
+  },
+  {
+   "id": "version:3.16",
+   "type": "PythonVersion",
+   "version": "3.16"
+  },
+  {
+   "id": "version:3.5",
+   "type": "PythonVersion",
+   "version": "3.5"
+  },
+  {
+   "id": "version:3.6",
+   "type": "PythonVersion",
+   "version": "3.6"
+  },
+  {
+   "id": "version:3.7",
+   "type": "PythonVersion",
+   "version": "3.7"
+  },
+  {
+   "id": "version:3.8",
+   "type": "PythonVersion",
+   "version": "3.8"
+  },
+  {
+   "id": "version:3.9",
+   "type": "PythonVersion",
+   "version": "3.9"
+  }
+ ],
+ "edges": [
+  {
+   "source": "feature:annotated",
+   "target": "version:3.9",
+   "type": "available_from",
+   "evidence": "Python-Version header of PEP 593"
+  },
+  {
+   "source": "feature:builtin_generics",
+   "target": "version:3.9",
+   "type": "available_from",
+   "evidence": "Python-Version header of PEP 585"
+  },
+  {
+   "source": "feature:callable_arrow_syntax",
+   "target": "version:3.11",
+   "type": "available_from",
+   "evidence": "Python-Version header of PEP 677"
+  },
+  {
+   "source": "feature:dataclass_transform",
+   "target": "version:3.11",
+   "type": "available_from",
+   "evidence": "Python-Version header of PEP 681"
+  },
+  {
+   "source": "feature:deferred_annotations",
+   "target": "version:3.14",
+   "type": "available_from",
+   "evidence": "Python-Version header of PEP 649"
+  },
+  {
+   "source": "feature:deprecated",
+   "target": "version:3.13",
+   "type": "available_from",
+   "evidence": "Python-Version header of PEP 702"
+  },
+  {
+   "source": "feature:final",
+   "target": "version:3.8",
+   "type": "available_from",
+   "evidence": "Python-Version header of PEP 591"
+  },
+  {
+   "source": "feature:forward_ref_strings",
+   "target": "version:3.5",
+   "type": "available_from",
+   "evidence": "Python-Version header of PEP 484"
+  },
+  {
+   "source": "feature:implicit_type_alias",
+   "target": "version:3.5",
+   "type": "available_from",
+   "evidence": "Python-Version header of PEP 484"
+  },
+  {
+   "source": "feature:inline_typeddict",
+   "target": "version:3.15",
+   "type": "available_from",
+   "evidence": "Python-Version header of PEP 764"
+  },
+  {
+   "source": "feature:kwargs_unpack",
+   "target": "version:3.12",
+   "type": "available_from",
+   "evidence": "Python-Version header of PEP 692"
+  },
+  {
+   "source": "feature:literal",
+   "target": "version:3.8",
+   "type": "available_from",
+   "evidence": "Python-Version header of PEP 586"
+  },
+  {
+   "source": "feature:literal_string",
+   "target": "version:3.11",
+   "type": "available_from",
+   "evidence": "Python-Version header of PEP 675"
+  },
+  {
+   "source": "feature:override",
+   "target": "version:3.12",
+   "type": "available_from",
+   "evidence": "Python-Version header of PEP 698"
+  },
+  {
+   "source": "feature:paramspec",
+   "target": "version:3.10",
+   "type": "available_from",
+   "evidence": "Python-Version header of PEP 612"
+  },
+  {
+   "source": "feature:postponed_annotations",
+   "target": "version:3.7",
+   "type": "available_from",
+   "evidence": "Python-Version header of PEP 563"
+  },
+  {
+   "source": "feature:protocol",
+   "target": "version:3.8",
+   "type": "available_from",
+   "evidence": "Python-Version header of PEP 544"
+  },
+  {
+   "source": "feature:py_typed",
+   "target": "version:3.7",
+   "type": "available_from",
+   "evidence": "Python-Version header of PEP 561"
+  },
+  {
+   "source": "feature:readonly_attributes",
+   "target": "version:3.15",
+   "type": "available_from",
+   "evidence": "Python-Version header of PEP 767"
+  },
+  {
+   "source": "feature:readonly_typeddict",
+   "target": "version:3.13",
+   "type": "available_from",
+   "evidence": "Python-Version header of PEP 705"
+  },
+  {
+   "source": "feature:required_notrequired",
+   "target": "version:3.11",
+   "type": "available_from",
+   "evidence": "Python-Version header of PEP 655"
+  },
+  {
+   "source": "feature:self_type",
+   "target": "version:3.11",
+   "type": "available_from",
+   "evidence": "Python-Version header of PEP 673"
+  },
+  {
+   "source": "feature:strict_typeguard",
+   "target": "version:3.13",
+   "type": "available_from",
+   "evidence": "Python-Version header of PEP 724"
+  },
+  {
+   "source": "feature:type_checking_builtin",
+   "target": "version:3.15",
+   "type": "available_from",
+   "evidence": "Python-Version header of PEP 781"
+  },
+  {
+   "source": "feature:type_comments",
+   "target": "version:3.5",
+   "type": "available_from",
+   "evidence": "Python-Version header of PEP 484"
+  },
+  {
+   "source": "feature:type_param_syntax",
+   "target": "version:3.12",
+   "type": "available_from",
+   "evidence": "Python-Version header of PEP 695"
+  },
+  {
+   "source": "feature:type_statement",
+   "target": "version:3.12",
+   "type": "available_from",
+   "evidence": "Python-Version header of PEP 695"
+  },
+  {
+   "source": "feature:typealias_explicit",
+   "target": "version:3.10",
+   "type": "available_from",
+   "evidence": "Python-Version header of PEP 613"
+  },
+  {
+   "source": "feature:typeddict",
+   "target": "version:3.8",
+   "type": "available_from",
+   "evidence": "Python-Version header of PEP 589"
+  },
+  {
+   "source": "feature:typeddict_extra_items",
+   "target": "version:3.15",
+   "type": "available_from",
+   "evidence": "Python-Version header of PEP 728"
+  },
+  {
+   "source": "feature:typeddict_total",
+   "target": "version:3.8",
+   "type": "available_from",
+   "evidence": "Python-Version header of PEP 589"
+  },
+  {
+   "source": "feature:typeform",
+   "target": "version:3.15",
+   "type": "available_from",
+   "evidence": "Python-Version header of PEP 747"
+  },
+  {
+   "source": "feature:typeguard",
+   "target": "version:3.10",
+   "type": "available_from",
+   "evidence": "Python-Version header of PEP 647"
+  },
+  {
+   "source": "feature:typeis",
+   "target": "version:3.13",
+   "type": "available_from",
+   "evidence": "Python-Version header of PEP 742"
+  },
+  {
+   "source": "feature:typevar_defaults",
+   "target": "version:3.13",
+   "type": "available_from",
+   "evidence": "Python-Version header of PEP 696"
+  },
+  {
+   "source": "feature:typevar_generics",
+   "target": "version:3.5",
+   "type": "available_from",
+   "evidence": "Python-Version header of PEP 484"
+  },
+  {
+   "source": "feature:typevartuple",
+   "target": "version:3.11",
+   "type": "available_from",
+   "evidence": "Python-Version header of PEP 646"
+  },
+  {
+   "source": "feature:typing_callable",
+   "target": "version:3.5",
+   "type": "available_from",
+   "evidence": "Python-Version header of PEP 484"
+  },
+  {
+   "source": "feature:typing_generic_aliases",
+   "target": "version:3.5",
+   "type": "available_from",
+   "evidence": "Python-Version header of PEP 484"
+  },
+  {
+   "source": "feature:typing_optional",
+   "target": "version:3.5",
+   "type": "available_from",
+   "evidence": "Python-Version header of PEP 484"
+  },
+  {
+   "source": "feature:typing_union",
+   "target": "version:3.5",
+   "type": "available_from",
+   "evidence": "Python-Version header of PEP 484"
+  },
+  {
+   "source": "feature:union_pipe",
+   "target": "version:3.10",
+   "type": "available_from",
+   "evidence": "Python-Version header of PEP 604"
+  },
+  {
+   "source": "feature:variable_annotations",
+   "target": "version:3.6",
+   "type": "available_from",
+   "evidence": "Python-Version header of PEP 526"
+  },
+  {
+   "source": "pep:482",
+   "target": "pep:484",
+   "type": "builds_on",
+   "count": 1,
+   "evidence": [
+    "Abstract"
+   ]
+  },
+  {
+   "source": "pep:483",
+   "target": "pep:484",
+   "type": "builds_on",
+   "count": 2,
+   "evidence": [
+    "Abstract",
+    "Notational conventions"
+   ]
+  },
+  {
+   "source": "pep:484",
+   "target": "pep:482",
+   "type": "builds_on",
+   "count": 1,
+   "evidence": [
+    "Abstract"
+   ]
+  },
+  {
+   "source": "pep:484",
+   "target": "pep:483",
+   "type": "builds_on",
+   "count": 1,
+   "evidence": [
+    "Abstract"
+   ]
+  },
+  {
+   "source": "pep:526",
+   "target": "pep:484",
+   "type": "builds_on",
+   "count": 5,
+   "evidence": [
+    "Abstract",
+    "Rationale",
+    "Specification"
+   ]
+  },
+  {
+   "source": "pep:544",
+   "target": "pep:483",
+   "type": "builds_on",
+   "count": 1,
+   "evidence": [
+    "Nominal vs structural subtyping"
+   ]
+  },
+  {
+   "source": "pep:544",
+   "target": "pep:484",
+   "type": "builds_on",
+   "count": 12,
+   "evidence": [
+    "Abstract",
+    "Callback protocols",
+    "Nominal vs structural subtyping",
+    "Non-goals",
+    "Protocol members",
+    "Rationale and Goals",
+    "Recursive protocols",
+    "Self-types in protocols"
+   ]
+  },
+  {
+   "source": "pep:544",
+   "target": "pep:526",
+   "type": "builds_on",
+   "count": 3,
+   "evidence": [
+    "Non-goals",
+    "Protocol members"
+   ]
+  },
+  {
+   "source": "pep:560",
+   "target": "pep:484",
+   "type": "builds_on",
+   "count": 3,
+   "evidence": [
+    "Abstract",
+    "Performance",
+    "Using __class_getitem__ in C extensions"
+   ]
+  },
+  {
+   "source": "pep:560",
+   "target": "pep:526",
+   "type": "builds_on",
+   "count": 1,
+   "evidence": [
+    "Abstract"
+   ]
+  },
+  {
+   "source": "pep:561",
+   "target": "pep:484",
+   "type": "builds_on",
+   "count": 4,
+   "evidence": [
+    "Abstract",
+    "Rationale",
+    "Specification"
+   ]
+  },
+  {
+   "source": "pep:563",
+   "target": "pep:484",
+   "type": "builds_on",
+   "count": 6,
+   "evidence": [
+    "Abstract",
+    "Non-goals",
+    "Non-typing usage of annotations"
+   ]
+  },
+  {
+   "source": "pep:563",
+   "target": "pep:526",
+   "type": "builds_on",
+   "count": 3,
+   "evidence": [
+    "Abstract",
+    "Non-goals",
+    "Non-typing usage of annotations"
+   ]
+  },
+  {
+   "source": "pep:563",
+   "target": "pep:544",
+   "type": "builds_on",
+   "count": 1,
+   "evidence": [
+    "Non-typing usage of annotations"
+   ]
+  },
+  {
+   "source": "pep:563",
+   "target": "pep:560",
+   "type": "builds_on",
+   "count": 1,
+   "evidence": [
+    "Non-typing usage of annotations"
+   ]
+  },
+  {
+   "source": "pep:563",
+   "target": "pep:649",
+   "type": "builds_on",
+   "count": 1,
+   "evidence": [
+    "Rationale and Goals"
+   ]
+  },
+  {
+   "source": "pep:586",
+   "target": "pep:484",
+   "type": "builds_on",
+   "count": 3,
+   "evidence": [
+    "Abstract",
+    "Core behavior",
+    "Motivation and Rationale"
+   ]
+  },
+  {
+   "source": "pep:589",
+   "target": "pep:483",
+   "type": "builds_on",
+   "count": 1,
+   "evidence": [
+    "Type Consistency"
+   ]
+  },
+  {
+   "source": "pep:589",
+   "target": "pep:484",
+   "type": "builds_on",
+   "count": 7,
+   "evidence": [
+    "Abstract",
+    "Motivation",
+    "Specification",
+    "Using TypedDict Types"
+   ]
+  },
+  {
+   "source": "pep:589",
+   "target": "pep:526",
+   "type": "builds_on",
+   "count": 1,
+   "evidence": [
+    "Alternative Syntax"
+   ]
+  },
+  {
+   "source": "pep:589",
+   "target": "pep:586",
+   "type": "builds_on",
+   "count": 1,
+   "evidence": [
+    "Use of Final Values and Literal Types"
+   ]
+  },
+  {
+   "source": "pep:589",
+   "target": "pep:591",
+   "type": "builds_on",
+   "count": 1,
+   "evidence": [
+    "Use of Final Values and Literal Types"
+   ]
+  },
+  {
+   "source": "pep:591",
+   "target": "pep:586",
+   "type": "builds_on",
+   "count": 1,
+   "evidence": [
+    "The Final annotation"
+   ]
+  },
+  {
+   "source": "pep:593",
+   "target": "pep:484",
+   "type": "builds_on",
+   "count": 2,
+   "evidence": [
+    "Motivation"
+   ]
+  },
+  {
+   "source": "pep:604",
+   "target": "pep:484",
+   "type": "builds_on",
+   "count": 1,
+   "evidence": [
+    "Motivation"
+   ]
+  },
+  {
+   "source": "pep:604",
+   "target": "pep:526",
+   "type": "builds_on",
+   "count": 1,
+   "evidence": [
+    "Motivation"
+   ]
+  },
+  {
+   "source": "pep:604",
+   "target": "pep:585",
+   "type": "builds_on",
+   "count": 2,
+   "evidence": [
+    "Motivation"
+   ]
+  },
+  {
+   "source": "pep:612",
+   "target": "pep:484",
+   "type": "builds_on",
+   "count": 2,
+   "evidence": [
+    "Abstract",
+    "Motivation"
+   ]
+  },
+  {
+   "source": "pep:612",
+   "target": "pep:544",
+   "type": "builds_on",
+   "count": 1,
+   "evidence": [
+    "Abstract"
+   ]
+  },
+  {
+   "source": "pep:613",
+   "target": "pep:484",
+   "type": "builds_on",
+   "count": 1,
+   "evidence": [
+    "Motivation"
+   ]
+  },
+  {
+   "source": "pep:646",
+   "target": "pep:484",
+   "type": "builds_on",
+   "count": 3,
+   "evidence": [
+    "*args as a Type Variable Tuple",
+    "Abstract"
+   ]
+  },
+  {
+   "source": "pep:649",
+   "target": "pep:484",
+   "type": "builds_on",
+   "count": 2,
+   "evidence": [
+    "A History Of Annotations",
+    "Static typing users"
+   ]
+  },
+  {
+   "source": "pep:649",
+   "target": "pep:526",
+   "type": "builds_on",
+   "count": 2,
+   "evidence": [
+    "A History Of Annotations"
+   ]
+  },
+  {
+   "source": "pep:649",
+   "target": "pep:563",
+   "type": "builds_on",
+   "count": 17,
+   "evidence": [
+    "A History Of Annotations",
+    "Abstract",
+    "Comparison Of Annotation Semantics",
+    "Documentation",
+    "Motivation For This PEP",
+    "Overview",
+    "Runtime annotation users",
+    "Static typing users",
+    "Wrappers"
+   ]
+  },
+  {
+   "source": "pep:655",
+   "target": "pep:589",
+   "type": "builds_on",
+   "count": 5,
+   "evidence": [
+    "Abstract",
+    "Interaction with total=False",
+    "Motivation",
+    "Specification"
+   ]
+  },
+  {
+   "source": "pep:673",
+   "target": "pep:484",
+   "type": "builds_on",
+   "count": 1,
+   "evidence": [
+    "Abstract"
+   ]
+  },
+  {
+   "source": "pep:673",
+   "target": "pep:544",
+   "type": "builds_on",
+   "count": 1,
+   "evidence": [
+    "Use in Protocols"
+   ]
+  },
+  {
+   "source": "pep:675",
+   "target": "pep:586",
+   "type": "builds_on",
+   "count": 1,
+   "evidence": [
+    "Motivation"
+   ]
+  },
+  {
+   "source": "pep:677",
+   "target": "pep:484",
+   "type": "builds_on",
+   "count": 2,
+   "evidence": [
+    "Background and History",
+    "Motivation"
+   ]
+  },
+  {
+   "source": "pep:677",
+   "target": "pep:585",
+   "type": "builds_on",
+   "count": 1,
+   "evidence": [
+    "Rationale"
+   ]
+  },
+  {
+   "source": "pep:677",
+   "target": "pep:604",
+   "type": "builds_on",
+   "count": 4,
+   "evidence": [
+    "Additional Behaviors of types.CallableType",
+    "Background and History",
+    "Precedence of ->",
+    "Rationale"
+   ]
+  },
+  {
+   "source": "pep:677",
+   "target": "pep:612",
+   "type": "builds_on",
+   "count": 1,
+   "evidence": [
+    "Compact Syntax for ParamSpec"
+   ]
+  },
+  {
+   "source": "pep:677",
+   "target": "pep:646",
+   "type": "builds_on",
+   "count": 2,
+   "evidence": [
+    "Grammar and AST"
+   ]
+  },
+  {
+   "source": "pep:692",
+   "target": "pep:589",
+   "type": "builds_on",
+   "count": 1,
+   "evidence": [
+    "Rationale"
+   ]
+  },
+  {
+   "source": "pep:692",
+   "target": "pep:646",
+   "type": "builds_on",
+   "count": 2,
+   "evidence": [
+    "Rationale"
+   ]
+  },
+  {
+   "source": "pep:692",
+   "target": "pep:655",
+   "type": "builds_on",
+   "count": 1,
+   "evidence": [
+    "Required and non-required keys"
+   ]
+  },
+  {
+   "source": "pep:695",
+   "target": "pep:483",
+   "type": "builds_on",
+   "count": 1,
+   "evidence": [
+    "Points of Confusion"
+   ]
+  },
+  {
+   "source": "pep:695",
+   "target": "pep:484",
+   "type": "builds_on",
+   "count": 5,
+   "evidence": [
+    "Constrained Type Specification",
+    "Motivation",
+    "Points of Confusion",
+    "Type Parameter Scopes",
+    "Variance Inference"
+   ]
+  },
+  {
+   "source": "pep:695",
+   "target": "pep:612",
+   "type": "builds_on",
+   "count": 2,
+   "evidence": [
+    "Motivation",
+    "Type Parameter Declarations"
+   ]
+  },
+  {
+   "source": "pep:695",
+   "target": "pep:613",
+   "type": "builds_on",
+   "count": 1,
+   "evidence": [
+    "Generic Type Alias"
+   ]
+  },
+  {
+   "source": "pep:695",
+   "target": "pep:646",
+   "type": "builds_on",
+   "count": 2,
+   "evidence": [
+    "Motivation",
+    "Type Parameter Declarations"
+   ]
+  },
+  {
+   "source": "pep:696",
+   "target": "pep:646",
+   "type": "builds_on",
+   "count": 1,
+   "evidence": [
+    "TypeVarTuple\\ s as Defaults"
+   ]
+  },
+  {
+   "source": "pep:696",
+   "target": "pep:695",
+   "type": "builds_on",
+   "count": 3,
+   "evidence": [
+    "Abstract",
+    "Default Ordering and Subscription Rules"
+   ]
+  },
+  {
+   "source": "pep:698",
+   "target": "pep:591",
+   "type": "builds_on",
+   "count": 1,
+   "evidence": [
+    "Runtime Override Checks in Python"
+   ]
+  },
+  {
+   "source": "pep:702",
+   "target": "pep:698",
+   "type": "builds_on",
+   "count": 1,
+   "evidence": [
+    "Specification"
+   ]
+  },
+  {
+   "source": "pep:705",
+   "target": "pep:544",
+   "type": "builds_on",
+   "count": 1,
+   "evidence": [
+    "Pure functions"
+   ]
+  },
+  {
+   "source": "pep:705",
+   "target": "pep:589",
+   "type": "builds_on",
+   "count": 5,
+   "evidence": [
+    "Abstract",
+    "Alternative functional syntax",
+    "Inheritance",
+    "Motivation",
+    "Type consistency"
+   ]
+  },
+  {
+   "source": "pep:705",
+   "target": "pep:655",
+   "type": "builds_on",
+   "count": 1,
+   "evidence": [
+    "Interaction with other special types"
+   ]
+  },
+  {
+   "source": "pep:705",
+   "target": "pep:692",
+   "type": "builds_on",
+   "count": 1,
+   "evidence": [
+    "Keyword argument typing"
+   ]
+  },
+  {
+   "source": "pep:718",
+   "target": "pep:646",
+   "type": "builds_on",
+   "count": 1,
+   "evidence": [
+    "Functions Parameterized by TypeVarTuple\\ s"
+   ]
+  },
+  {
+   "source": "pep:718",
+   "target": "pep:696",
+   "type": "builds_on",
+   "count": 1,
+   "evidence": [
+    "Binding Rules"
+   ]
+  },
+  {
+   "source": "pep:718",
+   "target": "pep:747",
+   "type": "builds_on",
+   "count": 2,
+   "evidence": [
+    "Motivation",
+    "Rationale"
+   ]
+  },
+  {
+   "source": "pep:724",
+   "target": "pep:647",
+   "type": "builds_on",
+   "count": 6,
+   "evidence": [
+    "Abstract",
+    "Motivation",
+    "Specification"
+   ]
+  },
+  {
+   "source": "pep:727",
+   "target": "pep:484",
+   "type": "builds_on",
+   "count": 1,
+   "evidence": [
+    "Motivation"
+   ]
+  },
+  {
+   "source": "pep:728",
+   "target": "pep:589",
+   "type": "builds_on",
+   "count": 1,
+   "evidence": [
+    "Specification"
+   ]
+  },
+  {
+   "source": "pep:728",
+   "target": "pep:692",
+   "type": "builds_on",
+   "count": 3,
+   "evidence": [
+    "Previous Discussions",
+    "Support Additional Keys for Unpack"
+   ]
+  },
+  {
+   "source": "pep:728",
+   "target": "pep:705",
+   "type": "builds_on",
+   "count": 1,
+   "evidence": [
+    "Previous Discussions"
+   ]
+  },
+  {
+   "source": "pep:729",
+   "target": "pep:484",
+   "type": "builds_on",
+   "count": 6,
+   "evidence": [
+    "It's hard to evolve the specification",
+    "Mandate",
+    "Motivation",
+    "Operations and process",
+    "PEPs are the only specification"
+   ]
+  },
+  {
+   "source": "pep:729",
+   "target": "pep:526",
+   "type": "builds_on",
+   "count": 1,
+   "evidence": [
+    "Operations and process"
+   ]
+  },
+  {
+   "source": "pep:729",
+   "target": "pep:561",
+   "type": "builds_on",
+   "count": 1,
+   "evidence": [
+    "It's hard to evolve the specification"
+   ]
+  },
+  {
+   "source": "pep:729",
+   "target": "pep:647",
+   "type": "builds_on",
+   "count": 2,
+   "evidence": [
+    "Operations and process",
+    "Relationship with the Steering Council"
+   ]
+  },
+  {
+   "source": "pep:729",
+   "target": "pep:655",
+   "type": "builds_on",
+   "count": 1,
+   "evidence": [
+    "Relationship with the Steering Council"
+   ]
+  },
+  {
+   "source": "pep:729",
+   "target": "pep:673",
+   "type": "builds_on",
+   "count": 1,
+   "evidence": [
+    "Relationship with the Steering Council"
+   ]
+  },
+  {
+   "source": "pep:729",
+   "target": "pep:675",
+   "type": "builds_on",
+   "count": 1,
+   "evidence": [
+    "Relationship with the Steering Council"
+   ]
+  },
+  {
+   "source": "pep:729",
+   "target": "pep:681",
+   "type": "builds_on",
+   "count": 1,
+   "evidence": [
+    "Operations and process"
+   ]
+  },
+  {
+   "source": "pep:729",
+   "target": "pep:688",
+   "type": "builds_on",
+   "count": 1,
+   "evidence": [
+    "Operations and process"
+   ]
+  },
+  {
+   "source": "pep:729",
+   "target": "pep:695",
+   "type": "builds_on",
+   "count": 2,
+   "evidence": [
+    "Operations and process",
+    "Relationship with the Steering Council"
+   ]
+  },
+  {
+   "source": "pep:729",
+   "target": "pep:698",
+   "type": "builds_on",
+   "count": 1,
+   "evidence": [
+    "Relationship with the Steering Council"
+   ]
+  },
+  {
+   "source": "pep:729",
+   "target": "pep:702",
+   "type": "builds_on",
+   "count": 2,
+   "evidence": [
+    "Operations and process",
+    "Relationship with the Steering Council"
+   ]
+  },
+  {
+   "source": "pep:729",
+   "target": "pep:718",
+   "type": "builds_on",
+   "count": 1,
+   "evidence": [
+    "Relationship with the Steering Council"
+   ]
+  },
+  {
+   "source": "pep:729",
+   "target": "pep:727",
+   "type": "builds_on",
+   "count": 1,
+   "evidence": [
+    "Relationship with the Steering Council"
+   ]
+  },
+  {
+   "source": "pep:742",
+   "target": "pep:647",
+   "type": "builds_on",
+   "count": 2,
+   "evidence": [
+    "Motivation"
+   ]
+  },
+  {
+   "source": "pep:742",
+   "target": "pep:724",
+   "type": "builds_on",
+   "count": 2,
+   "evidence": [
+    "Motivation",
+    "Rationale"
+   ]
+  },
+  {
+   "source": "pep:746",
+   "target": "pep:593",
+   "type": "builds_on",
+   "count": 2,
+   "evidence": [
+    "Motivation"
+   ]
+  },
+  {
+   "source": "pep:747",
+   "target": "pep:589",
+   "type": "builds_on",
+   "count": 1,
+   "evidence": [
+    "Motivation"
+   ]
+  },
+  {
+   "source": "pep:749",
+   "target": "pep:563",
+   "type": "builds_on",
+   "count": 1,
+   "evidence": [
+    "Abstract"
+   ]
+  },
+  {
+   "source": "pep:749",
+   "target": "pep:649",
+   "type": "builds_on",
+   "count": 14,
+   "evidence": [
+    "Abstract",
+    "Motivation",
+    "Rationale",
+    "Specification"
+   ]
+  },
+  {
+   "source": "pep:749",
+   "target": "pep:695",
+   "type": "builds_on",
+   "count": 2,
+   "evidence": [
+    "Abstract",
+    "Specification"
+   ]
+  },
+  {
+   "source": "pep:749",
+   "target": "pep:696",
+   "type": "builds_on",
+   "count": 2,
+   "evidence": [
+    "Abstract",
+    "Specification"
+   ]
+  },
+  {
+   "source": "pep:764",
+   "target": "pep:589",
+   "type": "builds_on",
+   "count": 1,
+   "evidence": [
+    "Abstract"
+   ]
+  },
+  {
+   "source": "pep:767",
+   "target": "pep:705",
+   "type": "builds_on",
+   "count": 5,
+   "evidence": [
+    "Abstract",
+    "Interaction with Other Type Qualifiers",
+    "Rationale",
+    "Subtyping"
+   ]
+  },
+  {
+   "source": "pep:781",
+   "target": "pep:484",
+   "type": "builds_on",
+   "count": 1,
+   "evidence": [
+    "Motivation"
+   ]
+  },
+  {
+   "source": "pep:781",
+   "target": "pep:563",
+   "type": "builds_on",
+   "count": 2,
+   "evidence": [
+    "Motivation"
+   ]
+  },
+  {
+   "source": "pep:781",
+   "target": "pep:649",
+   "type": "builds_on",
+   "count": 1,
+   "evidence": [
+    "Motivation"
+   ]
+  },
+  {
+   "source": "pep:821",
+   "target": "pep:646",
+   "type": "builds_on",
+   "count": 1,
+   "evidence": [
+    "Design goals"
+   ]
+  },
+  {
+   "source": "pep:821",
+   "target": "pep:692",
+   "type": "builds_on",
+   "count": 2,
+   "evidence": [
+    "Design goals",
+    "Semantics"
+   ]
+  },
+  {
+   "source": "pep:821",
+   "target": "pep:728",
+   "type": "builds_on",
+   "count": 2,
+   "evidence": [
+    "Design goals",
+    "Semantics"
+   ]
+  },
+  {
+   "source": "pep:827",
+   "target": "pep:612",
+   "type": "builds_on",
+   "count": 1,
+   "evidence": [
+    "More powerful decorator typing"
+   ]
+  },
+  {
+   "source": "pep:827",
+   "target": "pep:646",
+   "type": "builds_on",
+   "count": 1,
+   "evidence": [
+    "Unpack of typevars for **kwargs"
+   ]
+  },
+  {
+   "source": "pep:827",
+   "target": "pep:681",
+   "type": "builds_on",
+   "count": 2,
+   "evidence": [
+    "Motivation",
+    "dataclasses-style method generation"
+   ]
+  },
+  {
+   "source": "pep:827",
+   "target": "pep:692",
+   "type": "builds_on",
+   "count": 1,
+   "evidence": [
+    "Unpack of typevars for **kwargs"
+   ]
+  },
+  {
+   "source": "pep:835",
+   "target": "pep:585",
+   "type": "builds_on",
+   "count": 1,
+   "evidence": [
+    "Historical Context and Prior Art"
+   ]
+  },
+  {
+   "source": "pep:835",
+   "target": "pep:593",
+   "type": "builds_on",
+   "count": 3,
+   "evidence": [
+    "Motivation"
+   ]
+  },
+  {
+   "source": "pep:835",
+   "target": "pep:604",
+   "type": "builds_on",
+   "count": 2,
+   "evidence": [
+    "Historical Context and Prior Art",
+    "Operator Precedence"
+   ]
+  },
+  {
+   "source": "pep:835",
+   "target": "pep:727",
+   "type": "builds_on",
+   "count": 1,
+   "evidence": [
+    "Motivation"
+   ]
+  },
+  {
+   "source": "pep:846",
+   "target": "pep:695",
+   "type": "builds_on",
+   "count": 1,
+   "evidence": [
+    "Motivation"
+   ]
+  },
+  {
+   "source": "pep:849",
+   "target": "pep:586",
+   "type": "builds_on",
+   "count": 1,
+   "evidence": [
+    "Motivation"
+   ]
+  },
+  {
+   "source": "pep:849",
+   "target": "pep:827",
+   "type": "builds_on",
+   "count": 1,
+   "evidence": [
+    "Motivation"
+   ]
+  },
+  {
+   "source": "pep:483",
+   "target": "pep:484",
+   "type": "cites",
+   "count": 4,
+   "evidence": [
+    "Covariance and Contravariance",
+    "Pragmatics",
+    "Types vs. Classes"
+   ]
+  },
+  {
+   "source": "pep:484",
+   "target": "pep:482",
+   "type": "cites",
+   "count": 1,
+   "evidence": [
+    "Acknowledgements"
+   ]
+  },
+  {
+   "source": "pep:484",
+   "target": "pep:483",
+   "type": "cites",
+   "count": 1,
+   "evidence": [
+    "Covariance and contravariance"
+   ]
+  },
+  {
+   "source": "pep:484",
+   "target": "pep:526",
+   "type": "cites",
+   "count": 2,
+   "evidence": [
+    "Type comments"
+   ]
+  },
+  {
+   "source": "pep:484",
+   "target": "pep:561",
+   "type": "cites",
+   "count": 1,
+   "evidence": [
+    "Storing and distributing stub files"
+   ]
+  },
+  {
+   "source": "pep:526",
+   "target": "pep:484",
+   "type": "cites",
+   "count": 1,
+   "evidence": [
+    "Changes to Standard Library and Documentation"
+   ]
+  },
+  {
+   "source": "pep:544",
+   "target": "pep:483",
+   "type": "cites",
+   "count": 1,
+   "evidence": [
+    "Unions and intersections of protocols"
+   ]
+  },
+  {
+   "source": "pep:544",
+   "target": "pep:484",
+   "type": "cites",
+   "count": 1,
+   "evidence": [
+    "Using Protocols in Python 2.7 - 3.5"
+   ]
+  },
+  {
+   "source": "pep:561",
+   "target": "pep:526",
+   "type": "cites",
+   "count": 1,
+   "evidence": [
+    "Definition of Terms"
+   ]
+  },
+  {
+   "source": "pep:563",
+   "target": "pep:484",
+   "type": "cites",
+   "count": 2,
+   "evidence": [
+    "In PEP 484",
+    "python/typing#400"
+   ]
+  },
+  {
+   "source": "pep:563",
+   "target": "pep:526",
+   "type": "cites",
+   "count": 1,
+   "evidence": [
+    "Implementation"
+   ]
+  },
+  {
+   "source": "pep:563",
+   "target": "pep:649",
+   "type": "cites",
+   "count": 1,
+   "evidence": [
+    "Resolution"
+   ]
+  },
+  {
+   "source": "pep:563",
+   "target": "pep:749",
+   "type": "cites",
+   "count": 1,
+   "evidence": [
+    "Resolution"
+   ]
+  },
+  {
+   "source": "pep:585",
+   "target": "pep:563",
+   "type": "cites",
+   "count": 1,
+   "evidence": [
+    "Implementation"
+   ]
+  },
+  {
+   "source": "pep:586",
+   "target": "pep:484",
+   "type": "cites",
+   "count": 2,
+   "evidence": [
+    "Illegal parameters for Literal at type check time",
+    "Interactions with enums and exhaustiveness checks"
+   ]
+  },
+  {
+   "source": "pep:586",
+   "target": "pep:591",
+   "type": "cites",
+   "count": 2,
+   "evidence": [
+    "Interactions with Final"
+   ]
+  },
+  {
+   "source": "pep:649",
+   "target": "pep:563",
+   "type": "cites",
+   "count": 8,
+   "evidence": [
+    "Acknowledgements",
+    "Annotations On Local Variables Inside Functions",
+    "Performance Comparison"
+   ]
+  },
+  {
+   "source": "pep:695",
+   "target": "pep:563",
+   "type": "cites",
+   "count": 2,
+   "evidence": [
+    "Lazy Evaluation"
+   ]
+  },
+  {
+   "source": "pep:695",
+   "target": "pep:649",
+   "type": "cites",
+   "count": 7,
+   "evidence": [
+    "Lazy Evaluation"
+   ]
+  },
+  {
+   "source": "pep:696",
+   "target": "pep:695",
+   "type": "cites",
+   "count": 2,
+   "evidence": [
+    "Grammar changes"
+   ]
+  },
+  {
+   "source": "pep:724",
+   "target": "pep:483",
+   "type": "cites",
+   "count": 1,
+   "evidence": [
+    "Footnotes"
+   ]
+  },
+  {
+   "source": "pep:727",
+   "target": "pep:702",
+   "type": "cites",
+   "count": 1,
+   "evidence": [
+    "Documentation is not Typing"
+   ]
+  },
+  {
+   "source": "pep:728",
+   "target": "pep:705",
+   "type": "cites",
+   "count": 1,
+   "evidence": [
+    "Acknowledgments"
+   ]
+  },
+  {
+   "source": "pep:742",
+   "target": "pep:724",
+   "type": "cites",
+   "count": 2,
+   "evidence": [
+    "Acknowledgments"
+   ]
+  },
+  {
+   "source": "pep:747",
+   "target": "pep:649",
+   "type": "cites",
+   "count": 1,
+   "evidence": [
+    "Footnotes"
+   ]
+  },
+  {
+   "source": "pep:749",
+   "target": "pep:563",
+   "type": "cites",
+   "count": 2,
+   "evidence": [
+    "The future of from __future__ import annotations"
+   ]
+  },
+  {
+   "source": "pep:749",
+   "target": "pep:649",
+   "type": "cites",
+   "count": 22,
+   "evidence": [
+    "Acknowledgments",
+    "Adding the VALUE_WITH_FAKE_GLOBALS format",
+    "Behavior of the REPL",
+    "Caching of annotations on partially executed modules",
+    "Conditionally defined annotations",
+    "Deferred evaluation of PEP 695 and 696 objects",
+    "Effect of deleting __annotations__",
+    "How to Teach This",
+    "Metaclass behavior with PEP 649",
+    "Miscellaneous implementation details",
+    "New annotationlib module",
+    "Security Implications",
+    "Signature of __annotate__ functions",
+    "Supported operations on ForwardRef objects",
+    "The future of from __future__ import annotations",
+    "Which expressions can be stringified?",
+    "Wrappers that provide __annotations__"
+   ]
+  },
+  {
+   "source": "pep:749",
+   "target": "pep:695",
+   "type": "cites",
+   "count": 2,
+   "evidence": [
+    "Deferred evaluation of PEP 695 and 696 objects"
+   ]
+  },
+  {
+   "source": "pep:749",
+   "target": "pep:696",
+   "type": "cites",
+   "count": 1,
+   "evidence": [
+    "Deferred evaluation of PEP 695 and 696 objects"
+   ]
+  },
+  {
+   "source": "pep:764",
+   "target": "pep:728",
+   "type": "cites",
+   "count": 2,
+   "evidence": [
+    "Inline typed dictionaries and extra items"
+   ]
+  },
+  {
+   "source": "pep:767",
+   "target": "pep:705",
+   "type": "cites",
+   "count": 1,
+   "evidence": [
+    "How to Teach This"
+   ]
+  },
+  {
+   "source": "pep:821",
+   "target": "pep:677",
+   "type": "cites",
+   "count": 1,
+   "evidence": [
+    "References"
+   ]
+  },
+  {
+   "source": "pep:821",
+   "target": "pep:692",
+   "type": "cites",
+   "count": 1,
+   "evidence": [
+    "References"
+   ]
+  },
+  {
+   "source": "pep:821",
+   "target": "pep:728",
+   "type": "cites",
+   "count": 2,
+   "evidence": [
+    "How to Teach This",
+    "References"
+   ]
+  },
+  {
+   "source": "pep:827",
+   "target": "pep:764",
+   "type": "cites",
+   "count": 1,
+   "evidence": [
+    "Dictionary comprehension based syntax for creating typed dicts and protocols"
+   ]
+  },
+  {
+   "source": "pep:835",
+   "target": "pep:484",
+   "type": "cites",
+   "count": 1,
+   "evidence": [
+    "Terminology"
+   ]
+  },
+  {
+   "source": "pep:835",
+   "target": "pep:593",
+   "type": "cites",
+   "count": 1,
+   "evidence": [
+    "Terminology"
+   ]
+  },
+  {
+   "source": "pep:835",
+   "target": "pep:727",
+   "type": "cites",
+   "count": 1,
+   "evidence": [
+    "References"
+   ]
+  },
+  {
+   "source": "pep:835",
+   "target": "pep:746",
+   "type": "cites",
+   "count": 2,
+   "evidence": [
+    "Targeted Metadata",
+    "Terminology"
+   ]
+  },
+  {
+   "source": "pep:563",
+   "target": "pep:649",
+   "type": "compat_concern",
+   "count": 1,
+   "evidence": [
+    "Deprecation policy"
+   ]
+  },
+  {
+   "source": "pep:649",
+   "target": "pep:563",
+   "type": "compat_concern",
+   "count": 15,
+   "evidence": [
+    "Backwards Compatibility With PEP 563 Semantics",
+    "Backwards Compatibility With Stock Semantics"
+   ]
+  },
+  {
+   "source": "pep:675",
+   "target": "pep:586",
+   "type": "compat_concern",
+   "count": 2,
+   "evidence": [
+    "Backwards Compatibility"
+   ]
+  },
+  {
+   "source": "pep:677",
+   "target": "pep:612",
+   "type": "compat_concern",
+   "count": 1,
+   "evidence": [
+    "Incompatibility with other possible uses of * and **"
+   ]
+  },
+  {
+   "source": "pep:677",
+   "target": "pep:646",
+   "type": "compat_concern",
+   "count": 1,
+   "evidence": [
+    "Incompatibility with other possible uses of * and **"
+   ]
+  },
+  {
+   "source": "pep:749",
+   "target": "pep:563",
+   "type": "compat_concern",
+   "count": 1,
+   "evidence": [
+    "Backwards Compatibility"
+   ]
+  },
+  {
+   "source": "pep:749",
+   "target": "pep:649",
+   "type": "compat_concern",
+   "count": 4,
+   "evidence": [
+    "Backwards Compatibility"
+   ]
+  },
+  {
+   "source": "pep:827",
+   "target": "pep:649",
+   "type": "compat_concern",
+   "count": 2,
+   "evidence": [
+    "Backwards Compatibility"
+   ]
+  },
+  {
+   "source": "feature:builtin_generics",
+   "target": "feature:postponed_annotations",
+   "type": "falls_back_to",
+   "condition": "only inside annotations; runtime use like list[int]() or isinstance still fails",
+   "priority": 1
+  },
+  {
+   "source": "feature:builtin_generics",
+   "target": "feature:typing_generic_aliases",
+   "type": "falls_back_to",
+   "condition": "always valid; import List, Dict, Tuple from typing",
+   "priority": 0
+  },
+  {
+   "source": "feature:callable_arrow_syntax",
+   "target": "feature:typing_callable",
+   "type": "falls_back_to",
+   "condition": "always valid; this syntax was never added to Python",
+   "priority": 0
+  },
+  {
+   "source": "feature:deferred_annotations",
+   "target": "feature:forward_ref_strings",
+   "type": "falls_back_to",
+   "condition": "always valid; quote forward references by hand",
+   "priority": 1
+  },
+  {
+   "source": "feature:deferred_annotations",
+   "target": "feature:postponed_annotations",
+   "type": "falls_back_to",
+   "condition": "same effect for most code, but annotations become strings at runtime",
+   "priority": 0
+  },
+  {
+   "source": "feature:inline_typeddict",
+   "target": "feature:typeddict",
+   "type": "falls_back_to",
+   "condition": "always valid; declare a named TypedDict class",
+   "priority": 0
+  },
+  {
+   "source": "feature:postponed_annotations",
+   "target": "feature:forward_ref_strings",
+   "type": "falls_back_to",
+   "condition": "always valid; quote the annotations that reference later names",
+   "priority": 0
+  },
+  {
+   "source": "feature:readonly_attributes",
+   "target": "feature:final",
+   "type": "falls_back_to",
+   "condition": "Final also blocks reassignment, but cannot be overridden in subclasses",
+   "priority": 0
+  },
+  {
+   "source": "feature:required_notrequired",
+   "target": "feature:typeddict_total",
+   "type": "falls_back_to",
+   "condition": "split the TypedDict into a required base class and a total=False subclass",
+   "priority": 0
+  },
+  {
+   "source": "feature:self_type",
+   "target": "feature:typevar_generics",
+   "type": "falls_back_to",
+   "condition": "declare TSelf = TypeVar('TSelf', bound='ClassName') and annotate self with it",
+   "priority": 0
+  },
+  {
+   "source": "feature:strict_typeguard",
+   "target": "feature:typeis",
+   "type": "falls_back_to",
+   "condition": "TypeIs was added instead of changing TypeGuard",
+   "priority": 0
+  },
+  {
+   "source": "feature:type_param_syntax",
+   "target": "feature:typevar_generics",
+   "type": "falls_back_to",
+   "condition": "always valid; declare T = TypeVar('T') and subclass Generic[T]",
+   "priority": 0
+  },
+  {
+   "source": "feature:type_statement",
+   "target": "feature:typealias_explicit",
+   "type": "falls_back_to",
+   "condition": "valid for most aliases; the alias is evaluated eagerly instead of lazily",
+   "priority": 0
+  },
+  {
+   "source": "feature:typealias_explicit",
+   "target": "feature:implicit_type_alias",
+   "type": "falls_back_to",
+   "condition": "always valid; type checkers infer the alias, with less precision for forward references",
+   "priority": 0
+  },
+  {
+   "source": "feature:typeis",
+   "target": "feature:typeguard",
+   "type": "falls_back_to",
+   "condition": "TypeGuard narrows only the True branch and does not narrow the False branch",
+   "priority": 0
+  },
+  {
+   "source": "feature:union_pipe",
+   "target": "feature:postponed_annotations",
+   "type": "falls_back_to",
+   "condition": "only inside annotations; X | Y used at runtime (isinstance, type aliases, cast) still fails",
+   "priority": 1
+  },
+  {
+   "source": "feature:union_pipe",
+   "target": "feature:typing_union",
+   "type": "falls_back_to",
+   "condition": "always valid; write Union[X, Y] (or Optional[X] for X | None)",
+   "priority": 0
+  },
+  {
+   "source": "feature:variable_annotations",
+   "target": "feature:type_comments",
+   "type": "falls_back_to",
+   "condition": "always valid; move the type into a # type: comment",
+   "priority": 0
+  },
+  {
+   "source": "feature:annotated",
+   "target": "pep:593",
+   "type": "introduced_by"
+  },
+  {
+   "source": "feature:builtin_generics",
+   "target": "pep:585",
+   "type": "introduced_by"
+  },
+  {
+   "source": "feature:callable_arrow_syntax",
+   "target": "pep:677",
+   "type": "introduced_by"
+  },
+  {
+   "source": "feature:dataclass_transform",
+   "target": "pep:681",
+   "type": "introduced_by"
+  },
+  {
+   "source": "feature:deferred_annotations",
+   "target": "pep:649",
+   "type": "introduced_by"
+  },
+  {
+   "source": "feature:deprecated",
+   "target": "pep:702",
+   "type": "introduced_by"
+  },
+  {
+   "source": "feature:final",
+   "target": "pep:591",
+   "type": "introduced_by"
+  },
+  {
+   "source": "feature:forward_ref_strings",
+   "target": "pep:484",
+   "type": "introduced_by"
+  },
+  {
+   "source": "feature:implicit_type_alias",
+   "target": "pep:484",
+   "type": "introduced_by"
+  },
+  {
+   "source": "feature:inline_typeddict",
+   "target": "pep:764",
+   "type": "introduced_by"
+  },
+  {
+   "source": "feature:kwargs_unpack",
+   "target": "pep:692",
+   "type": "introduced_by"
+  },
+  {
+   "source": "feature:literal",
+   "target": "pep:586",
+   "type": "introduced_by"
+  },
+  {
+   "source": "feature:literal_string",
+   "target": "pep:675",
+   "type": "introduced_by"
+  },
+  {
+   "source": "feature:override",
+   "target": "pep:698",
+   "type": "introduced_by"
+  },
+  {
+   "source": "feature:paramspec",
+   "target": "pep:612",
+   "type": "introduced_by"
+  },
+  {
+   "source": "feature:postponed_annotations",
+   "target": "pep:563",
+   "type": "introduced_by"
+  },
+  {
+   "source": "feature:protocol",
+   "target": "pep:544",
+   "type": "introduced_by"
+  },
+  {
+   "source": "feature:py_typed",
+   "target": "pep:561",
+   "type": "introduced_by"
+  },
+  {
+   "source": "feature:readonly_attributes",
+   "target": "pep:767",
+   "type": "introduced_by"
+  },
+  {
+   "source": "feature:readonly_typeddict",
+   "target": "pep:705",
+   "type": "introduced_by"
+  },
+  {
+   "source": "feature:required_notrequired",
+   "target": "pep:655",
+   "type": "introduced_by"
+  },
+  {
+   "source": "feature:self_type",
+   "target": "pep:673",
+   "type": "introduced_by"
+  },
+  {
+   "source": "feature:strict_typeguard",
+   "target": "pep:724",
+   "type": "introduced_by"
+  },
+  {
+   "source": "feature:type_checking_builtin",
+   "target": "pep:781",
+   "type": "introduced_by"
+  },
+  {
+   "source": "feature:type_comments",
+   "target": "pep:484",
+   "type": "introduced_by"
+  },
+  {
+   "source": "feature:type_param_syntax",
+   "target": "pep:695",
+   "type": "introduced_by"
+  },
+  {
+   "source": "feature:type_statement",
+   "target": "pep:695",
+   "type": "introduced_by"
+  },
+  {
+   "source": "feature:typealias_explicit",
+   "target": "pep:613",
+   "type": "introduced_by"
+  },
+  {
+   "source": "feature:typeddict",
+   "target": "pep:589",
+   "type": "introduced_by"
+  },
+  {
+   "source": "feature:typeddict_extra_items",
+   "target": "pep:728",
+   "type": "introduced_by"
+  },
+  {
+   "source": "feature:typeddict_total",
+   "target": "pep:589",
+   "type": "introduced_by"
+  },
+  {
+   "source": "feature:typeform",
+   "target": "pep:747",
+   "type": "introduced_by"
+  },
+  {
+   "source": "feature:typeguard",
+   "target": "pep:647",
+   "type": "introduced_by"
+  },
+  {
+   "source": "feature:typeis",
+   "target": "pep:742",
+   "type": "introduced_by"
+  },
+  {
+   "source": "feature:typevar_defaults",
+   "target": "pep:696",
+   "type": "introduced_by"
+  },
+  {
+   "source": "feature:typevar_generics",
+   "target": "pep:484",
+   "type": "introduced_by"
+  },
+  {
+   "source": "feature:typevartuple",
+   "target": "pep:646",
+   "type": "introduced_by"
+  },
+  {
+   "source": "feature:typing_callable",
+   "target": "pep:484",
+   "type": "introduced_by"
+  },
+  {
+   "source": "feature:typing_generic_aliases",
+   "target": "pep:484",
+   "type": "introduced_by"
+  },
+  {
+   "source": "feature:typing_optional",
+   "target": "pep:484",
+   "type": "introduced_by"
+  },
+  {
+   "source": "feature:typing_union",
+   "target": "pep:484",
+   "type": "introduced_by"
+  },
+  {
+   "source": "feature:union_pipe",
+   "target": "pep:604",
+   "type": "introduced_by"
+  },
+  {
+   "source": "feature:variable_annotations",
+   "target": "pep:526",
+   "type": "introduced_by"
+  },
+  {
+   "source": "version:3.10",
+   "target": "version:3.11",
+   "type": "next_version"
+  },
+  {
+   "source": "version:3.11",
+   "target": "version:3.12",
+   "type": "next_version"
+  },
+  {
+   "source": "version:3.12",
+   "target": "version:3.13",
+   "type": "next_version"
+  },
+  {
+   "source": "version:3.13",
+   "target": "version:3.14",
+   "type": "next_version"
+  },
+  {
+   "source": "version:3.14",
+   "target": "version:3.15",
+   "type": "next_version"
+  },
+  {
+   "source": "version:3.15",
+   "target": "version:3.16",
+   "type": "next_version"
+  },
+  {
+   "source": "version:3.5",
+   "target": "version:3.6",
+   "type": "next_version"
+  },
+  {
+   "source": "version:3.6",
+   "target": "version:3.7",
+   "type": "next_version"
+  },
+  {
+   "source": "version:3.7",
+   "target": "version:3.8",
+   "type": "next_version"
+  },
+  {
+   "source": "version:3.8",
+   "target": "version:3.9",
+   "type": "next_version"
+  },
+  {
+   "source": "version:3.9",
+   "target": "version:3.10",
+   "type": "next_version"
+  },
+  {
+   "source": "pep:749",
+   "target": "pep:649",
+   "type": "pep_requires",
+   "evidence": "Requires header of PEP 749"
+  },
+  {
+   "source": "pep:484",
+   "target": "pep:563",
+   "type": "rejected_idea_ref",
+   "count": 2,
+   "evidence": [
+    "The problem of forward declarations",
+    "What about existing uses of annotations?"
+   ]
+  },
+  {
+   "source": "pep:526",
+   "target": "pep:484",
+   "type": "rejected_idea_ref",
+   "count": 3,
+   "evidence": [
+    "Rejected/Postponed Proposals"
+   ]
+  },
+  {
+   "source": "pep:544",
+   "target": "pep:484",
+   "type": "rejected_idea_ref",
+   "count": 3,
+   "evidence": [
+    "Allow only protocol methods and force use of getters and setters",
+    "Overriding inferred variance of protocol classes",
+    "Support adapters and adaptation"
+   ]
+  },
+  {
+   "source": "pep:544",
+   "target": "pep:526",
+   "type": "rejected_idea_ref",
+   "count": 1,
+   "evidence": [
+    "Make protocols interoperable with other approaches"
+   ]
+  },
+  {
+   "source": "pep:586",
+   "target": "pep:484",
+   "type": "rejected_idea_ref",
+   "count": 1,
+   "evidence": [
+    "True dependent types/integer generics"
+   ]
+  },
+  {
+   "source": "pep:589",
+   "target": "pep:484",
+   "type": "rejected_idea_ref",
+   "count": 1,
+   "evidence": [
+    "Rejected Alternatives"
+   ]
+  },
+  {
+   "source": "pep:604",
+   "target": "pep:563",
+   "type": "rejected_idea_ref",
+   "count": 1,
+   "evidence": [
+    "2. Change only PEP 484 (Type hints) to accept the syntax type1 | type2 ?"
+   ]
+  },
+  {
+   "source": "pep:649",
+   "target": "pep:563",
+   "type": "rejected_idea_ref",
+   "count": 2,
+   "evidence": [
+    "Mistaken Rejection Of This Approach In November 2017"
+   ]
+  },
+  {
+   "source": "pep:655",
+   "target": "pep:604",
+   "type": "rejected_idea_ref",
+   "count": 1,
+   "evidence": [
+    "Replace Optional with Nullable. Repurpose Optional to mean “optional item”."
+   ]
+  },
+  {
+   "source": "pep:677",
+   "target": "pep:585",
+   "type": "rejected_idea_ref",
+   "count": 1,
+   "evidence": [
+    "Improving Usability of the Indexed Callable Type"
+   ]
+  },
+  {
+   "source": "pep:677",
+   "target": "pep:612",
+   "type": "rejected_idea_ref",
+   "count": 3,
+   "evidence": [
+    "Extended Syntax Supporting Named and Optional Arguments",
+    "Rejected Alternatives",
+    "Syntax Closer to Function Signatures"
+   ]
+  },
+  {
+   "source": "pep:677",
+   "target": "pep:646",
+   "type": "rejected_idea_ref",
+   "count": 1,
+   "evidence": [
+    "Rejected Alternatives"
+   ]
+  },
+  {
+   "source": "pep:681",
+   "target": "pep:526",
+   "type": "rejected_idea_ref",
+   "count": 1,
+   "evidence": [
+    "auto_attribs parameter"
+   ]
+  },
+  {
+   "source": "pep:688",
+   "target": "pep:544",
+   "type": "rejected_idea_ref",
+   "count": 1,
+   "evidence": [
+    "Keep bytearray compatible with bytes"
+   ]
+  },
+  {
+   "source": "pep:705",
+   "target": "pep:591",
+   "type": "rejected_idea_ref",
+   "count": 3,
+   "evidence": [
+    "Preventing unspecified keys in TypedDicts",
+    "Reusing the Final annotation"
+   ]
+  },
+  {
+   "source": "pep:705",
+   "target": "pep:728",
+   "type": "rejected_idea_ref",
+   "count": 2,
+   "evidence": [
+    "Preventing unspecified keys in TypedDicts"
+   ]
+  },
+  {
+   "source": "pep:727",
+   "target": "pep:702",
+   "type": "rejected_idea_ref",
+   "count": 1,
+   "evidence": [
+    "Extra Metadata and Decorator"
+   ]
+  },
+  {
+   "source": "pep:729",
+   "target": "pep:484",
+   "type": "rejected_idea_ref",
+   "count": 2,
+   "evidence": [
+    "Writing the specification from scratch"
+   ]
+  },
+  {
+   "source": "pep:742",
+   "target": "pep:647",
+   "type": "rejected_idea_ref",
+   "count": 1,
+   "evidence": [
+    "Change the behavior of TypeGuard"
+   ]
+  },
+  {
+   "source": "pep:742",
+   "target": "pep:724",
+   "type": "rejected_idea_ref",
+   "count": 4,
+   "evidence": [
+    "Alternative names",
+    "Change the behavior of TypeGuard",
+    "Do nothing"
+   ]
+  },
+  {
+   "source": "pep:746",
+   "target": "pep:695",
+   "type": "rejected_idea_ref",
+   "count": 1,
+   "evidence": [
+    "Introducing a type variable instead of a generic class"
+   ]
+  },
+  {
+   "source": "pep:749",
+   "target": "pep:649",
+   "type": "rejected_idea_ref",
+   "count": 2,
+   "evidence": [
+    "Rejected alternatives"
+   ]
+  },
+  {
+   "source": "pep:764",
+   "target": "pep:585",
+   "type": "rejected_idea_ref",
+   "count": 1,
+   "evidence": [
+    "Using dict or typing.Dict with a single type argument"
+   ]
+  },
+  {
+   "source": "pep:764",
+   "target": "pep:604",
+   "type": "rejected_idea_ref",
+   "count": 1,
+   "evidence": [
+    "Using a simple dictionary"
+   ]
+  },
+  {
+   "source": "pep:821",
+   "target": "pep:612",
+   "type": "rejected_idea_ref",
+   "count": 1,
+   "evidence": [
+    "Rejected Ideas"
+   ]
+  },
+  {
+   "source": "pep:821",
+   "target": "pep:677",
+   "type": "rejected_idea_ref",
+   "count": 1,
+   "evidence": [
+    "Alternatives considered"
+   ]
+  },
+  {
+   "source": "pep:821",
+   "target": "pep:692",
+   "type": "rejected_idea_ref",
+   "count": 1,
+   "evidence": [
+    "Alternatives considered"
+   ]
+  },
+  {
+   "source": "pep:835",
+   "target": "pep:593",
+   "type": "rejected_idea_ref",
+   "count": 1,
+   "evidence": [
+    "Sole Reliance on __rmatmul__"
+   ]
+  },
+  {
+   "source": "pep:835",
+   "target": "pep:749",
+   "type": "rejected_idea_ref",
+   "count": 1,
+   "evidence": [
+    "Structural Evaluation Format (Format.TYPE)"
+   ]
+  },
+  {
+   "source": "pep:849",
+   "target": "pep:649",
+   "type": "rejected_idea_ref",
+   "count": 1,
+   "evidence": [
+    "Storing Annotation Source Code"
+   ]
+  },
+  {
+   "source": "pep:649",
+   "target": "pep:563",
+   "type": "replaces",
+   "evidence": "Replaces header of PEP 649"
+  },
+  {
+   "source": "pep:742",
+   "target": "pep:724",
+   "type": "replaces",
+   "evidence": "Replaces header of PEP 742"
+  },
+  {
+   "source": "feature:inline_typeddict",
+   "target": "feature:typeddict",
+   "type": "requires"
+  },
+  {
+   "source": "feature:kwargs_unpack",
+   "target": "feature:typeddict",
+   "type": "requires"
+  },
+  {
+   "source": "feature:paramspec",
+   "target": "feature:typevar_generics",
+   "type": "requires"
+  },
+  {
+   "source": "feature:readonly_typeddict",
+   "target": "feature:typeddict",
+   "type": "requires"
+  },
+  {
+   "source": "feature:required_notrequired",
+   "target": "feature:typeddict",
+   "type": "requires"
+  },
+  {
+   "source": "feature:strict_typeguard",
+   "target": "feature:typeguard",
+   "type": "requires"
+  },
+  {
+   "source": "feature:typeddict_extra_items",
+   "target": "feature:typeddict",
+   "type": "requires"
+  },
+  {
+   "source": "feature:typeddict_total",
+   "target": "feature:typeddict",
+   "type": "requires"
+  },
+  {
+   "source": "feature:typevar_defaults",
+   "target": "feature:typevar_generics",
+   "type": "requires"
+  },
+  {
+   "source": "feature:typevartuple",
+   "target": "feature:typevar_generics",
+   "type": "requires"
+  },
+  {
+   "source": "pep:563",
+   "target": "pep:649",
+   "type": "superseded_by",
+   "evidence": "Superseded-By header of PEP 563"
+  },
+  {
+   "source": "pep:563",
+   "target": "pep:749",
+   "type": "superseded_by",
+   "evidence": "Superseded-By header of PEP 563"
+  }
+ ]
+}
