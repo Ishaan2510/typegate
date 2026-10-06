@@ -1,0 +1,736 @@
+{
+ "_about": "Hand-curated list of typing features. Each feature names the PEP that introduced it; its Python version is NOT stored here, it is read from that PEP's Python-Version header at build time. 'requires' = other features this one cannot be used without. 'fallbacks' = an older feature that covers the same need, with the condition under which the substitute is valid. 'aliases' = the fixed vocabulary a user's description is matched against (lowercase).",
+ "features": [
+  {
+   "id": "typing_union",
+   "name": "Union[X, Y]",
+   "example": "def f(x: Union[int, str]) -> None",
+   "intro_pep": 484,
+   "aliases": [
+    "union[",
+    "typing.union",
+    "union types",
+    "union type",
+    "unions"
+   ],
+   "requires": [],
+   "fallbacks": []
+  },
+  {
+   "id": "typing_optional",
+   "name": "Optional[X]",
+   "example": "def f(x: Optional[str] = None)",
+   "intro_pep": 484,
+   "aliases": [
+    "optional[",
+    "typing.optional",
+    "optional types",
+    "optional type",
+    "nullable"
+   ],
+   "requires": [],
+   "fallbacks": []
+  },
+  {
+   "id": "union_pipe",
+   "name": "X | Y union syntax",
+   "example": "def f(x: int | None) -> str | bytes",
+   "intro_pep": 604,
+   "aliases": [
+    "x | y",
+    "x | none",
+    "| none",
+    "pipe union",
+    "pipe syntax",
+    "union operator",
+    "unions with |",
+    "union with |",
+    "| syntax"
+   ],
+   "requires": [],
+   "fallbacks": [
+    {
+     "to": "typing_union",
+     "condition": "always valid; write Union[X, Y] (or Optional[X] for X | None)"
+    },
+    {
+     "to": "postponed_annotations",
+     "condition": "only inside annotations; X | Y used at runtime (isinstance, type aliases, cast) still fails"
+    }
+   ]
+  },
+  {
+   "id": "builtin_generics",
+   "name": "Built-in generics (list[int], dict[str, int])",
+   "example": "def f(xs: list[int]) -> dict[str, int]",
+   "intro_pep": 585,
+   "aliases": [
+    "list[int]",
+    "dict[str",
+    "tuple[",
+    "set[",
+    "built-in generics",
+    "builtin generics",
+    "lowercase generics",
+    "list[",
+    "dict["
+   ],
+   "requires": [],
+   "fallbacks": [
+    {
+     "to": "typing_generic_aliases",
+     "condition": "always valid; import List, Dict, Tuple from typing"
+    },
+    {
+     "to": "postponed_annotations",
+     "condition": "only inside annotations; runtime use like list[int]() or isinstance still fails"
+    }
+   ]
+  },
+  {
+   "id": "typing_generic_aliases",
+   "name": "typing.List / Dict / Tuple",
+   "example": "def f(xs: List[int]) -> Dict[str, int]",
+   "intro_pep": 484,
+   "aliases": [
+    "typing.list",
+    "typing.dict",
+    "list[...] from typing",
+    "capital list",
+    "List[",
+    "Dict["
+   ],
+   "requires": [],
+   "fallbacks": []
+  },
+  {
+   "id": "type_comments",
+   "name": "Type comments (# type: int)",
+   "example": "x = []  # type: List[int]",
+   "intro_pep": 484,
+   "aliases": [
+    "type comments",
+    "type comment",
+    "# type:"
+   ],
+   "requires": [],
+   "fallbacks": []
+  },
+  {
+   "id": "variable_annotations",
+   "name": "Variable annotations (x: int = 0)",
+   "example": "count: int = 0",
+   "intro_pep": 526,
+   "aliases": [
+    "variable annotations",
+    "variable annotation",
+    "annotated assignment",
+    "classvar",
+    "class variable annotations",
+    "attribute annotations"
+   ],
+   "requires": [],
+   "fallbacks": [
+    {
+     "to": "type_comments",
+     "condition": "always valid; move the type into a # type: comment"
+    }
+   ]
+  },
+  {
+   "id": "typing_callable",
+   "name": "Callable[[Args], Ret]",
+   "example": "handler: Callable[[int, str], bool]",
+   "intro_pep": 484,
+   "aliases": [
+    "callable[",
+    "typing.callable",
+    "callable types",
+    "callable type",
+    "function types"
+   ],
+   "requires": [],
+   "fallbacks": []
+  },
+  {
+   "id": "callable_arrow_syntax",
+   "name": "Arrow callable syntax ((int) -> str)",
+   "example": "handler: (int, str) -> bool",
+   "intro_pep": 677,
+   "aliases": [
+    "arrow syntax",
+    "(int) -> str",
+    "callable syntax",
+    "arrow callable",
+    "callable arrow"
+   ],
+   "requires": [],
+   "fallbacks": [
+    {
+     "to": "typing_callable",
+     "condition": "always valid; this syntax was never added to Python"
+    }
+   ]
+  },
+  {
+   "id": "typevar_generics",
+   "name": "TypeVar and Generic classes",
+   "example": "T = TypeVar('T')\nclass Box(Generic[T]): ...",
+   "intro_pep": 484,
+   "aliases": [
+    "typevar",
+    "type variable",
+    "type variables",
+    "generic[",
+    "generic class",
+    "generic classes",
+    "generics"
+   ],
+   "requires": [],
+   "fallbacks": []
+  },
+  {
+   "id": "type_param_syntax",
+   "name": "Type parameter syntax (class Box[T])",
+   "example": "class Box[T]: ...\ndef first[T](xs: list[T]) -> T",
+   "intro_pep": 695,
+   "aliases": [
+    "type parameter syntax",
+    "class box[t]",
+    "def f[t]",
+    "new generic syntax",
+    "pep 695 generics",
+    "inline generics",
+    "type params"
+   ],
+   "requires": [],
+   "fallbacks": [
+    {
+     "to": "typevar_generics",
+     "condition": "always valid; declare T = TypeVar('T') and subclass Generic[T]"
+    }
+   ]
+  },
+  {
+   "id": "implicit_type_alias",
+   "name": "Implicit type alias (Vector = list[float])",
+   "example": "Vector = List[float]",
+   "intro_pep": 484,
+   "aliases": [
+    "implicit alias",
+    "plain alias",
+    "alias by assignment"
+   ],
+   "requires": [],
+   "fallbacks": []
+  },
+  {
+   "id": "typealias_explicit",
+   "name": "TypeAlias annotation",
+   "example": "Vector: TypeAlias = list[float]",
+   "intro_pep": 613,
+   "aliases": [
+    "typealias",
+    "explicit type alias",
+    "explicit alias"
+   ],
+   "requires": [],
+   "fallbacks": [
+    {
+     "to": "implicit_type_alias",
+     "condition": "always valid; type checkers infer the alias, with less precision for forward references"
+    }
+   ]
+  },
+  {
+   "id": "type_statement",
+   "name": "type statement (type Vector = ...)",
+   "example": "type Vector = list[float]",
+   "intro_pep": 695,
+   "aliases": [
+    "type statement",
+    "type x =",
+    "type alias statement",
+    "lazy type alias"
+   ],
+   "requires": [],
+   "fallbacks": [
+    {
+     "to": "typealias_explicit",
+     "condition": "valid for most aliases; the alias is evaluated eagerly instead of lazily"
+    }
+   ]
+  },
+  {
+   "id": "protocol",
+   "name": "Protocol (structural subtyping)",
+   "example": "class Closeable(Protocol):\n    def close(self) -> None: ...",
+   "intro_pep": 544,
+   "aliases": [
+    "protocol",
+    "protocols",
+    "structural subtyping",
+    "duck typing",
+    "runtime_checkable",
+    "static duck typing"
+   ],
+   "requires": [],
+   "fallbacks": []
+  },
+  {
+   "id": "literal",
+   "name": "Literal types",
+   "example": "mode: Literal['r', 'w']",
+   "intro_pep": 586,
+   "aliases": [
+    "literal[",
+    "literal types",
+    "literal type",
+    "literals"
+   ],
+   "requires": [],
+   "fallbacks": []
+  },
+  {
+   "id": "typeddict",
+   "name": "TypedDict",
+   "example": "class Movie(TypedDict):\n    title: str\n    year: int",
+   "intro_pep": 589,
+   "aliases": [
+    "typeddict",
+    "typed dict",
+    "typed dictionary",
+    "typed dictionaries",
+    "dict with fixed keys"
+   ],
+   "requires": [],
+   "fallbacks": []
+  },
+  {
+   "id": "typeddict_total",
+   "name": "TypedDict total=False",
+   "example": "class Movie(TypedDict, total=False): ...",
+   "intro_pep": 589,
+   "aliases": [
+    "total=false",
+    "total false",
+    "all keys optional"
+   ],
+   "requires": [
+    "typeddict"
+   ],
+   "fallbacks": []
+  },
+  {
+   "id": "required_notrequired",
+   "name": "Required / NotRequired TypedDict items",
+   "example": "class Movie(TypedDict):\n    title: str\n    year: NotRequired[int]",
+   "intro_pep": 655,
+   "aliases": [
+    "notrequired",
+    "not required",
+    "required[",
+    "optional keys",
+    "optional key",
+    "missing keys",
+    "potentially-missing"
+   ],
+   "requires": [
+    "typeddict"
+   ],
+   "fallbacks": [
+    {
+     "to": "typeddict_total",
+     "condition": "split the TypedDict into a required base class and a total=False subclass"
+    }
+   ]
+  },
+  {
+   "id": "readonly_typeddict",
+   "name": "ReadOnly TypedDict items",
+   "example": "class Movie(TypedDict):\n    title: ReadOnly[str]",
+   "intro_pep": 705,
+   "aliases": [
+    "readonly",
+    "read-only items",
+    "read only items",
+    "readonly keys",
+    "read-only keys"
+   ],
+   "requires": [
+    "typeddict"
+   ],
+   "fallbacks": []
+  },
+  {
+   "id": "typeddict_extra_items",
+   "name": "TypedDict closed / extra_items",
+   "example": "class Movie(TypedDict, extra_items=int): ...",
+   "intro_pep": 728,
+   "aliases": [
+    "extra_items",
+    "extra items",
+    "closed typeddict",
+    "closed=true"
+   ],
+   "requires": [
+    "typeddict"
+   ],
+   "fallbacks": []
+  },
+  {
+   "id": "inline_typeddict",
+   "name": "Inline TypedDict (TypedDict[{...}])",
+   "example": "def f() -> TypedDict[{'a': int}]",
+   "intro_pep": 764,
+   "aliases": [
+    "inline typeddict",
+    "inline typed dict",
+    "anonymous typeddict"
+   ],
+   "requires": [
+    "typeddict"
+   ],
+   "fallbacks": [
+    {
+     "to": "typeddict",
+     "condition": "always valid; declare a named TypedDict class"
+    }
+   ]
+  },
+  {
+   "id": "kwargs_unpack",
+   "name": "Unpack[TypedDict] for **kwargs",
+   "example": "def f(**kwargs: Unpack[Options]) -> None",
+   "intro_pep": 692,
+   "aliases": [
+    "**kwargs",
+    "kwargs typing",
+    "typed kwargs",
+    "unpack kwargs"
+   ],
+   "requires": [
+    "typeddict"
+   ],
+   "fallbacks": []
+  },
+  {
+   "id": "final",
+   "name": "Final and @final",
+   "example": "MAX: Final = 10",
+   "intro_pep": 591,
+   "aliases": [
+    "final[",
+    "typing.final",
+    "@final",
+    "constants",
+    "final qualifier"
+   ],
+   "requires": [],
+   "fallbacks": []
+  },
+  {
+   "id": "annotated",
+   "name": "Annotated metadata",
+   "example": "age: Annotated[int, Gt(0)]",
+   "intro_pep": 593,
+   "aliases": [
+    "annotated",
+    "annotated[",
+    "type metadata"
+   ],
+   "requires": [],
+   "fallbacks": []
+  },
+  {
+   "id": "paramspec",
+   "name": "ParamSpec and Concatenate",
+   "example": "P = ParamSpec('P')\ndef deco(f: Callable[P, R]) -> Callable[P, R]",
+   "intro_pep": 612,
+   "aliases": [
+    "paramspec",
+    "concatenate",
+    "typed decorators",
+    "decorator typing",
+    "parameter specification"
+   ],
+   "requires": [
+    "typevar_generics"
+   ],
+   "fallbacks": []
+  },
+  {
+   "id": "typeguard",
+   "name": "TypeGuard",
+   "example": "def is_str_list(v: list[object]) -> TypeGuard[list[str]]",
+   "intro_pep": 647,
+   "aliases": [
+    "typeguard",
+    "type guard",
+    "type guards"
+   ],
+   "requires": [],
+   "fallbacks": []
+  },
+  {
+   "id": "strict_typeguard",
+   "name": "Stricter TypeGuard semantics",
+   "example": "(proposal to change TypeGuard narrowing)",
+   "intro_pep": 724,
+   "aliases": [
+    "stricter typeguard",
+    "strict typeguard"
+   ],
+   "requires": [
+    "typeguard"
+   ],
+   "fallbacks": [
+    {
+     "to": "typeis",
+     "condition": "TypeIs was added instead of changing TypeGuard"
+    }
+   ]
+  },
+  {
+   "id": "typeis",
+   "name": "TypeIs",
+   "example": "def is_str(v: object) -> TypeIs[str]",
+   "intro_pep": 742,
+   "aliases": [
+    "typeis",
+    "type narrowing",
+    "narrowing"
+   ],
+   "requires": [],
+   "fallbacks": [
+    {
+     "to": "typeguard",
+     "condition": "TypeGuard narrows only the True branch and does not narrow the False branch"
+    }
+   ]
+  },
+  {
+   "id": "typevartuple",
+   "name": "TypeVarTuple (variadic generics)",
+   "example": "Ts = TypeVarTuple('Ts')\nclass Array(Generic[*Ts]): ...",
+   "intro_pep": 646,
+   "aliases": [
+    "typevartuple",
+    "variadic generics",
+    "variadic",
+    "*ts"
+   ],
+   "requires": [
+    "typevar_generics"
+   ],
+   "fallbacks": []
+  },
+  {
+   "id": "typevar_defaults",
+   "name": "Type parameter defaults",
+   "example": "class Box[T = int]: ...",
+   "intro_pep": 696,
+   "aliases": [
+    "typevar default",
+    "typevar defaults",
+    "type parameter defaults",
+    "default type parameter"
+   ],
+   "requires": [
+    "typevar_generics"
+   ],
+   "fallbacks": []
+  },
+  {
+   "id": "self_type",
+   "name": "Self",
+   "example": "def set_x(self, x: int) -> Self",
+   "intro_pep": 673,
+   "aliases": [
+    "self type",
+    "typing.self",
+    "-> self",
+    "return self",
+    "self"
+   ],
+   "requires": [],
+   "fallbacks": [
+    {
+     "to": "typevar_generics",
+     "condition": "declare TSelf = TypeVar('TSelf', bound='ClassName') and annotate self with it"
+    }
+   ]
+  },
+  {
+   "id": "literal_string",
+   "name": "LiteralString",
+   "example": "def run_sql(query: LiteralString) -> None",
+   "intro_pep": 675,
+   "aliases": [
+    "literalstring",
+    "literal string",
+    "sql injection typing"
+   ],
+   "requires": [],
+   "fallbacks": []
+  },
+  {
+   "id": "dataclass_transform",
+   "name": "@dataclass_transform",
+   "example": "@dataclass_transform()\nclass ModelBase: ...",
+   "intro_pep": 681,
+   "aliases": [
+    "dataclass_transform",
+    "dataclass transform",
+    "orm models",
+    "model base class"
+   ],
+   "requires": [],
+   "fallbacks": []
+  },
+  {
+   "id": "override",
+   "name": "@override",
+   "example": "@override\ndef save(self) -> None",
+   "intro_pep": 698,
+   "aliases": [
+    "@override",
+    "override decorator",
+    "override"
+   ],
+   "requires": [],
+   "fallbacks": []
+  },
+  {
+   "id": "deprecated",
+   "name": "@deprecated",
+   "example": "@deprecated('use g()')\ndef f() -> None",
+   "intro_pep": 702,
+   "aliases": [
+    "@deprecated",
+    "deprecated decorator",
+    "deprecation",
+    "deprecated"
+   ],
+   "requires": [],
+   "fallbacks": []
+  },
+  {
+   "id": "forward_ref_strings",
+   "name": "String forward references",
+   "example": "def f() -> 'Node'",
+   "intro_pep": 484,
+   "aliases": [
+    "forward reference",
+    "forward references",
+    "string annotations",
+    "quoted annotations"
+   ],
+   "requires": [],
+   "fallbacks": []
+  },
+  {
+   "id": "postponed_annotations",
+   "name": "from __future__ import annotations",
+   "example": "from __future__ import annotations",
+   "intro_pep": 563,
+   "aliases": [
+    "from __future__ import annotations",
+    "__future__ annotations",
+    "postponed evaluation",
+    "postponed annotations"
+   ],
+   "requires": [],
+   "fallbacks": [
+    {
+     "to": "forward_ref_strings",
+     "condition": "always valid; quote the annotations that reference later names"
+    }
+   ]
+  },
+  {
+   "id": "deferred_annotations",
+   "name": "Deferred evaluation of annotations (default)",
+   "example": "class A:\n    next: B  # no quotes, no __future__ import",
+   "intro_pep": 649,
+   "aliases": [
+    "deferred evaluation",
+    "deferred annotations",
+    "lazy annotations",
+    "annotationlib",
+    "unquoted forward references"
+   ],
+   "requires": [],
+   "fallbacks": [
+    {
+     "to": "postponed_annotations",
+     "condition": "same effect for most code, but annotations become strings at runtime"
+    },
+    {
+     "to": "forward_ref_strings",
+     "condition": "always valid; quote forward references by hand"
+    }
+   ]
+  },
+  {
+   "id": "typeform",
+   "name": "TypeForm",
+   "example": "def trycast(typx: TypeForm[T], value: object) -> T | None",
+   "intro_pep": 747,
+   "aliases": [
+    "typeform",
+    "type form",
+    "type forms"
+   ],
+   "requires": [],
+   "fallbacks": []
+  },
+  {
+   "id": "type_checking_builtin",
+   "name": "TYPE_CHECKING as a built-in",
+   "example": "if TYPE_CHECKING:  # no import needed",
+   "intro_pep": 781,
+   "aliases": [
+    "type_checking builtin",
+    "built-in type_checking",
+    "type_checking without import"
+   ],
+   "requires": [],
+   "fallbacks": []
+  },
+  {
+   "id": "readonly_attributes",
+   "name": "ReadOnly class attributes",
+   "example": "class P:\n    x: ReadOnly[int]",
+   "intro_pep": 767,
+   "aliases": [
+    "readonly attributes",
+    "read-only attributes",
+    "read only attributes"
+   ],
+   "requires": [],
+   "fallbacks": [
+    {
+     "to": "final",
+     "condition": "Final also blocks reassignment, but cannot be overridden in subclasses"
+    }
+   ]
+  },
+  {
+   "id": "py_typed",
+   "name": "py.typed marker and stub packages",
+   "example": "mypackage/py.typed",
+   "intro_pep": 561,
+   "aliases": [
+    "py.typed",
+    "stub package",
+    "stub packages",
+    "-stubs",
+    "ship types",
+    "distribute types"
+   ],
+   "requires": [],
+   "fallbacks": []
+  }
+ ]
+}
