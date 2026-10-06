@@ -46,7 +46,13 @@ def render(report, show_evidence=False):
     for i, f in enumerate(report["features"], 1):
         out.append("")
         out.append(f"[{i}] {f['feature']}  ->  {VERDICT_LABEL[f['verdict']]}")
-        out.append(f"    {f['introduced_by']}  (status: {f['pep_status']}, needs Python {f['min_python'] or 'n/a'})")
+        if f["verdict"] == "never_available":
+            needs = "never ships"
+        elif f["min_python"]:
+            needs = f"needs Python {f['min_python']}"
+        else:
+            needs = f"targets Python {f['pep_target_version']}, not shipped"
+        out.append(f"    {f['introduced_by']}  (status: {f['pep_status']}, {needs})")
         out.append(f"    reason: {f['reason']}")
         fb = f["fallback"]
         if fb:
@@ -98,8 +104,11 @@ def main():
 
     graph = Graph(args.graph) if args.graph else Graph()
     if args.list_features:
-        for n in sorted((n for n in graph.nodes.values() if n["type"] == "Feature"), key=lambda n: n["name"]):
-            print(f"{n['name']:<50} e.g. {', '.join(n['aliases'][:3])}")
+        feats = sorted((n for n in graph.nodes.values() if n["type"] == "Feature"),
+                       key=lambda n: n["name"].lstrip("@").lower())
+        for n in feats:
+            aliases = "  ".join(f'"{a}"' for a in n["aliases"][:3])
+            print(f"{n['name']:<50} say: {aliases}")
         return
     version = args.python or input("Target Python version (e.g. 3.9): ").strip()
     want = args.want or input("Which typing features do you plan to use? ").strip()
