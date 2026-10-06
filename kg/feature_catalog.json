@@ -1,5 +1,5 @@
 {
- "_about": "Hand-curated list of typing features. Each feature names the PEP that introduced it; its Python version is NOT stored here, it is read from that PEP's Python-Version header at build time. 'requires' = other features this one cannot be used without. 'fallbacks' = an older feature that covers the same need, with the condition under which the substitute is valid. 'aliases' = the fixed vocabulary a user's description is matched against (lowercase).",
+ "_about": "Hand-curated list of typing features. Each feature names the PEP that introduced it; its Python version is NOT stored here, it is read from that PEP's Python-Version header at build time. 'requires' = other features this one cannot be used without. 'fallbacks' = an older feature that covers the same need, with the condition under which the substitute is valid. 'aliases' = the fixed vocabulary a user's description is matched against (lowercase). 'patterns' = optional regexes for features people write as code rather than name (e.g. 'int | str'); matched against the lowercased input after spacing around '|' is normalized.",
  "features": [
   {
    "id": "typing_union",
@@ -57,6 +57,9 @@
      "to": "postponed_annotations",
      "condition": "only inside annotations; X | Y used at runtime (isinstance, type aliases, cast) still fails"
     }
+   ],
+   "patterns": [
+    "[\\w\\]\\)'\\\"] \\| [\\w\\[\\('\\\"]"
    ]
   },
   {

@@ -23,7 +23,7 @@ def vkey(v):
 
 def clean_rst(text):
     text = re.sub(r":pep:`(?:[^`<]*<)?(\d+)>?`", r"PEP \1", text)
-    text = re.sub(r":[a-z:]+:`~?([^`]+)`", r"\1", text)
+    text = re.sub(r":[a-z:]+:`~?([^`<]+?)(?:\s*<[^>]*>)?`", r"\1", text)  # :role:`text <target>` -> text
     text = re.sub(r"`([^`<]+?)\s*<[^>]+>`_+", r"\1", text)  # `text <url>`_ -> text
     text = text.replace("``", "")
     return re.sub(r"\s+", " ", text).strip()
@@ -140,7 +140,7 @@ def build(raw_path, catalog_path, peps_commit):
             continue
         version = in_scope[pep]["header"].get("Python-Version")
         nodes[fid] = {"id": fid, "type": "Feature", "name": f["name"], "example": f["example"],
-                      "aliases": f["aliases"]}
+                      "aliases": f["aliases"], "patterns": f.get("patterns", [])}
         edges.append({"source": fid, "target": f"pep:{pep}", "type": "introduced_by"})
         if version and f"version:{version}" in nodes:
             edges.append({"source": fid, "target": f"version:{version}", "type": "available_from",

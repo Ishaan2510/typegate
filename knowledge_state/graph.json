@@ -119,7 +119,8 @@
     "annotated",
     "annotated[",
     "type metadata"
-   ]
+   ],
+   "patterns": []
   },
   {
    "id": "feature:builtin_generics",
@@ -136,7 +137,8 @@
     "lowercase generics",
     "list[",
     "dict["
-   ]
+   ],
+   "patterns": []
   },
   {
    "id": "feature:callable_arrow_syntax",
@@ -149,7 +151,8 @@
     "callable syntax",
     "arrow callable",
     "callable arrow"
-   ]
+   ],
+   "patterns": []
   },
   {
    "id": "feature:dataclass_transform",
@@ -161,7 +164,8 @@
     "dataclass transform",
     "orm models",
     "model base class"
-   ]
+   ],
+   "patterns": []
   },
   {
    "id": "feature:deferred_annotations",
@@ -174,7 +178,8 @@
     "lazy annotations",
     "annotationlib",
     "unquoted forward references"
-   ]
+   ],
+   "patterns": []
   },
   {
    "id": "feature:deprecated",
@@ -186,7 +191,8 @@
     "deprecated decorator",
     "deprecation",
     "deprecated"
-   ]
+   ],
+   "patterns": []
   },
   {
    "id": "feature:final",
@@ -199,7 +205,8 @@
     "@final",
     "constants",
     "final qualifier"
-   ]
+   ],
+   "patterns": []
   },
   {
    "id": "feature:forward_ref_strings",
@@ -211,7 +218,8 @@
     "forward references",
     "string annotations",
     "quoted annotations"
-   ]
+   ],
+   "patterns": []
   },
   {
    "id": "feature:implicit_type_alias",
@@ -222,7 +230,8 @@
     "implicit alias",
     "plain alias",
     "alias by assignment"
-   ]
+   ],
+   "patterns": []
   },
   {
    "id": "feature:inline_typeddict",
@@ -233,7 +242,8 @@
     "inline typeddict",
     "inline typed dict",
     "anonymous typeddict"
-   ]
+   ],
+   "patterns": []
   },
   {
    "id": "feature:kwargs_unpack",
@@ -245,7 +255,8 @@
     "kwargs typing",
     "typed kwargs",
     "unpack kwargs"
-   ]
+   ],
+   "patterns": []
   },
   {
    "id": "feature:literal",
@@ -257,7 +268,8 @@
     "literal types",
     "literal type",
     "literals"
-   ]
+   ],
+   "patterns": []
   },
   {
    "id": "feature:literal_string",
@@ -268,7 +280,8 @@
     "literalstring",
     "literal string",
     "sql injection typing"
-   ]
+   ],
+   "patterns": []
   },
   {
    "id": "feature:override",
@@ -279,7 +292,8 @@
     "@override",
     "override decorator",
     "override"
-   ]
+   ],
+   "patterns": []
   },
   {
    "id": "feature:paramspec",
@@ -292,7 +306,8 @@
     "typed decorators",
     "decorator typing",
     "parameter specification"
-   ]
+   ],
+   "patterns": []
   },
   {
    "id": "feature:postponed_annotations",
@@ -304,7 +319,8 @@
     "__future__ annotations",
     "postponed evaluation",
     "postponed annotations"
-   ]
+   ],
+   "patterns": []
   },
   {
    "id": "feature:protocol",
@@ -318,7 +334,8 @@
     "duck typing",
     "runtime_checkable",
     "static duck typing"
-   ]
+   ],
+   "patterns": []
   },
   {
    "id": "feature:py_typed",
@@ -332,7 +349,8 @@
     "-stubs",
     "ship types",
     "distribute types"
-   ]
+   ],
+   "patterns": []
   },
   {
    "id": "feature:readonly_attributes",
@@ -343,7 +361,8 @@
     "readonly attributes",
     "read-only attributes",
     "read only attributes"
-   ]
+   ],
+   "patterns": []
   },
   {
    "id": "feature:readonly_typeddict",
@@ -356,7 +375,8 @@
     "read only items",
     "readonly keys",
     "read-only keys"
-   ]
+   ],
+   "patterns": []
   },
   {
    "id": "feature:required_notrequired",
@@ -371,7 +391,8 @@
     "optional key",
     "missing keys",
     "potentially-missing"
-   ]
+   ],
+   "patterns": []
   },
   {
    "id": "feature:self_type",
@@ -384,7 +405,8 @@
     "-> self",
     "return self",
     "self"
-   ]
+   ],
+   "patterns": []
   },
   {
    "id": "feature:strict_typeguard",
@@ -394,7 +416,8 @@
    "aliases": [
     "stricter typeguard",
     "strict typeguard"
-   ]
+   ],
+   "patterns": []
   },
   {
    "id": "feature:type_checking_builtin",
@@ -405,7 +428,8 @@
     "type_checking builtin",
     "built-in type_checking",
     "type_checking without import"
-   ]
+   ],
+   "patterns": []
   },
   {
    "id": "feature:type_comments",
@@ -416,7 +440,8 @@
     "type comments",
     "type comment",
     "# type:"
-   ]
+   ],
+   "patterns": []
   },
   {
    "id": "feature:type_param_syntax",
@@ -431,7 +456,8 @@
     "pep 695 generics",
     "inline generics",
     "type params"
-   ]
+   ],
+   "patterns": []
   },
   {
    "id": "feature:type_statement",
@@ -443,7 +469,8 @@
     "type x =",
     "type alias statement",
     "lazy type alias"
-   ]
+   ],
+   "patterns": []
   },
   {
    "id": "feature:typealias_explicit",
@@ -454,7 +481,8 @@
     "typealias",
     "explicit type alias",
     "explicit alias"
-   ]
+   ],
+   "patterns": []
   },
   {
    "id": "feature:typeddict",
@@ -467,7 +495,8 @@
     "typed dictionary",
     "typed dictionaries",
     "dict with fixed keys"
-   ]
+   ],
+   "patterns": []
   },
   {
    "id": "feature:typeddict_extra_items",
@@ -479,7 +508,8 @@
     "extra items",
     "closed typeddict",
     "closed=true"
-   ]
+   ],
+   "patterns": []
   },
   {
    "id": "feature:typeddict_total",
@@ -490,7 +520,8 @@
     "total=false",
     "total false",
     "all keys optional"
-   ]
+   ],
+   "patterns": []
   },
   {
    "id": "feature:typeform",
@@ -501,7 +532,8 @@
     "typeform",
     "type form",
     "type forms"
-   ]
+   ],
+   "patterns": []
   },
   {
    "id": "feature:typeguard",
@@ -512,7 +544,8 @@
     "typeguard",
     "type guard",
     "type guards"
-   ]
+   ],
+   "patterns": []
   },
   {
    "id": "feature:typeis",
@@ -523,7 +556,8 @@
     "typeis",
     "type narrowing",
     "narrowing"
-   ]
+   ],
+   "patterns": []
   },
   {
    "id": "feature:typevar_defaults",
@@ -535,7 +569,8 @@
     "typevar defaults",
     "type parameter defaults",
     "default type parameter"
-   ]
+   ],
+   "patterns": []
   },
   {
    "id": "feature:typevar_generics",
@@ -550,7 +585,8 @@
     "generic class",
     "generic classes",
     "generics"
-   ]
+   ],
+   "patterns": []
   },
   {
    "id": "feature:typevartuple",
@@ -562,7 +598,8 @@
     "variadic generics",
     "variadic",
     "*ts"
-   ]
+   ],
+   "patterns": []
   },
   {
    "id": "feature:typing_callable",
@@ -575,7 +612,8 @@
     "callable types",
     "callable type",
     "function types"
-   ]
+   ],
+   "patterns": []
   },
   {
    "id": "feature:typing_generic_aliases",
@@ -589,7 +627,8 @@
     "capital list",
     "List[",
     "Dict["
-   ]
+   ],
+   "patterns": []
   },
   {
    "id": "feature:typing_optional",
@@ -602,7 +641,8 @@
     "optional types",
     "optional type",
     "nullable"
-   ]
+   ],
+   "patterns": []
   },
   {
    "id": "feature:typing_union",
@@ -615,7 +655,8 @@
     "union types",
     "union type",
     "unions"
-   ]
+   ],
+   "patterns": []
   },
   {
    "id": "feature:union_pipe",
@@ -632,6 +673,9 @@
     "unions with |",
     "union with |",
     "| syntax"
+   ],
+   "patterns": [
+    "[\\w\\]\\)'\\\"] \\| [\\w\\[\\('\\\"]"
    ]
   },
   {
@@ -646,7 +690,8 @@
     "classvar",
     "class variable annotations",
     "attribute annotations"
-   ]
+   ],
+   "patterns": []
   },
   {
    "id": "pep:482",
@@ -1382,7 +1427,7 @@
    "backwards_compatibility": [
     {
      "title": "Backwards Compatibility",
-     "summary": "We propose adding typing_extensions.LiteralString for use in earlier Python versions. As PEP 586 mentions <586#backwards-compatibility>, type checkers \"should feel free to experiment with more sophisticated inference techniques\". So, if the type checker infers a literal string type for an unannotated variable that is initialized with a literal string, the following example should be OK: : This ..."
+     "summary": "We propose adding typing_extensions.LiteralString for use in earlier Python versions. As PEP 586 mentions, type checkers \"should feel free to experiment with more sophisticated inference techniques\". So, if the type checker infers a literal string type for an unannotated variable that is initialized with a literal string, the following example should be OK: : This enables precise type checking of ..."
     }
    ]
   },
@@ -2121,7 +2166,7 @@
     },
     {
      "title": "Using a simple dictionary",
-     "summary": "Instead of subscripting the typing.TypedDict class, a plain dictionary could be used as an annotation: However, PEP 584 added union operators on dictionaries and PEP 604 introduced union types <python:types-union>. Both features make use of the bitwise or (|) <python:bitwise> operator, making the following use cases incompatible, especially for runtime introspection:"
+     "summary": "Instead of subscripting the typing.TypedDict class, a plain dictionary could be used as an annotation: However, PEP 584 added union operators on dictionaries and PEP 604 introduced union types. Both features make use of the bitwise or (|) operator, making the following use cases incompatible, especially for runtime introspection:"
     },
     {
      "title": "Extending other typed dictionaries",
