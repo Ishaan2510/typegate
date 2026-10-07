@@ -75,6 +75,20 @@ class Graph:
 
 
 # ---------------------------------------------------------------- matching
+def alias_regex(alias):
+    """Match an alias as a whole word, so "self" does not fire inside "itself".
+
+    Boundaries are only enforced on alphanumeric ends ("list[" has no end
+    boundary), and a trailing plural "s"/"es" is allowed ("typeddicts").
+    """
+    pat = re.escape(alias)
+    if re.match(r"\w", alias):
+        pat = r"(?<![\w])" + pat
+    if re.search(r"\w$", alias):
+        pat = pat + r"(?:s|es)?(?![\w])"
+    return pat
+
+
 def match_features(graph, description):
     """Map free text onto Feature nodes using each feature's alias list.
 
@@ -91,7 +105,7 @@ def match_features(graph, description):
         if n["type"] != "Feature":
             continue
         for al in n["aliases"]:
-            for m in re.finditer(re.escape(norm(al)), text):
+            for m in re.finditer(alias_regex(norm(al)), text):
                 hits.append((m.start(), m.end(), nid, al))
         for pat in n.get("patterns", []):  # features written as code, e.g. "int | str"
             for m in re.finditer(pat, text):

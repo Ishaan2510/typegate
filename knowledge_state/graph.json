@@ -188,9 +188,7 @@
    "example": "@deprecated('use g()')\ndef f() -> None",
    "aliases": [
     "@deprecated",
-    "deprecated decorator",
-    "deprecation",
-    "deprecated"
+    "deprecated decorator"
    ],
    "patterns": []
   },
@@ -290,8 +288,7 @@
    "example": "@override\ndef save(self) -> None",
    "aliases": [
     "@override",
-    "override decorator",
-    "override"
+    "override decorator"
    ],
    "patterns": []
   },

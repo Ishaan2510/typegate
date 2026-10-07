@@ -1,4 +1,5 @@
 """Behavioural tests: each one states a fact the graph must reason its way to."""
+import json
 import os
 import sys
 
@@ -106,3 +107,30 @@ def test_version_forms():
             assert False, bad
         except ValueError:
             pass
+
+
+def test_aliases_match_whole_words_only():
+    assert match_features(G, "TypedDict itself")[0] == ["feature:typeddict"]
+    assert match_features(G, "we deprecated old endpoints")[0] == []
+    assert "feature:typeddict" in match_features(G, "two typeddicts")[0]  # plural still matches
+
+
+def test_every_feature_on_every_version_renders():
+    """Brute force: each feature is found by its own first alias and the full
+    report (engine + text renderer + JSON) works on old, current, and future versions."""
+    import cli
+    feats = [n for n in G.nodes.values() if n["type"] == "Feature"]
+    for v in ["3.4", "3.7", "3.9", "3.11", "3.13", "3.16", "3.20"]:
+        for f in feats:
+            r = analyze(G, v, f["aliases"][0])
+            assert any(x["feature_id"] == f["id"] for x in r["features"]), (v, f["id"])
+            cli.render(r, show_evidence=True)
+            json.dumps(r)
+
+
+def test_knowledge_state_has_no_dangling_edges():
+    root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    data = json.load(open(os.path.join(root, "knowledge_state", "graph.json"), encoding="utf-8"))
+    ids = {n["id"] for n in data["nodes"]}
+    assert all(e["source"] in ids and e["target"] in ids for e in data["edges"])
+    assert data["meta"]["build_warnings"] == []

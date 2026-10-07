@@ -598,8 +598,7 @@
    "intro_pep": 698,
    "aliases": [
     "@override",
-    "override decorator",
-    "override"
+    "override decorator"
    ],
    "requires": [],
    "fallbacks": []
@@ -611,9 +610,7 @@
    "intro_pep": 702,
    "aliases": [
     "@deprecated",
-    "deprecated decorator",
-    "deprecation",
-    "deprecated"
+    "deprecated decorator"
    ],
    "requires": [],
    "fallbacks": []
