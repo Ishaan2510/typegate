@@ -66,7 +66,7 @@ Tradeoffs I accepted:
 2. **The version comes from the PEP header, not from the release.** This is right for Final PEPs. For Draft PEPs the header is a target, so the engine treats Draft and Deferred as "not shipped yet" regardless of version, and Rejected and Withdrawn as "never available".
 3. **Section classification is a title heuristic.** It made one mistake I found and fixed: PEP 589's "Alternative Syntax" section describes a supported syntax, but the pattern "alternative" labelled it rejected. The pattern now requires the plural "alternatives" or an explicit rejection word.
 4. **Reasoning text is the first prose paragraphs of each section**, skipping code blocks. It is a pointer into the PEP, not a summary written by a model, and every entry links back to the PEP URL.
-5. **Input matching uses a fixed vocabulary** (each feature's aliases) instead of fuzzy NLP. Unknown phrases are reported back with "did you mean" suggestions instead of being guessed.
+5. **Input matching uses a fixed vocabulary** (each feature's aliases) instead of fuzzy NLP. Unknown phrases are reported back with "did you mean" suggestions instead of being guessed. Aliases match whole words only, so "self" does not fire inside "itself", and I removed aliases that are ordinary English words ("override", "deprecated") because they matched sentences that had nothing to do with typing.
 
 ## What happens when a new input arrives
 
